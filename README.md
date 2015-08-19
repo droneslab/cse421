@@ -1,2 +1,2 @@
 # stat612
-Course webpage for Statistics 312/621: Linear Models; Yale, Fall 2015
+http://euler.stat.yale.edu/~tba3/stat612
