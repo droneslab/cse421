@@ -1,0 +1,200 @@
+\input{../header.tex}
+
+\title{high performance data i/o}
+\date{2015-02-16}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\vfill
+
+{\fontsize{0.7cm}{0cm}\selectfont Lecture 02 \\\vspace{0.2cm} Simple Linear Models: OLS}\\\vspace{0.5cm}
+07 September 2015
+
+\vspace{2cm}
+
+\begin{minipage}{0.6\textwidth}
+Taylor B. Arnold \\
+Yale Statistics \\
+STAT 312/612
+\end{minipage}
+\hfill
+\begin{minipage}{0.3\textwidth}\raggedleft
+\includegraphics[scale=0.3]{../yale-logo.png}
+\end{minipage}%
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Website}
+\end{flushright}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\fontsize{0.5cm}{0cm}\selectfont
+\url{http://euler.stat.yale.edu/~tba3/stat612}
+}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont What are Linear Models}
+\end{flushright}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+We begin by considering observing $n$ samples
+from a simple linear model with only a single unknown
+slope parameter $\beta \in \mathbb{R}$,
+\begin{align}
+y_i &= \beta x_i + \epsilon_i, \quad i = 1, \ldots n.
+\end{align}
+Where the $x_i$'s are fixed and known and the error terms
+are distributed as
+\begin{align}
+\epsilon_i \sim \mathcal{N}(0, \sigma^2)
+\end{align}
+For some variance $\sigma^2 > 0$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+As a first step, let's
+look at the maximum likelihood function of this model:
+\begin{align}
+\mathcal{L} (\beta, \sigma | x, y) &= \prod_i \frac{1}{\sqrt{2\pi\sigma^2}} \times
+    exp \left\{ - \frac{1}{2\sigma^2} (y_i - \beta x_i)^2 \right\}
+\end{align}
+\pause With the negative log-likelihood of:
+\begin{align}
+-\text{log} \left\{ \mathcal{L} (\beta, \sigma | x, y)\right\} &= \frac{n}{2} \cdot \text{log}(2\pi\sigma^2) +
+    \frac{1}{2\sigma^2}  \sum_i (y_i - \beta x_i)^2
+\end{align}
+The minimum of which corrisponds with the maximum likelihood estimators.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Only the second term depends on $\beta$:
+\begin{align}
+-\text{log} \left\{ \mathcal{L} (\beta, \sigma | x, y)\right\} &= \frac{n}{2} \cdot \text{log}(2\pi\sigma^2) +
+    {\color{solarized@orange} \frac{1}{2\sigma^2}  \sum_i (y_i - \beta x_i)^2}
+\end{align}
+And we can see without even resorting
+to derivatives that the maximum likelihood estimator is that one that
+minimizes the sum of squares:
+\begin{align}
+\widehat{\beta}_{mle} = \argmin_{\beta} \left\{ \sum_i (y_i - \beta x_i)^2 \right\}
+\end{align}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+The minimizer to the sum of squares can be found easily:
+\begin{align}
+\frac{\partial}{\partial \beta} \sum_i (y_i - \beta x_i)^2
+  &= 2 \cdot \sum_i ( y_i - \beta x_i) \cdot x_i \\
+  &= 2 \cdot \sum_i ( y_i x_i - \beta x_i^2)
+\end{align}
+And setting equal to zero:
+\begin{align}
+2 \cdot \sum_i ( y_i x_i - \widehat{\beta} x_i^2) &= 0 \\
+\sum_i y_i x_i &= \widehat{\beta} \sum_i x_i^2 \\
+\widehat{\beta} &= \frac{\sum_i y_i x_i}{\sum_i x_i^2}
+\end{align}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+There are many ways of thinking about the maximum likelihood estimator,
+one of which is as a weighted sum of the data points $y_i$:
+\begin{align}
+\widehat{\beta} &= \frac{\sum_i y_i x_i}{\sum_i x_i^2} \\
+&= \sum_i \left( y_i \cdot \frac{x_i}{\sum_j x_i^2} \right) \\
+&= \sum_i y_i w_i
+\end{align}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+So, we are weighting the data $y_i$ according to:
+\begin{align}
+w_i &\propto x_i
+\end{align}
+Does this make sense? {\bf Why}?
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+One thing that the weighted form of the estimator makes
+obvious is that the estimator is distributed normally:
+\begin{align}
+\widehat{\beta} \sim \mathcal{N} (\cdot, \cdot)
+\end{align}
+As it is the sum of normally distributed variables ($y_i$).
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+The mean of the estimator becomes
+\begin{eqnarray}
+\mathbb{E} \widehat{\beta} &=& \sum_i \mathbb{E} (y_i w_i) \\
+&=& \sum_i w_i \cdot \mathbb{E} (y_i) \\
+&=& \sum_i \beta x_i w_i \\ \pause
+&=& \beta \cdot \sum_i x_i \frac{x_i}{\sum_j x_j^2} \\
+&=& \pause \beta
+\end{eqnarray}
+And so we see the estimator is unbiased
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+
+
+\end{frame}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+

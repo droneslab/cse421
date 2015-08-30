@@ -33,3 +33,5 @@ h2 {
   background-color: #fdf6e3;
   color: #586e75;
 }
+
+td { min-width: 200px; }
