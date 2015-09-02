@@ -178,12 +178,12 @@ STAT 312/612
 \begin{frame}[fragile] \frametitle{}
 
 Linear Models is both a capstone to the 241/242 sequence
-and to the breadth to contrast 610's depth. It also
+and the breadth to compliment 610's depth. It also
 serves as a link between the statistical inference courses
 and the applied data analysis courses.\pause
 
 Topics will be oriented around linear models (obviously) but
-Linear Models is somewhat of a hodgepodge of topics.
+the course is somewhat of a hodgepodge of topics and applications.
 
 \end{frame}
 
@@ -221,6 +221,7 @@ Three parts: \pause
 \begin{enumerate}
 \item Bayesian regression
 \item Robust techniques
+\item GLMs
 \end{enumerate}
 \end{enumerate}
 
@@ -240,7 +241,7 @@ Three parts: \pause
 
 If $\{y_1, \ldots y_n \}$ are independent observations of
 a random variable distributed as $\mathcal{N}(\mu, \sigma^2)$,
-do you know how to calculate the maximum likelihood estimator's
+do you know how to calculate the maximum likelihood estimators
 of $\mu$ and $\sigma^2$?
 
 \end{frame}
@@ -367,6 +368,9 @@ and may be handed in to the office at 24 Hillhouse.
 
 {\bf STAT 312 vs. STAT 612} \pause
 
+Same requirements and assignments; final grades will be determined
+seperately. \pause
+
 I strongly encourage undergraduates to have taken linear
 algebra and at least STAT 238 or STAT 242. \pause
 
@@ -418,7 +422,7 @@ will be concerned with {\bf content} over {\bf grades}.
 \includegraphics[width=0.9\linewidth]{img/rao.jpg}
 \end{minipage}%%% to prevent a space
 \begin{minipage}{0.5\textwidth}
-Rao, Calyampudi R., and Helge Toutenburg. {\it Linear models}. Springer New York, 1995. \\
+Rao, Calyampudi R., et al. {\it Linear models}. Springer New York, 2008. \\
 \begin{itemize}
 \item Available digitally through Springer Link (free pdfs from Yale network)
 \item Solid all-around reference on linear models
@@ -484,11 +488,13 @@ Bühlmann, Peter, and Sara Van De Geer. {\it Statistics for high-dimensional dat
 \end{minipage}
 \end{frame}
 
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
 \begin{flushright}
-{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont People}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Me!}
 \end{flushright}
 
 \end{frame}
@@ -501,7 +507,6 @@ Bühlmann, Peter, and Sara Van De Geer. {\it Statistics for high-dimensional dat
 \includegraphics[width=0.9\linewidth]{img/arnold.jpeg}
 \end{minipage}%%% to prevent a space
 \begin{minipage}{0.6\textwidth}
-{\bf Taylor Arnold (me)} \\
 Joint appointment at Yale Statistics and AT\&T Labs Research
 \begin{itemize}
 \item Research focus on large-scale data analysis (think, petabytes)
@@ -622,7 +627,7 @@ A {\bf (general) linear model} is similiar to the simple variant, but
 with a multivariate $x \in \mathbb{R}^p$ and a mean given by a hyperplane
 in place of a single line.
 \begin{align}
-\mathbb{E}(y_i|x_i) &= \alpha + \sum_j ]\quad x_{i,j} \cdot \beta_j
+\mathbb{E}(y_i|x_i) &= \alpha + \sum_j \quad x_{i,j} \cdot \beta_j
 \end{align}
 
 \end{frame}
