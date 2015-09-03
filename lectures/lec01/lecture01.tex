@@ -827,7 +827,7 @@ Which will fit a polynomial to the data.
 
 An alternative that works better here, is a Fourier basis:
 \begin{align*}
-\mathbb{E} (y | x) &= \beta_0 + \sum_{j=1}^{k} \beta_j \cos (k * x) + \sum_{j=1}^k \beta_{k+j} \sin (k * x)
+\mathbb{E} (y | x) &= \beta_0 + \sum_{j=1}^{k} \beta_j \cos (j * x) + \sum_{j=1}^k \beta_{k+j} \sin (j * x)
 \end{align*}
 And we can adjust the fit appropriately by specifying the
 order $k$.

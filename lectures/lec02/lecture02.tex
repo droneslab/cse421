@@ -11,7 +11,7 @@
 \vfill
 
 {\fontsize{0.7cm}{0cm}\selectfont Lecture 02 \\\vspace{0.2cm} Simple Linear Models: OLS}\\\vspace{0.5cm}
-07 September 2015
+04 September 2015
 
 \vspace{2cm}
 
@@ -50,7 +50,38 @@ STAT 312/612
 \begin{frame}[fragile] \frametitle{}
 
 \begin{flushright}
-{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont What are Linear Models}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Office Hours}
+\end{flushright}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{itemize}
+\item Taylor Arnold:
+\begin{itemize}
+\item 24 Hillhouse, Office \# 206
+\item Wednesdays 13:30-15:00, or by appointment
+\item Short one-on-one meetings (or small groups)
+\end{itemize}
+\item Jason Klusowski:
+\begin{itemize}
+\item 24 Hillhouse, Main Classroom
+\item Tuesdays 19:00-20:30
+\item Group Q\&A style
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Simple Linear Models: MLEs}
 \end{flushright}
 
 \end{frame}
@@ -58,84 +89,194 @@ STAT 312/612
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-We begin by considering observing $n$ samples
+Considering observing $n$ samples
 from a simple linear model with only a single unknown
-slope parameter $\beta \in \mathbb{R}$,
-\begin{align}
-y_i &= \beta x_i + \epsilon_i, \quad i = 1, \ldots n.
-\end{align}
-Where the $x_i$'s are fixed and known and the error terms
-are distributed as
-\begin{align}
-\epsilon_i \sim \mathcal{N}(0, \sigma^2)
-\end{align}
-For some variance $\sigma^2 > 0$.
+slope parameter $\beta \in \mathbb{R}$, \pause
+\begin{align*}
+y_i &= x_i\beta  + \epsilon_i, \quad i = 1, \ldots n.
+\end{align*}
+This is, perhaps, the simpliest linear model.
 
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-As a first step, let's
-look at the maximum likelihood function of this model:
+For today, we will assume that the $x_i$'s are fixed and
+known quantities. This is called a {\bf fixed design}, compared
+to a {\bf random design}.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+The error terms are assumed to be independent and identically
+distributed random variables with a normal density function:
+\begin{align*}
+\epsilon_i \sim \mathcal{N}(0, \sigma^2)
+\end{align*}
+For some unknown variance $\sigma^2 > 0$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{center}
+\includegraphics[width=\linewidth]{img/normal_density.pdf}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+The density function of a normally distributed random variable with
+mean $\mu$ and variance $\sigma^2$ is given by:
+\begin{align*}
+f(x) &=  \frac{1}{\sqrt{2\pi\sigma^2}} \times
+    exp \left\{ - \frac{1}{2\sigma^2} (x-\mu)^2 \right\}
+\end{align*}
+\pause Conceptually, the front term is just a normalization to make
+the density sum to $1$. The important part is:
+\begin{align*}
+f(x) &\propto exp \left\{ - \frac{1}{2\sigma^2} (x-\mu)^2 \right\}
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Which you have probably seen rewritten as:
+\begin{align*}
+f(x) &\propto exp \left\{ - 0.5 \cdot \left(\frac{x-\mu}{\sigma}\right)^2 \right\}
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Let's look at the maximum likelihood function of this model:
+\begin{eqnarray*}
+\mathcal{L} (\beta, \sigma | x, y) &=& \prod_i \mathcal{L} (\beta, \sigma | x_i, y_i) \\ \pause
+&=& \prod_i \frac{1}{\sqrt{2\pi\sigma^2}} \times
+    exp \left\{ - \frac{1}{2\sigma^2} {\color{solarized@red} (y_i - \beta x_i)^2} \right\}
+\end{eqnarray*}
+\pause Notice that the {\color{solarized@red}mean $\mu$} from the general case has been
+replaced by $\beta x_i$, which should be the mean of $y_i | x_i$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+We can bring the product up into the the exponent as a sum:
+\begin{eqnarray*}
+\mathcal{L} (\beta, \sigma | x, y) &=& {\color{solarized@blue}\prod_i} \frac{1}{\sqrt{2\pi\sigma^2}} \times
+    exp \left\{ - \frac{1}{2\sigma^2} (y_i - \beta x_i)^2 \right\} \\ \pause
+&=& (2\pi\sigma^2)^{-{\color{solarized@blue}n}/2} \times
+    exp \left\{ - \frac{1}{2\sigma^2} \cdot {\color{solarized@blue}\sum_i} (y_i - \beta x_i)^2 \right\} \\
+\end{eqnarray*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Let's highlight the slope parameter $\beta$:
+\begin{eqnarray*}
+\mathcal{L} (\beta, \sigma | x, y) &=& (2\pi\sigma^2)^{-n/2} \times
+    exp \left\{ - \frac{1}{2\sigma^2} \cdot \sum_i (y_i -  {\color{solarized@orange} \bf \beta} x_i)^2 \right\} \\
+\end{eqnarray*}
+\pause What is the MLE for ${\color{solarized@orange} \bf \beta}$?
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Without resorting to any fancy math, we can see that:
 \begin{align}
-\mathcal{L} (\beta, \sigma | x, y) &= \prod_i \frac{1}{\sqrt{2\pi\sigma^2}} \times
-    exp \left\{ - \frac{1}{2\sigma^2} (y_i - \beta x_i)^2 \right\}
+\widehat{\beta}_{MLE} &= \argmin_{b \in \mathbb{R}} \left\{ \sum_i (y_i -  b \cdot x_i)^2 \right\}
 \end{align}
-\pause With the negative log-likelihood of:
-\begin{align}
+The least squares estimator.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+A slightly more `mathy' approach would be to calculate the the negative log-likelihood: \pause
+\begin{align*}
 -\text{log} \left\{ \mathcal{L} (\beta, \sigma | x, y)\right\} &= \frac{n}{2} \cdot \text{log}(2\pi\sigma^2) +
     \frac{1}{2\sigma^2}  \sum_i (y_i - \beta x_i)^2
-\end{align}
-The minimum of which corrisponds with the maximum likelihood estimators.
+\end{align*}
+\pause Now the minimum of this corrisponds with the maximum likelihood estimators.
 
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-Only the second term depends on $\beta$:
-\begin{align}
+Again, we notice that only the second term depends on $\beta$: \pause
+\begin{align*}
 -\text{log} \left\{ \mathcal{L} (\beta, \sigma | x, y)\right\} &= \frac{n}{2} \cdot \text{log}(2\pi\sigma^2) +
     {\color{solarized@orange} \frac{1}{2\sigma^2}  \sum_i (y_i - \beta x_i)^2}
-\end{align}
-And we can see without even resorting
+\end{align*}
+\pause And we can again see without resorting
 to derivatives that the maximum likelihood estimator is that one that
 minimizes the sum of squares:
-\begin{align}
-\widehat{\beta}_{mle} = \argmin_{\beta} \left\{ \sum_i (y_i - \beta x_i)^2 \right\}
-\end{align}
+\begin{align*}
+\widehat{\beta}_{mle} = \argmin_{b \in \mathbb{R}} \left\{ \sum_i (y_i - b x_i)^2 \right\}
+\end{align*}
 
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-The minimizer to the sum of squares can be found easily:
-\begin{align}
+It is possible to directly solve the least squares and obtain
+an analytic solution to the simple linear regression model.
+
+Taking the derivative of the sum of squares with respect to
+$\beta$ we get:
+\begin{eqnarray*}
 \frac{\partial}{\partial \beta} \sum_i (y_i - \beta x_i)^2
-  &= 2 \cdot \sum_i ( y_i - \beta x_i) \cdot x_i \\
+  &= 2 \cdot \sum_i ( y_i - \beta x_i) \cdot x_i \\ \pause
   &= 2 \cdot \sum_i ( y_i x_i - \beta x_i^2)
-\end{align}
-And setting equal to zero:
-\begin{align}
-2 \cdot \sum_i ( y_i x_i - \widehat{\beta} x_i^2) &= 0 \\
-\sum_i y_i x_i &= \widehat{\beta} \sum_i x_i^2 \\
-\widehat{\beta} &= \frac{\sum_i y_i x_i}{\sum_i x_i^2}
-\end{align}
+\end{eqnarray*}
+
 
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Setting the derivative equal to zero:
+\begin{eqnarray*}
+2 \cdot \sum_i ( y_i x_i - \widehat{\beta} x_i^2) &= 0 \\ \pause
+\sum_i y_i x_i &= \widehat{\beta} \sum_i x_i^2 \\ \pause
+\widehat{\beta}_{MLE} &= \frac{\sum_i y_i x_i}{\sum_i x_i^2}
+\end{eqnarray*}
+\pause If you have seen the standard simple least squares solution
+(that is, with an intercept) this should look familiar.
+
+\end{frame}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
 There are many ways of thinking about the maximum likelihood estimator,
 one of which is as a weighted sum of the data points $y_i$:
-\begin{align}
+\begin{align*}
 \widehat{\beta} &= \frac{\sum_i y_i x_i}{\sum_i x_i^2} \\
 &= \sum_i \left( y_i \cdot \frac{x_i}{\sum_j x_i^2} \right) \\
 &= \sum_i y_i w_i
-\end{align}
+\end{align*}
 
 \end{frame}
 
@@ -143,9 +284,9 @@ one of which is as a weighted sum of the data points $y_i$:
 \begin{frame}[fragile] \frametitle{}
 
 So, we are weighting the data $y_i$ according to:
-\begin{align}
+\begin{align*}
 w_i &\propto x_i
-\end{align}
+\end{align*}
 Does this make sense? {\bf Why}?
 
 \end{frame}
@@ -155,9 +296,9 @@ Does this make sense? {\bf Why}?
 
 One thing that the weighted form of the estimator makes
 obvious is that the estimator is distributed normally:
-\begin{align}
+\begin{align*}
 \widehat{\beta} \sim \mathcal{N} (\cdot, \cdot)
-\end{align}
+\end{align*}
 As it is the sum of normally distributed variables ($y_i$).
 
 \end{frame}
@@ -166,13 +307,13 @@ As it is the sum of normally distributed variables ($y_i$).
 \begin{frame}[fragile] \frametitle{}
 
 The mean of the estimator becomes
-\begin{eqnarray}
+\begin{eqnarray*}
 \mathbb{E} \widehat{\beta} &=& \sum_i \mathbb{E} (y_i w_i) \\
 &=& \sum_i w_i \cdot \mathbb{E} (y_i) \\
 &=& \sum_i \beta x_i w_i \\ \pause
 &=& \beta \cdot \sum_i x_i \frac{x_i}{\sum_j x_j^2} \\
 &=& \pause \beta
-\end{eqnarray}
+\end{eqnarray*}
 And so we see the estimator is unbiased
 
 \end{frame}
