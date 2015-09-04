@@ -147,13 +147,13 @@ For some unknown variance $\sigma^2 > 0$.
 The density function of a normally distributed random variable with
 mean $\mu$ and variance $\sigma^2$ is given by:
 \begin{align*}
-f(x) &=  \frac{1}{\sqrt{2\pi\sigma^2}} \times
-    exp \left\{ - \frac{1}{2\sigma^2} (x-\mu)^2 \right\}
+f(z) &=  \frac{1}{\sqrt{2\pi\sigma^2}} \times
+    exp \left\{ - \frac{1}{2\sigma^2} (z-\mu)^2 \right\}
 \end{align*}
 \pause Conceptually, the front term is just a normalization to make
 the density sum to $1$. The important part is:
 \begin{align*}
-f(x) &\propto exp \left\{ - \frac{1}{2\sigma^2} (x-\mu)^2 \right\}
+f(z) &\propto exp \left\{ - \frac{1}{2\sigma^2} (z-\mu)^2 \right\}
 \end{align*}
 
 \end{frame}
@@ -163,7 +163,7 @@ f(x) &\propto exp \left\{ - \frac{1}{2\sigma^2} (x-\mu)^2 \right\}
 
 Which you have probably seen rewritten as:
 \begin{align*}
-f(x) &\propto exp \left\{ - 0.5 \cdot \left(\frac{x-\mu}{\sigma}\right)^2 \right\}
+f(z) &\propto exp \left\{ - 0.5 \cdot \left(\frac{z-\mu}{\sigma}\right)^2 \right\}
 \end{align*}
 
 \end{frame}
@@ -171,7 +171,7 @@ f(x) &\propto exp \left\{ - 0.5 \cdot \left(\frac{x-\mu}{\sigma}\right)^2 \right
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-Let's look at the maximum likelihood function of this model:
+Let's look at the maximum likelihood function of our simple regression model:
 \begin{eqnarray*}
 \mathcal{L} (\beta, \sigma | x, y) &=& \prod_i \mathcal{L} (\beta, \sigma | x_i, y_i) \\ \pause
 &=& \prod_i \frac{1}{\sqrt{2\pi\sigma^2}} \times
@@ -251,14 +251,14 @@ minimizes the sum of squares:
 \begin{frame}[fragile] \frametitle{}
 
 It is possible to directly solve the least squares and obtain
-an analytic solution to the simple linear regression model.
+an analytic solution to the simple linear regression model. \pause
 
 Taking the derivative of the sum of squares with respect to
 $\beta$ we get:
 \begin{eqnarray*}
 \frac{\partial}{\partial \beta} \sum_i (y_i - \beta x_i)^2
-  &= 2 \cdot \sum_i ( y_i - \beta x_i) \cdot x_i \\ \pause
-  &= 2 \cdot \sum_i ( y_i x_i - \beta x_i^2)
+  &= -2 \cdot \sum_i ( y_i - \beta x_i) \cdot x_i \\ \pause
+  &= -2 \cdot \sum_i ( y_i x_i - \beta x_i^2)
 \end{eqnarray*}
 
 
@@ -269,7 +269,7 @@ $\beta$ we get:
 
 Setting the derivative equal to zero:
 \begin{eqnarray*}
-2 \cdot \sum_i ( y_i x_i - \widehat{\beta} x_i^2) &=& 0 \\ \pause
+-2 \cdot \sum_i ( y_i x_i - \widehat{\beta} x_i^2) &=& 0 \\ \pause
 \sum_i y_i x_i &=& \widehat{\beta} \sum_i x_i^2 \\ \pause
 \widehat{\beta}_{MLE} &=& \frac{\sum_i y_i x_i}{\sum_i x_i^2}
 \end{eqnarray*}
@@ -285,8 +285,8 @@ Setting the derivative equal to zero:
 There are many ways of thinking about the maximum likelihood estimator,
 one of which is as a weighted sum of the data points $y_i$:
 \begin{align*}
-\widehat{\beta} &= \frac{\sum_i y_i x_i}{\sum_i x_i^2} \\
-&= \sum_i \left( y_i \cdot \frac{x_i}{\sum_j x_i^2} \right) \\
+\widehat{\beta} &= \frac{\sum_i y_i x_i}{\sum_i x_i^2} \\ \pause
+&= \sum_i \left( y_i \cdot \frac{x_i}{\sum_j x_j^2} \right) \\ \pause
 &= \sum_i y_i w_i
 \end{align*}
 
@@ -311,8 +311,9 @@ The mean of the estimator becomes
 \begin{eqnarray*}
 \mathbb{E} \widehat{\beta} &=& \sum_i \mathbb{E} (y_i w_i) \\ \pause
 &=& \sum_i w_i \cdot \mathbb{E} (y_i) \\ \pause
-&=& \sum_i \beta x_i w_i \\ \pause
-&=& \beta \cdot \sum_i x_i \frac{x_i}{\sum_j x_j^2} \\
+&=& \sum_i w_i x_i \beta \\ \pause
+&=& \beta \cdot \sum_i x_i \frac{x_i}{\sum_j x_j^2} \\ \pause
+&=& \beta \cdot \frac{\sum_i x_i^2}{\sum_j x_j^2} \\ \pause
 &=& \pause \beta
 \end{eqnarray*}
 And so we see the estimator is unbiased.
@@ -339,11 +340,23 @@ If $\sum_i x_i^2$ diverges, we will get a consistent estimator.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-So, we are weighting the data $y_i$ according to:
+So we now know that the MLE is distributed as:
+\begin{align*}
+\widehat{\beta} \sim \mathcal{N} (\beta, \frac{\sigma^2}{\sum_i x_i^2})
+\end{align*}
+\pause Does this make sense? What if $x_i = 1$ for
+all $i$?
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+The MLE is weighting the data $y_i$ according to:
 \begin{align*}
 w_i &\propto x_i
 \end{align*}
-Does this make sense? {\bf Why}?
+\pause Does this make sense? {\bf Why}?
 
 \end{frame}
 
@@ -370,6 +383,26 @@ We will be using the R programming language for data analysis and simulations \\
 \item An implementation of the S programming language
 \item Designed for interactive data analysis
 \item For pros/cons, check out the many lengthy internet articles \& arguments
+\end{itemize}
+\end{minipage}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\noindent
+\begin{minipage}{0.5\textwidth}
+\includegraphics[width=0.75\linewidth]{img/Rlogo.png}
+\end{minipage}%%% to prevent a space
+\begin{minipage}{0.5\textwidth}
+Things to know \\
+\begin{itemize}
+\item everything in R is an object
+\item indexing starts at 1
+\item no scalar type, numeric objects are all vectors
+\item mostly functional language, with some OO features
 \end{itemize}
 \end{minipage}
 
@@ -414,7 +447,7 @@ To force unbiaseness, we must have:
 \begin{eqnarray*}
 \mathbb{E} \sum_i y_i \cdot a_i &=& \beta \\ \pause
 \sum_i x_i \cdot \beta \cdot a_i &=& \beta \\ \pause
-\sum_i x_i \cdot a_i &=& 1 \\ \pause
+\sum_i x_i \cdot a_i &=& 1 \\
 \end{eqnarray*}
 
 \end{frame}
@@ -455,7 +488,8 @@ Find stationary points (zero partial derivates) of:
 \begin{align*}
 L(x,\lambda) &= f(x) + \lambda \cdot (g(x) - k)
 \end{align*}
-These points are nessisary conditions for solving the original problem.
+This will give the set of possible minimisers to the original constrained
+problem.
 
 \end{frame}
 
@@ -475,7 +509,7 @@ For our problem we have:
 \begin{align*}
 L(a,\lambda) &= \sum_i a_i^2 + \lambda \cdot \left( 1 - \sum_i a_i x_i\right)
 \end{align*}
-Which gives:
+\pause  Which gives:
 \begin{align*}
 \frac{\partial}{\partial a_k}  L(a,\lambda) &= 2 a_k - \lambda x_k \\
 2 a_k - \lambda x_k &= 0 \\
@@ -487,13 +521,13 @@ a_k &= \frac{1}{2} \cdot \lambda \cdot x_k
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-The lambda derivative, which is just the constrain, shows the specific
+The lambda derivative, which is just the constraint, shows the specific
 value of $\lambda$ that we need:
 \begin{align*}
 \frac{\partial}{\partial \lambda}  L(a,\lambda) &= 1 - \sum_i a_i x_i \\
 \sum_i a_i x_i &= 1
 \end{align*}
-\pause Plugging our previous version of $\lambda$:
+\pause Plugging our previous version of $a_i$:
 \begin{align*}
 \sum_i \frac{1}{2} \cdot \lambda \cdot x_i \cdot x_i &= 1 \\
 \lambda \cdot \sum_i \frac{1}{2} \cdot x_i^2 &= 1 \\
@@ -510,7 +544,7 @@ Finally, plugging this back in:
 a_k &= \frac{1}{2} \cdot \lambda \cdot x_k \\
 a_k &= \frac{x_k}{\sum_i x_i^2}
 \end{align*}
-And this gives:
+\pause And this gives:
 \begin{align*}
 \widehat{\beta}_{BLUE} &= \sum_i y_i \cdot \frac{x_i}{\sum_j x_j^2} \\
 &= \widehat{\beta}_{MLE}

@@ -22,7 +22,7 @@ beta <- 1
 sigma <- 0.25
 
 # get one sample of y and plot it with
-# ols estimator
+# the ols estimator
 y <- x * beta + rnorm(n,sd=sigma)
 plot(x,y,pch=19)
 betaHat <- sum(y*x) / sum(x^2)
@@ -75,17 +75,34 @@ for (k in 1:n) {
   results[k] <- betaHatMinus - betaHat
 }
 
+plot(results)
 plot(x,results)
 
 ###################################
+# Galton's pea
+p <- read.csv("http://euler.stat.yale.edu/~tba3/stat612/lectures/lec02/data/galton_peas.csv")
+p <- read.csv("~/files/stat612/lectures/lec02/data/galton_peas.csv")
+table(p[,1], round(p[,2]), dnn=c("parent", "child"))
+
+betaHat <- sum((p$child)*(p$parent)) / sum((p$parent)^2)
+
+betaHat <- sum((p$parent - mean(p$parent))*(p$child - mean(p$child))) / sum((p$child - mean(p$child))^2)
+alphaHat <- mean(p$parent) - mean(p$child) * betaHat
+
+out <- lm(child ~ parent, data=p)
+out
+
+out <- lm(child ~ parent - 1, data=p)
+out
+
 # Galton's height data
-height <- read.csv("http://euler.stat.yale.edu/~tba3/stat612/lectures/lec02/data/galton_heights.csv")
+h <- read.csv("http://euler.stat.yale.edu/~tba3/stat612/lectures/lec02/data/galton_heights.csv")
+h <- read.csv("~/files/stat612/lectures/lec02/data/galton_heights.csv")
 
+x <- h$Height
+y <- (h$Father + h$Mother) / 2
 
-y <- height$Height
-x <- (height$Father + height$Mother) / 2
-
-
+sum( (y - mean(y))*(x - mean(x))) / sum((x - mean(x))^2)
 
 
 
