@@ -77,6 +77,16 @@ for (k in 1:n) {
 
 plot(x,results)
 
+###################################
+# Galton's height data
+height <- read.csv("http://euler.stat.yale.edu/~tba3/stat612/lectures/lec02/data/galton_heights.csv")
+
+
+y <- height$Height
+x <- (height$Father + height$Mother) / 2
+
+
+
 
 
 
