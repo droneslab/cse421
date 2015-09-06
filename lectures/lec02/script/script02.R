@@ -13,7 +13,6 @@ text(0, dnorm(0, sd=SD[3])+0.07, expression(paste(sigma," = ", 1)))
 text(0, dnorm(0, sd=SD[4])+0.07, expression(paste(sigma," = ", 2)))
 dev.off()
 
-
 ###################################
 # Simulation of simple regression
 x <- seq(0,1,by=0.01)
@@ -41,43 +40,6 @@ hist(betaHat,breaks=100)
 mean(betaHat) - beta
 var(betaHat) - sigma^2 / sum(x^2)
 
-# leverage
-x[n] <- 10
-y <- x * beta + rnorm(n,sd=sigma)
-
-plot(x,y,cex=0.3)
-betaHat <- sum(y*x) / sum(x^2)
-abline(0,betaHat,col="red")
-
-# leverage with corruption
-x[n] <- 10
-y <- x * beta + rnorm(n,sd=sigma)
-k <- n
-y[k] <- y[k] - 1
-
-plot(x,y,cex=0.3)
-betaHat <- sum(y*x) / sum(x^2)
-abline(0,betaHat,col="red")
-betaHatMinus <- sum(y[-k]*x[-k]) / sum(x[-k]^2)
-abline(0,betaHatMinus,col="blue")
-
-# calc leverage measure of each point
-x[n] <- 10
-y <- x * beta + rnorm(n,sd=sigma)
-
-results <- rep(NA, n)
-for (k in 1:n) {
-  ynew <- y
-  ynew[k] <- ynew[k] - 1
-
-  betaHat <- sum(ynew*x) / sum(x^2)
-  betaHatMinus <- sum(ynew[-k]*x[-k]) / sum(x[-k]^2)
-  results[k] <- betaHatMinus - betaHat
-}
-
-plot(results)
-plot(x,results)
-
 ###################################
 # Galton's pea
 p <- read.csv("http://euler.stat.yale.edu/~tba3/stat612/lectures/lec02/data/galton_peas.csv")
@@ -94,16 +56,6 @@ out
 
 out <- lm(child ~ parent - 1, data=p)
 out
-
-# Galton's height data
-h <- read.csv("http://euler.stat.yale.edu/~tba3/stat612/lectures/lec02/data/galton_heights.csv")
-h <- read.csv("~/files/stat612/lectures/lec02/data/galton_heights.csv")
-
-x <- h$Height
-y <- (h$Father + h$Mother) / 2
-
-sum( (y - mean(y))*(x - mean(x))) / sum((x - mean(x))^2)
-
 
 
 
