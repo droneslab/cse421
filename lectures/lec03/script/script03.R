@@ -1,6 +1,6 @@
 ###################################
 # Simple linear regression - leverage
-options(width=50)
+options(width=4)
 set.seed(3)
 x <- seq(0,1,by=0.01)
 n <- length(x)
@@ -55,7 +55,7 @@ hist(betaHatMinus)
 abline(v=median(betaHatMinus), col="red", lwd=3)
 
 # repeat for a different point
-N <- 10000
+N <- 100
 betaHat <- rep(NA, N)
 betaHatMinus <- rep(NA, N)
 x <- seq(0,1,by=0.01)
@@ -185,6 +185,7 @@ head(h)
 
 summary(lm(Height ~ Father - 1, data=h))
 
+summary(lm(h$Height ~ h$Father - 1))
 
 
 
