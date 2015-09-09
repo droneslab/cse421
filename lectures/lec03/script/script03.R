@@ -185,46 +185,6 @@ head(h)
 
 summary(lm(Height ~ Father - 1, data=h))
 
-summary(lm(h$Height ~ h$Father - 1))
-
-
-
-summary(lm(Height ~ Father - 1, data=h,
-          subset=(Gender == "M")))
-
-mean(h$Father)
-mean(h$Mother)
-mean(h$Height[h$Gender == "M"])
-mean(h$Height[h$Gender == "F"])
-
-mean(h$Father) / mean(h$Mother)
-mean(h$Height[h$Gender == "M"]) /
-  mean(h$Height[h$Gender == "F"])
-
-h$Height2 <- h$Height
-h$Height2[h$Gender == "F"] <-
-  h$Height2[h$Gender == "F"] * 1.08
-h$MidHeight <- (h$Father + h$Mother*1.08) / 2
-
-summary(lm(Height2 ~ MidHeight - 1, data=h))
-summary(lm(Height2 ~ MidHeight, data=h))
-
-
-plot(h$MidHeight, h$Height2, pch=19, cex=0.3,
-      xlab="Parents Avg. Height",
-      ylab="Children's Height")
-abline(lm(Height2 ~ MidHeight, data=h),
-        col="red", lwd=2)
-
-summary(lm(MidHeight ~ Height2, data=h))
-abline(-44.47115/0.35750, 1/0.35750,
-         col="red", lwd=2)
-
-summary(lm(Height2 ~ Father, data=h))
-summary(lm(Father ~ Height2, data=h))
-
-
-
 
 
 
