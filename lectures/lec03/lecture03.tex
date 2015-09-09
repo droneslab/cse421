@@ -36,8 +36,9 @@ STAT 312/612
 
 \begin{itemize}
 \item Problem Set \#1 Online: Due Next Wednesday, 2015-09-16
-\item R code online
+\item R code; online
 \item Course Pace
+\item Classroom
 \end{itemize}
 
 \end{frame}
@@ -97,7 +98,7 @@ Last time we calculated the MLE estimator,
 \begin{align*}
 \widehat{\beta}_{MLE} &= \frac{\sum_i y_i x_i}{\sum_i x_i^2}
 \end{align*}
-And showed that it has a normally distribution with the following
+\pause And showed that it has a normal distribution with the following
 mean and variance:
 \begin{align*}
 \widehat{\beta} \sim \mathcal{N} (\beta, \frac{\sigma^2}{\sum_i x_i^2})
@@ -158,7 +159,7 @@ it would seem reasonable to have:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-Much like when estimating the mean a randomly sampled normal
+Much like when estimating the mean of a randomly sampled normal
 distribution, this is approximately correct though the exact
 formula requires a small correction since\pause
 \begin{align*}
@@ -190,7 +191,7 @@ s^2 &= \frac{1}{n-1} \cdot \sum_i r_i^2 \\
 The ratio of our estimator to the true variance has
 a $\chi^2$ distribution with $n-1$ degrees of freedom.
 \begin{align*}
-\frac{s^2}{\sigma^2} \sim \chi^2_{n - 1}
+(n-1) \cdot \frac{s^2}{\sigma^2} \sim \chi^2_{n - 1}
 \end{align*}
 
 \end{frame}
@@ -199,10 +200,10 @@ a $\chi^2$ distribution with $n-1$ degrees of freedom.
 \begin{frame}[fragile] \frametitle{}
 
 The standard error is then given by:
-\begin{align*}
-\text{S.E.}(\widehat{\beta}) &= \sqrt{\frac{s^2}{\sum_i x_i^2}} \\
-&= \sqrt{\frac{(y - x_i \widehat{\beta})^2}{(n-1) \cdot \sum_i x_i^2}}
-\end{align*}
+\begin{eqnarray*}
+\text{S.E.}(\widehat{\beta}) &=& \sqrt{\frac{s^2}{\sum_i x_i^2}} \\ \pause
+&=& \sqrt{\frac{(y - x_i \widehat{\beta})^2}{(n-1) \cdot \sum_i x_i^2}}
+\end{eqnarray*}
 
 \end{frame}
 
@@ -244,12 +245,12 @@ this by a normal distribution:
 
 As an alternative to the T-test, consider squaring the
 test statistic
-\begin{align*}
-T^2 &= \left( \frac{\widehat{\beta} - b}{\text{S.E.}(\widehat{\beta})} \right)^2 \\
-&= \frac{{\color{solarized@red}\left(\frac{\widehat{\beta} - b}{\sigma^2 / \sum_i x_i^2}\right)^2}}{{\color{solarized@violet}s^2 / \sigma^2}} \\
-&= \frac{{\color{solarized@red}U}}{{\color{solarized@violet}V}}
-\end{align*}
-\pause Where ${\color{solarized@red}U} \sim \chi^2_{1}$ and ${\color{solarized@violet}V} \sim \chi^2_{n-1}$.
+\begin{eqnarray*}
+T^2 &=& \left( \frac{\widehat{\beta} - b}{\text{S.E.}(\widehat{\beta})} \right)^2 \\ \pause
+&=& \frac{{\color{solarized@red}\left(\frac{\widehat{\beta} - b}{\sqrt{\sigma^2 / \sum_i x_i^2}}\right)^2}}{{\color{solarized@violet}s^2 / \sigma^2}} \\ \pause
+&=& \frac{{\color{solarized@red}U}}{{\color{solarized@violet}V}}
+\end{eqnarray*}
+\pause Where ${\color{solarized@red}U} \sim \chi^2_{1}$ and ${\color{solarized@violet}(n-1) \cdot V} \sim \chi^2_{n-1}$.
 
 \pause And therefore $T^2 \sim F_{1, n-1}$.
 
@@ -267,11 +268,12 @@ s^2 &= \frac{1}{n-2} \cdot \sum_i (y_i - \widehat{y}_i)^2
 \end{align*}
 \pause as well as the standard errors:
 \begin{align*}
-\text{S.E.}(\alpha) &= \sqrt{s^2 \cdot \left(\frac{1}{n} + \frac{\bar{x}}{\sum_i (x_i-\bar{x})^2} \right)} \\
+\text{S.E.}(\alpha) &= \sqrt{s^2 \cdot \left(\frac{1}{n} + \frac{\bar{x}^2}{\sum_i (x_i-\bar{x})^2} \right)} \\
 \text{S.E.}(\beta) &= \sqrt{\frac{s^2}{\sum_i (x_i-\bar{x})^2}}
 \end{align*}
 
 \end{frame}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
@@ -293,10 +295,9 @@ can be written as:
 \begin{align*}
 R^2 &= 1 - \frac{\sum_i (y_i - \widehat{y}_i)^2}{\sum_i (y_i)^2}
 \end{align*}
-\pause The more typically seen version compares the estimated
-residuals with the centered values of $y$.
+\pause We can re-write this as:
 \begin{align*}
-R^2 &= 1 - \frac{\sum_i (y_i - \widehat{y}_i)^2}{\sum_i (y_i - \bar{y})^2}
+R^2 &= \left( \frac{\sum_i x_i y_i}{\sqrt{\sum_i x_i^2 \cdot \sum_i y_i^2}} \right)^2
 \end{align*}
 
 \end{frame}
@@ -304,7 +305,12 @@ R^2 &= 1 - \frac{\sum_i (y_i - \widehat{y}_i)^2}{\sum_i (y_i - \bar{y})^2}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-With a bit of algebraic manipulation, we see that this is
+The more typically seen version compares the estimated
+residuals with the centered values of $y$.
+\begin{align*}
+R^2 &= 1 - \frac{\sum_i (y_i - \widehat{y}_i)^2}{\sum_i (y_i - \bar{y})^2}
+\end{align*}
+\pause With a bit of algebraic manipulation, we see that this is
 equal to the squared sample correlation of $x$ and $y$:
 \begin{align*}
 R^2 &= \left( \frac{\sum_i (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_i (x_i - \bar{x})^2 \cdot \sum_i (y_i - \bar{y})^2}} \right)^2 \\
@@ -323,9 +329,18 @@ R^2 &= \left( \frac{\sum_i (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_i (x_i - \
 \end{frame}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf Some parting words from Sir Francis Galton}
+
+\begin{center}
+\includegraphics[width=0.95\linewidth]{img/galton_quote.png}
+\end{center}
+
+\end{frame}
+
 \end{document}
-
-
 
 
 
