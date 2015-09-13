@@ -1,0 +1,341 @@
+\input{../header.tex}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\vfill
+
+{\fontsize{0.7cm}{0cm}\selectfont Lecture 04 \\\vspace{0.2cm} Applications
+and Intro to Multivariate Regression}\\\vspace{0.5cm}
+14 September 2015
+
+\vspace{2cm}
+
+\begin{minipage}{0.6\textwidth}
+Taylor B. Arnold \\
+Yale Statistics \\
+STAT 312/612
+\end{minipage}
+\hfill
+\begin{minipage}{0.3\textwidth}\raggedleft
+\includegraphics[scale=0.3]{../yale-logo.png}
+\end{minipage}%
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\color{yaleblue}\fontsize{16pt}{20pt}\selectfont Goals for today}
+
+\begin{enumerate}
+\item Galton's heights data
+\item multivariate regression: normal equations
+\end{enumerate}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Galton Heights Application}
+\end{flushright}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Multivariate Regression Models}
+\end{flushright}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+The multivariate linear regression model is, on the surface,
+only a slight generalization of the simple linear regression model:
+\begin{align*}
+y_i &= x_{1,i} \beta_1 + x_{2,i} \beta_2 + \cdots + x_{1,p} \beta_p + \epsilon
+\end{align*}
+\pause The statistical estimation problem now becomes one of
+estimating the $p$ components of the multivariate vector $\beta$.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+A sample can be re-written in terms of the vector $x_i$
+(the vector of covariates for a single observation):
+\begin{align*}
+y_i &= x_{i}^t \beta + \epsilon
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+In matrix notation, we can write the linear model simultaneously
+for all observations:
+\begin{align*}
+\left(\begin{array}{c}y_1\\ y_2\\ \vdots\\ y_n\end{array}\right) &=
+  \left(\begin{array}{cccc}x_{1,1}&x_{2,1}&\cdots&x_{p,1}\\
+                           x_{1,2}&\ddots&&x_{p,2}\\
+                           \vdots&&\ddots&\vdots\\
+                           x_{1,n}&x_{2,n}&\cdots&x_{p,n}\\\end{array}\right)
+  \left(\begin{array}{c}\beta_1\\ \beta_2\\ \vdots\\ \beta_p\end{array}\right) +
+  \left(\begin{array}{c}\epsilon_1\\ \epsilon_1\\ \vdots\\ \epsilon_n\end{array}\right)
+\end{align*}
+\pause Which can be compactly written as:
+\begin{align*}
+Y &= X \beta + \epsilon
+\end{align*}
+\pause {\bf Note:} we use the transpose for $x_i^t \beta$ but not for $X \beta$!
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+For reference, note the following equation
+\begin{align*}
+Y &= X \beta + \epsilon
+\end{align*}
+Yields these dimensions:
+\begin{align*}
+Y &\in \mathbb{R}^n \\
+X &\in \mathbb{R}^{n \times p} \\
+\beta &\in \mathbb{R}^p \\
+\epsilon &\in \mathbb{R}^n \\
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf Vector Norms}
+
+When working with vectors and matricies, it will be helpful
+to represent certain quantities by norms. The p-norm of a
+vector is given by:
+\begin{align*}
+||x||_p^p = \sum_{i=1}^n | x_i |^p
+\end{align*}
+\pause In particular, the squared $2$-norm yields the sum
+of squares of a vector.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf Vector Norm Properties}
+
+The following properties are true of all vector norms,
+for a scalar $\alpha$ and vectors $v_1$ and $v_2$.
+\begin{align*}
+|| \alpha v_1 || = |\alpha| \cdot || v_1 || \\
+|| v_1 + v_2 || \leq || v_1 || + || v_2 || \\
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf p-Norm Properties}
+
+$p$-norms have several additional properties that we will find
+useful.
+
+\pause Define $q$ such that:
+\begin{align*}
+\frac{1}{p} + \frac{1}{q} = 1
+\end{align*}
+The $q$-norm and $p$-norm are then said to be {\it dual} to one another.
+
+\pause Notice that the $2$-norm is dual to itself.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf p-Norm Properties, cont.}
+
+Hölder's inequality then yields
+\begin{align*}
+|v_1^t v_2 | \leq ||v_1||_p ||v_2||_q
+\end{align*}
+\pause As a special case, the Cauchy–Schwarz inequality
+gives that:
+\begin{align*}
+|v_1^t v_2 |^2 \leq ||v_1||_2^2 ||v_2||_2^2
+\end{align*}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf p-Norm Properties, cont.}
+
+Finally, and of most importance for us today, note that
+the squared $2$-norm is exactly equal to the self inner
+product:
+\begin{align*}
+|| v_1 ||_2^2 = v_1^t v_1
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf Least squares (again)}
+
+To estimate the least squares solution, which is again the
+MLE for independent normal errors, we see that:
+\begin{align*}
+\widehat{\beta} \in \argmin_{b \in \mathbb{R}^p} \left\{ ||Y - X \beta ||_2^2 \right\}
+\end{align*}
+\pause Now using vector norms to denote the sum of
+squares.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+It will be helpful to re-write the sum of squares as:
+in $\beta$:
+\begin{eqnarray*}
+||Y - X \beta ||_2^2 &=& (Y - X\beta)^t (Y - X\beta) \\ \pause
+&=& (Y^t - \beta^t X^t) (Y - X\beta) \\ \pause
+&=& Y^tY - Y^t X\beta - \beta^t X^t Y + \beta^t X^t X\beta \\ \pause
+&=& Y^tY - 2 Y^t X\beta + \beta^t X^t X\beta
+\end{eqnarray*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf Normal Equations}
+
+In order to find the minimum of the sum of squares, we take the gradient
+with respect to $\beta$ and set it equal to zero.
+
+Recall that, for a vector $a$ and symmetric matrix $A$ :
+\begin{align*}
+\nabla_\beta a^t \beta = a \\
+\nabla_\beta \beta^t A \beta = 2 A \beta
+\end{align*}
+\pause This gives the gradient of the sum of squares as:
+\begin{align*}
+\nabla_\beta ||Y - X \beta ||_2^2 &= \nabla_\beta \left(Y^tY - {\color{solarized@blue} 2 Y^t X\beta} + {\color{solarized@magenta} \beta^t X^t X\beta} \right)\\
+&= {\color{solarized@magenta}2 X^t X \beta} - {\color{solarized@blue} 2 X^t y}
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Setting this equal to zero gives a set of $p$ equations called
+the normal equations:
+\begin{align*}
+X^t X \widehat{\beta} &= X^t y
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf Maximum or Minimum?}
+
+To determine whether the normal equations give a local minimum, maximum, or
+saddle point, we can calculate the Hessian matrix.
+\pause This is a $p \times p$ matrix giving every combination of the
+second partial derivatives:
+\begin{align*}
+H f(\beta) &=
+  \left(\begin{array}{cccc}\frac{\partial^2f}{\partial \beta_1 \partial \beta_1}&\frac{\partial^2f}{\partial \beta_1 \partial \beta_2}&\cdots&\frac{\partial^2f}{\partial \beta_1 \partial \beta_p}\\
+                           \frac{\partial^2f}{\partial \beta_2 \partial \beta_1}&\ddots&&\frac{\partial^2f}{\partial \beta_2 \partial \beta_p}\\
+                           \vdots&&\ddots&\vdots\\
+                           \frac{\partial^2f}{\partial \beta_n \partial \beta_1}&\frac{\partial^2f}{\partial \beta_n \partial \beta_2}&\cdots&\frac{\partial^2f}{\partial \beta_n \partial \beta_p}\\\end{array}\right)
+\end{align*}
+If the Hessian is positive definite ($x^t H x \geq 0$) at a critical point,
+then the corrisponding point is a minimum of the
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Looking at the gradiant of the sum of squares:
+\begin{align*}
+\nabla_\beta ||Y - X \beta ||_2^2 &= 2 X^t X - 2 X^t y
+\end{align*}
+\pause We can see that the Hessian is simply:
+\begin{align*}
+H_\beta ||Y - X \beta ||_2^2 &= 2 X^t X
+\end{align*}
+\pause Why is this positive definite? \pause
+\begin{align*}
+v^t \left(2 X^tX \right) v &= 2 \left( v^t X^t X v\right) \\
+&= 2 || X v ||_2^2 \\
+&\geq 0
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Back to the normal equations themselves, notice that if the
+matrix $X^t X$ is invertable, we can `solve' the normal
+equations as:
+\begin{align*}
+X^t X \widehat{\beta} &= X^t y \\
+\widehat{\beta} &= (X^t X)^{-1} X^t y
+\end{align*}
+\pause This is not a good way to solve the normal equations
+numerically, but for deriving theoretical results about the
+least squares estimator this form will be very useful.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Matricies and Model Frames in R}
+\end{flushright}
+
+\end{frame}
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
