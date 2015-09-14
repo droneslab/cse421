@@ -1,13 +1,12 @@
 ###################################
 # Galton's height data
 urlBase <- "http://euler.stat.yale.edu/~tba3/stat612/lectures/lec03/data/"
-urlBase <- "~/files/stat612/lectures/lec03/data/"
+#urlBase <- "~/files/stat612/lectures/lec03/data/"
 h <- read.csv(paste0(urlBase, "galton_heights.csv"))
 head(h)
 
 summary(lm(Height ~ Father - 1, data=h))
 summary(lm(h$Height ~ h$Father - 1))
-
 
 summary(lm(Height ~ Father - 1, data=h,
           subset=(Gender == "M")))
@@ -16,6 +15,8 @@ mean(h$Father)
 mean(h$Mother)
 mean(h$Height[h$Gender == "M"])
 mean(h$Height[h$Gender == "F"])
+
+
 
 mean(h$Father) / mean(h$Mother)
 mean(h$Height[h$Gender == "M"]) /
@@ -34,11 +35,11 @@ plot(h$MidHeight, h$Height2, pch=19, cex=0.3,
       xlab="Parents Avg. Height",
       ylab="Children's Height")
 abline(lm(Height2 ~ MidHeight, data=h),
-        col="red", lwd=2)
+        col="blue", lwd=3)
 
 summary(lm(MidHeight ~ Height2, data=h))
 abline(-44.47115/0.35750, 1/0.35750,
-         col="red", lwd=2)
+         col="blue", lwd=3)
 
 summary(lm(Height2 ~ Father, data=h))
 summary(lm(Father ~ Height2, data=h))
