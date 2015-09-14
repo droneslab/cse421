@@ -28,11 +28,26 @@ STAT 312/612
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
+{\color{yaleblue}\fontsize{16pt}{20pt}\selectfont Notes}
+
+\begin{enumerate}
+\item Problem set 1 due start of next class
+\item TA session tomorrow night
+\item One typo; 4(b) has hypothesis test for the intercept not the slope
+\item Try to get a fresh copy of notes!
+\end{enumerate}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
 {\color{yaleblue}\fontsize{16pt}{20pt}\selectfont Goals for today}
 
 \begin{enumerate}
 \item Galton's heights data
-\item multivariate regression: normal equations
+\item Multivariate regression; normal equations
+\item Model frames in R
 \end{enumerate}
 
 \end{frame}
@@ -218,7 +233,6 @@ squares.
 \begin{frame}[fragile] \frametitle{}
 
 It will be helpful to re-write the sum of squares as:
-in $\beta$:
 \begin{eqnarray*}
 ||Y - X \beta ||_2^2 &=& (Y - X\beta)^t (Y - X\beta) \\ \pause
 &=& (Y^t - \beta^t X^t) (Y - X\beta) \\ \pause
@@ -277,7 +291,7 @@ H f(\beta) &=
                            \frac{\partial^2f}{\partial \beta_n \partial \beta_1}&\frac{\partial^2f}{\partial \beta_n \partial \beta_2}&\cdots&\frac{\partial^2f}{\partial \beta_n \partial \beta_p}\\\end{array}\right)
 \end{align*}
 If the Hessian is positive definite ($x^t H x \geq 0$) at a critical point,
-then the corrisponding point is a minimum of the
+then the critical point is a local minimum.
 
 \end{frame}
 
@@ -286,7 +300,7 @@ then the corrisponding point is a minimum of the
 
 Looking at the gradiant of the sum of squares:
 \begin{align*}
-\nabla_\beta ||Y - X \beta ||_2^2 &= 2 X^t X - 2 X^t y
+\nabla_\beta ||Y - X \beta ||_2^2 &= 2 X^t X \beta - 2 X^t y
 \end{align*}
 \pause We can see that the Hessian is simply:
 \begin{align*}
