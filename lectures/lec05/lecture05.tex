@@ -33,7 +33,7 @@ STAT 312/612
 \begin{enumerate}
 \item Geometry of least squares
 \item Projection matrix P and annihilator matrix M
-\item Application to
+\item Multivariate Galton Heights
 \end{enumerate}
 
 \end{frame}
@@ -68,15 +68,15 @@ As long as the matrix $X^t X$ is invertable.
 
 Define the column space of the matrix $X$ as:
 \begin{align*}
-\mathcal{R} (X) &= \left\{ \theta : \theta = X \beta, \, \beta \in \mathbb{R}^p \right\} \subset \mathbb{R}^n
+\mathcal{R} (X) &= \left\{ \theta : \theta = X b, \, b \in \mathbb{R}^p \right\} \subset \mathbb{R}^n
 \end{align*}
-This is the space spanned by the $p$ columns on $X$ sitting in $n$-dimensional space.
+This is the space spanned by the $p$ columns of $X$ sitting in $n$-dimensional space.
 
 \pause Notice that the least squares problem can be re-written as:
 \begin{align*}
-\widehat{\theta} &= \argmin_\theta \left\{ || y - \theta||_2^2, \quad \text{s.t} \quad \theta = X\beta \right\}
+\widehat{\theta} &= \argmin_\theta \left\{ || y - \theta||_2^2, \quad \text{s.t} \quad \theta \in \mathcal{R} (X) \right\}
 \end{align*}
-Where $\widehat{\beta} = X \widehat{\theta}$.
+Where then $\widehat{\beta} = X \widehat{\theta}$.
 
 \end{frame}
 
@@ -166,17 +166,17 @@ matrix? \pause
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-The projection matrix is sometimes called the {\it hat matrix}.
-Any thoughts as to why?
+\begin{center}
+\includegraphics[width=4in]{img/olsGeom.pdf}
+\end{center}
 
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-\begin{center}
-\includegraphics[width=4in]{img/olsGeom.pdf}
-\end{center}
+The projection matrix is sometimes called the {\it hat matrix}.
+Any thoughts as to why?
 
 \end{frame}
 
@@ -195,21 +195,21 @@ M = I_n - P
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-The matrix $P = X (X^t X)^{-1} X^t$ is clearly symettric.
+The matrix $P = X (X^t X)^{-1} X^t$ is clearly symmetric.
 It is also idempotent:
-\begin{align*}
-P^2 &= X (X^t X)^{-1} X^t X (X^t X)^{-1} X^t \\
-&= X (X^t X)^{-1} (X^t X) (X^t X)^{-1} X^t \\
-&= X (X^t X)^{-1} X^t \\
-&= P
-\end{align*}
+\begin{eqnarray*}
+P^2 &=& {\color{solarized@magenta} X (X^t X)^{-1} X^t}  {\color{solarized@blue} X (X^t X)^{-1} X^t}\\ \pause
+&=& X {\color{solarized@red} (X^t X)^{-1}} {\color{solarized@green} (X^t X)} {\color{solarized@red}(X^t X)^{-1}} X^t \\  \pause
+&=& X (X^t X)^{-1} X^t \\  \pause
+&=& P
+\end{eqnarray*}
 
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-M is also symettric
+M is also symmetric
 \begin{align*}
 M^t &= (I_n - P)^t \\
 &= (I_n - P^t) \\
