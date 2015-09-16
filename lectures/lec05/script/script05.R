@@ -38,6 +38,9 @@ summary(out)
 out <- lm(Height ~ Father*Gender, data=h)
 coef(out)
 
+out2 <- lm(Height ~ Father, data=h, subset=Gender=='F')
+coef(out2) # compare to coef(out)
+
 summary(out) # what's odd here!?
 
 ################# Now, model frames again!
@@ -67,8 +70,16 @@ mr <- model.response(mf)
 
 head(mm)
 colnames(mm)[1] <- "GenderF"
+
 mm[,1] <- 1 - mm[,3]
 head(mm)
 
 solve(t(mm) %*% mm) %*% t(mm) %*% mr
+
+
+
+
+
+
+
 

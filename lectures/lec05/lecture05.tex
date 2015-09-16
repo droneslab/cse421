@@ -97,7 +97,7 @@ in $\mathcal{R}$.
 $(y - \widehat{\theta}) \perp \mathcal{R}(X)$. \pause This implies
 that $X^{t} (y - \widehat{\theta}) = 0$. Then for all $\theta \in \mathcal{R}$:
 \begin{eqnarray*}
-|| y - \theta ||^2 &=& (y - \widehat{\theta} + \widehat{\theta} - \theta)^t (y - \widehat{\theta} + \widehat{\theta} - \theta) \\ \pause
+|| y - \theta ||_2^2 &=& (y - \widehat{\theta} + \widehat{\theta} - \theta)^t (y - \widehat{\theta} + \widehat{\theta} - \theta) \\ \pause
 &=& (y - \widehat{\theta})^t (y - \widehat{\theta}) + (\widehat{\theta} - \theta)^t (\widehat{\theta} - \theta) +
     2 (y - \widehat{\theta})^t (\widehat{\theta} - \theta) \\ \pause
 &=& (y - \widehat{\theta})^t (y - \widehat{\theta}) +
@@ -241,7 +241,7 @@ r  &=& y - X\widehat{\beta} \\ \pause
 &=& y - Py \\ \pause
 &=& (I_n - P) y \\ \pause
 &=& M y \\ \pause
-&=& M (X \beta - \epsilon) \\ \pause
+&=& M (X \beta + \epsilon) \\ \pause
 &=& M \epsilon \\
 \end{eqnarray*}
 \pause The matricies $P$ and $M$ not only help make the
