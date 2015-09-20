@@ -62,7 +62,6 @@ mr <- model.response(mf)
 
 head(mm)
 
-
 ## Redo model frame!
 mf <- model.frame(Height ~ Father + Gender, data=h)
 mm <- model.matrix.lm(mf)

@@ -1,0 +1,267 @@
+\input{../header.tex}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\vfill
+
+{\fontsize{0.7cm}{0cm}\selectfont Lecture 07 \\\vspace{0.2cm}
+Hypothesis Testing with Multivariate Regression}\\\vspace{0.5cm}
+23 September 2015
+
+\vspace{2cm}
+
+\begin{minipage}{0.6\textwidth}
+Taylor B. Arnold \\
+Yale Statistics \\
+STAT 312/612
+\end{minipage}
+\hfill
+\begin{minipage}{0.3\textwidth}\raggedleft
+\includegraphics[scale=0.3]{../yale-logo.png}
+\end{minipage}%
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\color{yaleblue}\fontsize{16pt}{20pt}\selectfont Goals for today}
+
+\begin{enumerate}
+\item Galton heights data
+\item Hypothesis tests
+\item F and T simulations
+\end{enumerate}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Linear models assumptions}
+\end{flushright}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf Hypothesis tests}
+
+Consider testing the hypothesis $H_0: beta_j = b$ for
+some particular $b$ and $j$.
+
+\pause Under assumptions I-V we have the following:
+\begin{align*}
+\left. \widehat{\beta} - b \right| X, H_0 \sim \mathcal{N} ( 0, \sigma^2 \left( (X^t X)^{-1}_{jj} \right))
+\end{align*}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf Z-test}
+
+This suggests the following test statistic:
+\begin{align*}
+z &= \frac{\widehat{\beta} - b}{\sqrt{\sigma^2  \left( (X^t X)^{-1}_{jj} \right)}}
+\end{align*}
+With,
+\begin{align*}
+\left. z \right| X, H_0 \sim \mathcal{N} (0, 1)
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf T-test}
+
+As in the simple linear linear regression case, we need to estimate
+$\sigma^2$ with $s^2$. This yields the following test statistic:
+\begin{align*}
+t &= \frac{\widehat{\beta} - b}{\sqrt{s^2  \left( (X^t X)^{-1}_{jj} \right)}} \\
+&= \frac{\widehat{\beta} - b}{\text{S.E.}(\widehat{\beta}_j)}
+\end{align*}
+
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf T-test}
+
+The test statistic has a $T$-distribution  with $(n-p)$ degrees
+of freedom
+\begin{align*}
+\left. t \right| X, H_0 \sim t_{n-p}
+\end{align*}
+\pause This time around, we'll actually prove this.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Note that:
+\begin{align*}
+t &= \frac{\widehat{\beta} - b}{\sqrt{\sigma^2  \left( (X^t X)^{-1}_{jj} \right)}} \cdot \sqrt{\frac{\sigma^2}{s^2}} \\
+&= \frac{z}{\sqrt{s^2 / \sigma^2}} \\
+&= \frac{z}{q / (n-p)}
+\end{align*}
+\pause Where $q = r^t r / \sigma^2$.
+
+\pause We need to show that (1) $q | X \sim \chi^2_{n-p}$ and
+(2) $z \independent q | X$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf Lemma} If $B$ is an idempotent matrix and
+$v \sim \mathcal{N} (0, \mathbb{I}_n)$, then
+$v^t B v \sim \chi^2_{\text{rank(B)}}$.
+
+\pause
+See \url{http://www2.econ.iastate.edu/classes/econ671/hallam/documents/QUAD_NORM.pdf}
+for a proof of this lemma.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+(1) We know that $r^t r = \epsilon^t M \epsilon$, so:
+\begin{align*}
+q &= \frac{r^t r}{\sigma^2} \\
+&= \frac{\epsilon^t}{\sigma} \cdot M \cdot \frac{\epsilon}{\sigma}
+\end{align*}
+\pause From the lemma then $q \sim \chi^2_{\text{rank(M)}}$. Finally,
+noting that $rank(M) = tr(M) = n - p$ finishes the first part of the
+proof.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+(2) The random variables $\widehat{\beta}$ and $r$ are both
+linear combinations of $\epsilon$, and are therefore jouintly
+normally distributed. As they are uncorrelated (problem set 2),
+this implies that they are independent. Finally, this implies that
+$z = f(\widehat{\beta})$ and $t = g(r)$ and themselves independent.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf F-test}
+
+Now consider the hypothesis test $H_0: D\beta = d$ for a
+matrix $D$ with $k$ columns and rank $k$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+We'll form the following test statistic:
+\begin{align*}
+F &= \frac{(D\widehat{\beta} - d)^t [D (X^t X)^{-1} D^t ]^{-1} (D\widehat{\beta} - d) / k}{s^2}
+\end{align*}
+And prove that is has an F-distribution with $k$ and $n-p$ degrees of
+freedom.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+We can re-write the test statistics as:
+\begin{align*}
+F &= \frac{w / k}{q / (n - p)}
+\end{align*}
+Where:
+\begin{align*}
+w &= (D\widehat{\beta} - d)^t [D (X^t X)^{-1} D^t ]^{-1} (D\widehat{\beta} - d) \\
+q &= r^t r / \sigma^2
+\end{align*}
+
+\pause
+We've already shown that $q | X \sim \chi^2_{n-p}$, and can see
+that $q \independent w$ by the same argument as before. All that
+is left is to show that $w \sim \chi^2_{k}$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Let $v = D\widehat{\beta} - d$. Under the null hypothesis $v = D (\widehat{\beta} - \beta)$.
+Therefore:
+\begin{eqnarray*}
+\mathbb{V} (v | X) &=& \mathbb{V} (D (\widehat{\beta} - \beta)) \\ \pause
+&=& D \mathbb{V} (\widehat{\beta} - \beta | X) D^t \\ \pause
+&=& \sigma^2 D (X^t X)^{-1} D^t
+\end{eqnarray*}
+
+\pause
+Now, for the multivariate normally distributed $v$ with zero mean,
+we have:
+\begin{align*}
+w &= v^t \mathbb{V} (v | X)^{-1} v
+\end{align*}
+And therefore $w | X \sim \chi^2_k$
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf An alternative F-test}
+
+Now, consider the following estimator:
+\begin{align*}
+\widetilde{\beta} &= \argmin_b || y - Xb ||_2^2 , \quad \text{s.t.} \quad Db = d
+\end{align*}
+\pause We then define the restricted residuals
+$\widetilde{r} = y - X\tilde{\beta}$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf An alternative F-test}
+
+An alternative expression for the $F$-test statistic is:
+\begin{align*}
+F &= \frac{(\tilde{r}^t \tilde{r} -  r^t r) / k }{r^t r / (n - p)}
+\end{align*}
+Conceptually, it should make sense that this is large whenever
+the null hypothesis is false.
+
+\end{frame}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
