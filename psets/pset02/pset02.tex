@@ -107,7 +107,7 @@ Where $\lambda$ is a $k$-dimensional vector. Let $\widetilde{\beta}$ be the solu
 (a) Let $\widehat{\beta}$ be the standard (unrestricted) OLS estimator. Show:
 \begin{align}
 \widetilde{\beta}
-&= \widehat{\beta} - (X^t X)^{-1} D^t \left[R (X^t X)^{-1} R^t\right]^{-1} (D \widehat{\beta} - d) \\
+&= \widehat{\beta} - (X^t X)^{-1} D^t \left[D (X^t X)^{-1} D^t\right]^{-1} (D \widehat{\beta} - d) \\
 \lambda &= \left[ D (X^t X)^{-1} D^t \right]^{-1} (D\widehat{\beta} - d)
 \end{align}
 
@@ -119,9 +119,9 @@ SSR_R - SSR_U &= (\widehat{\beta} - \widetilde{\beta})^t (X^t X) (\widehat{\beta
 &= \lambda^t D (X^t X)^{-1} D^t \lambda \\
 &= \widetilde{e}^t P \widetilde{e}
 \end{align}
-Make sure you justify each step.
+In other words, justify each step.
 
-(c) Show how this verifies that:
+(c) Show how this verifies that the two F-statistics are the same:
 \begin{align}
 \frac{(SSR_R - SSR_U) / k}{SSR_U / (n - p)} &=
 \frac{(D \widehat{\beta} - d)^t  [ D (X^t X)^{-1} D^t ]^{-1} (D \widehat{\beta} - d)^t / k}{s^2}
@@ -143,7 +143,7 @@ Quality – on a scale from 1 (worst) to 5 (best) with some half points \\
 End of harvest – measured as the number days since August 31 \\
 Rain – a dummy variable for unwanted rain at harvest = 1 if yes.
 \end{quote}
-The data can be found at \url{euler.stat.yale.edu/~tba3/psets/pset01/data/Latour.txt}. The first model considered was:
+The data can be found at \url{euler.stat.yale.edu/~tba3/psets/pset02/data/Latour.txt}. The first model considered was:
 \begin{align}
 \text{Quality} &= \beta_0 +\beta_1 \cdot \text{End of Harvest} + \beta_2 \text{Rain}
   + \beta_3 \text{End of Harvest} \times \text{Rain} + \epsilon \label{rainEq}
