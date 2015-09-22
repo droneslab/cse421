@@ -1,4 +1,4 @@
-\input{../header.tex}
+\input{../header-ho.tex}
 
 \begin{document}
 
@@ -113,16 +113,16 @@ The variance of the errors is given by:
 \begin{align*}
 \mathbb{V} \left( \epsilon | X \right) &= \sigma^2 \mathbb{I}_n
 \end{align*}
-Recall that $\mathbb{V} u = \mathbb{E} (u u^t)$.
+Recall that when $\mathbb{E}u = 0$ we have $\mathbb{V} u = \mathbb{E} (u u^t)$.
 
 \pause We can break this assumption into two parts; the
 {\it homoscedasticity} assumption:
 \begin{align*}
-\mathbb{E} ( \epsilon_i^2 ) &= \sigma^2
+\mathbb{E} ( \epsilon_i^2 | X ) &= \sigma^2
 \end{align*}
 and {\it no autocorrelation} assumption:
 \begin{align*}
-\mathbb{E} ( \epsilon_i \epsilon_j ) &= 0 \quad i \neq j
+\mathbb{E} ( \epsilon_i \epsilon_j | X ) &= 0 \quad i \neq j
 \end{align*}
 
 \end{frame}
@@ -279,7 +279,7 @@ Under assumptions I-IV:
 
 \hspace{1cm}  (D) $Cov( \widehat{\beta}, r | X) = 0$ \pause
 
-\hspace{1cm}  (E) $\mathbb{E} s^2 = \sigma^2$ \pause
+\hspace{1cm}  (E) $\mathbb{E} (s^2 | X) = \sigma^2$ \pause
 
 Under assumptions I-V:
 
@@ -372,14 +372,4 @@ tr(P) &=& tr(X (X^t X)^{-1} X^t) \\ \pause
 
 
 \end{document}
-
-
-
-
-
-
-
-
-
-
 
