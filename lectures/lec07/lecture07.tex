@@ -31,13 +31,69 @@ STAT 312/612
 {\color{yaleblue}\fontsize{16pt}{20pt}\selectfont Goals for today}
 
 \begin{enumerate}
+\item Review of assumptions and properties of linear model
 \item The multivariate T-test
 \item Hypothesis test simulations
 \item The multivariate F-test
-\item Application to Galton heights
 \end{enumerate}
 
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Review from Last Time}
+\end{flushright}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{center}
+{\Large Classical linear model assumptions}
+\end{center}
+
+{\bf I. Linearity} $\quad Y = X\beta + \epsilon$
+
+{\bf II. Strict exogeneity} $\quad \mathbb{E} \left( \epsilon | X \right) = 0$
+
+{\bf III. No multicollinearity} $\quad \mathbb{P} \left[ \text{rank} (X) = p \right] = 1$
+
+{\bf IV. Spherical errors} $\quad \mathbb{V} \left( \epsilon | X \right) = \sigma^2 \mathbb{I}_n$
+
+{\bf V. Normality} $\quad \epsilon | X \sim \mathcal{N} (0, \sigma^2 \mathbb{I}_n)$
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf Finite sample properties}
+
+Under assumptions I-III:
+
+\hspace{1cm} (A) $\mathbb{E} (\widehat{\beta} | X) = \beta$
+
+Under assumptions I-IV:
+
+\hspace{1cm}  (B)  $\mathbb{V} (\widehat{\beta} | X) = \sigma^2 (X^t X)^{-1}$
+
+\hspace{1cm}  (C) $\widehat{\beta}$ is the best linear unbiased estimator (Gauss-Markov)
+
+\hspace{1cm}  (D) $Cov( \widehat{\beta}, r | X) = 0$
+
+\hspace{1cm}  (E) $\mathbb{E} (s^2 | X) = \sigma^2$
+
+Under assumptions I-V:
+
+\hspace{1cm}  (F) $\widehat{\beta}$ achieves the Cramér–Rao lower bound
+
+\end{frame}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
@@ -161,8 +217,7 @@ Notice that as $B$ is idempotent:
 \begin{align*}
 \Lambda &= \Lambda^2 \\
 \end{align*}
-\pause Therefore all the elements of $\Lambda$ are $0$ or $1$
-(they cannot be negative because $B$ is symmetric).
+\pause Therefore all the elements of $\Lambda$ are $0$ or $1$.
 
 \end{frame}
 
@@ -175,7 +230,10 @@ By rotating the columns of $Q$, we can actually write:
 \end{align*}
 \pause Notice that this also shows that:
 \begin{align*}
-\text{tr}(B) &= \text{rank}(B)
+\text{tr}(B) &= \text{tr}(Q^t \Lambda Q) \\
+&= \text{tr}(\Lambda Q Q^t ) \\
+&= \text{tr}(\Lambda) \\
+&= \text{rank}(B)
 \end{align*}
 
 \end{frame}
@@ -211,7 +269,7 @@ u^t B u &=& v^t Q B Q^t v \\ \pause
 &=& v^t \Lambda v \\ \pause
 &=& v^t \left( \begin{array}{cc} \mathbb{I}_{\text{tr}(B)} & 0 \\ 0 & 0 \end{array} \right) v \\ \pause
 &=& \sum_{i=1}^{\text{tr}(B)} v_i^2 \pause \\
-&=& \sim \chi^2_{\text{tr}(B)}
+&\sim& \chi^2_{\text{tr}(B)}
 \end{eqnarray*}
 Which completes the lemma.
 
@@ -226,8 +284,9 @@ q &=& \frac{r^t r}{\sigma^2} \\ \pause
 &=& \frac{\epsilon^t}{\sigma} \cdot M \cdot \frac{\epsilon}{\sigma}
 \end{eqnarray*}
 \pause Under Assumption V,
-$\frac{\epsilon^t}{\sigma} \sim \mathcal{N} (0, \mathbb{I}_n)$.
-Therefore from the lemma, then $q \sim \chi^2_{\text{tr(M)}}$, which
+$\frac{\epsilon}{\sigma} \sim \mathcal{N} (0, \mathbb{I}_n)$.
+Therefore from the lemma, then $q \sim \chi^2_{\text{tr(M)}}$; last
+time we showed the $\text{tr(M)} = n - p$, which
 finishes the first part of the proof.
 
 \end{frame}
@@ -236,10 +295,10 @@ finishes the first part of the proof.
 \begin{frame}[fragile] \frametitle{}
 
 (2) The random variables $\widehat{\beta}$ and $r$ are both
-linear combinations of $\epsilon$, and are therefore jouintly
+linear combinations of $\epsilon$, and are therefore jointly
 normally distributed. As they are uncorrelated (problem set 2),
 this implies that they are independent. Finally, this implies that
-$z = f(\widehat{\beta})$ and $t = g(r)$ and themselves independent.
+$z = f(\widehat{\beta})$ and $q = g(r)$ and themselves independent.
 
 \end{frame}
 
@@ -280,7 +339,7 @@ t &= \frac{\widehat{\beta} - b}{\sqrt{{\color{solarized@blue}\sigma^2}  \left( (
 {\bf F-test}
 
 Now consider the hypothesis test $H_0: D\beta = d$ for a
-matrix $D$ with $k$ columns and rank $k$.
+matrix $D$ with $k$ rows and rank $k$.
 
 \end{frame}
 
@@ -305,7 +364,7 @@ F &= \frac{{\color{solarized@cyan} w} / k}{{\color{solarized@magenta} q} / (n - 
 \end{align*}
 Where:
 \begin{align*}
-{\color{solarized@cyan} w} &= (D\widehat{\beta} - d)^t [D (X^t X)^{-1} D^t ]^{-1} (D\widehat{\beta} - d) \\
+{\color{solarized@cyan} w} &= (D\widehat{\beta} - d)^t [\sigma^2 D (X^t X)^{-1} D^t ]^{-1} (D\widehat{\beta} - d) \\
 {\color{solarized@magenta} q} &= r^t r / \sigma^2
 \end{align*}
 
@@ -354,11 +413,11 @@ Q \Sigma^{-1} &=& \Lambda^{1/2} \Lambda^{1/2} Q  \\ \pause
 From here, we can write $w$ as the inner product of
 a suitably defined vector $u$:
 \begin{eqnarray*}
-w &=& v^t \sigma^{-1} v \\
-&=& v^t Q^t \Lambda^{1/2} \Lambda^{1/2} Q v \\
+w &=& v^t \Sigma^{-1} v \\ \pause
+&=& v^t Q^t \Lambda^{1/2} \Lambda^{1/2} Q v \\ \pause
 &=& u^t u
 \end{eqnarray*}
-With a mean of zero:
+\pause With a mean of zero:
 \begin{align*}
 \mathbb{E} (u | X) &= \mathbb{E} (\Lambda^{1/2} Q v | X) \\
 &= \Lambda^{1/2} Q \mathbb{E} (v | X) \\
@@ -427,8 +486,8 @@ restricted model, then this can be re-written as:
 \begin{align*}
 F &= \frac{(\text{SSR}_U -  \text{SSR}_R) / k }{\text{SSR}_U / (n - p)}
 \end{align*}
-This is the way it is written in the homework and in the Fumio-Hayashi
-text. It is left for you to prove that this is the same form as the
+This is the way it is written in the homework and in the Fumio Hayashi
+text. It is left for you to prove that this is equivalent to the
 other F test.
 
 \end{frame}
