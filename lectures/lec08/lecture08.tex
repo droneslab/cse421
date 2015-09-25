@@ -7,9 +7,15 @@
 
 \vfill
 
+<<<<<<< HEAD
+{\fontsize{0.7cm}{0cm}\selectfont Lecture 08 \\\vspace{0.2cm}
+Measuring Airline On-time Performance}\\\vspace{0.5cm}
+25 September 2015
+=======
 {\fontsize{0.7cm}{0cm}\selectfont Lecture 07 \\\vspace{0.2cm}
 Hypothesis Testing with Multivariate Regression}\\\vspace{0.5cm}
 23 September 2015
+>>>>>>> 6a3c92ed688ccc9923d0cc4b900758cd232bc0cc
 
 \vspace{2cm}
 
@@ -31,10 +37,16 @@ STAT 312/612
 {\color{yaleblue}\fontsize{16pt}{20pt}\selectfont Goals for today}
 
 \begin{enumerate}
+<<<<<<< HEAD
+\item Review of time
+\item Simulation of the multivariate F-test
+\item Introduction to ASA airline dataset
+=======
 \item Review of assumptions and properties of linear model
 \item The multivariate T-test
 \item Hypothesis test simulations
 \item The multivariate F-test
+>>>>>>> 6a3c92ed688ccc9923d0cc4b900758cd232bc0cc
 \end{enumerate}
 
 \end{frame}
@@ -48,6 +60,17 @@ STAT 312/612
 
 \end{frame}
 
+<<<<<<< HEAD
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+The hypothesis set $H_0: \beta_j = b_j$, yields the following
+{\bf t-test}:
+\begin{align*}
+t &= \frac{\widehat{\beta}_j - b_j}{\sqrt{s^2  \left( (X^t X)^{-1}_{jj} \right)}} \\
+&= \frac{\widehat{\beta}_j - b_j}{\text{S.E.}(\widehat{\beta}_j)} \\
+&\sim t_{n-k}
+=======
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
@@ -131,6 +154,7 @@ z &= \frac{\widehat{\beta}_j - b_j}{\sqrt{\sigma^2  \left( (X^t X)^{-1}_{jj} \ri
 With,
 \begin{align*}
 \left. z \right| X, H_0 \sim \mathcal{N} (0, 1)
+>>>>>>> 6a3c92ed688ccc9923d0cc4b900758cd232bc0cc
 \end{align*}
 
 \end{frame}
@@ -138,6 +162,20 @@ With,
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
+<<<<<<< HEAD
+The hypothesis set $H_0: D\beta = d$, for a full rank $k$-by-$p$ matrix
+yields the following {\bf F-test}
+\begin{align*}
+F &= \frac{(\text{SSR}_U -  \text{SSR}_R) / k }{\text{SSR}_U / (n - p)}\\
+&\sim F_{k, n-p}
+\end{align*}
+Where $\text{SSR}_U$ is $r^t r$ and $\text{SSR}_R$ is the
+sum of squared residuals $\tilde{r}^t \tilde{r}$ from the
+restricted model.
+
+\end{frame}
+
+=======
 {\bf T-test}
 
 As in the simple linear linear regression case, we generally
@@ -165,10 +203,27 @@ of freedom under the null hypothesis:
 \pause This time around, we'll actually prove this.
 
 \end{frame}
+>>>>>>> 6a3c92ed688ccc9923d0cc4b900758cd232bc0cc
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
+<<<<<<< HEAD
+We did a lot of matrix manipulations in the proofs of these
+two results. The most important 'big picture' results to
+remember are the lemma:
+
+\begin{itemize}
+\item If $B$ is a symmetric idempotent matrix and
+$u \sim \mathcal{N} (0, \mathbb{I}_n)$, then
+$u^t B u \sim \chi^2_{\text{tr(B)}}$. \pause
+\item If $B$ is a symmetric idempotent matrix, then
+all of $B$'s eigenvalues are $0$ or $1$. In terms of
+the $Q^t \Lambda Q$ eigen-value decomposition, this
+helps explain why we think of $P$ and $M$ as projection
+matricies.
+\end{itemize}
+=======
 To start, we re-write the test statistic as:
 \begin{eqnarray*}
 t &=& \frac{\widehat{\beta} - b}{\sqrt{{\color{solarized@blue}\sigma^2}  \left( (X^t X)^{-1}_{jj} \right)}} \cdot
@@ -321,6 +376,7 @@ t &= \frac{\widehat{\beta} - b}{\sqrt{{\color{solarized@blue}\sigma^2}  \left( (
 \begin{flushright}
 {\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Simulation}
 \end{flushright}
+>>>>>>> 6a3c92ed688ccc9923d0cc4b900758cd232bc0cc
 
 \end{frame}
 
@@ -328,7 +384,11 @@ t &= \frac{\widehat{\beta} - b}{\sqrt{{\color{solarized@blue}\sigma^2}  \left( (
 \begin{frame}[fragile] \frametitle{}
 
 \begin{flushright}
+<<<<<<< HEAD
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont F-Test confidence region}
+=======
 {\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont F-Test}
+>>>>>>> 6a3c92ed688ccc9923d0cc4b900758cd232bc0cc
 \end{flushright}
 
 \end{frame}
@@ -336,6 +396,10 @@ t &= \frac{\widehat{\beta} - b}{\sqrt{{\color{solarized@blue}\sigma^2}  \left( (
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
+<<<<<<< HEAD
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont ASA Flight Data}
+=======
 {\bf F-test}
 
 Now consider the hypothesis test $H_0: D\beta = d$ for a
@@ -497,6 +561,7 @@ other F test.
 
 \begin{flushright}
 {\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Application}
+>>>>>>> 6a3c92ed688ccc9923d0cc4b900758cd232bc0cc
 \end{flushright}
 
 \end{frame}

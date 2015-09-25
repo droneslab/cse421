@@ -78,8 +78,11 @@ for (i in 1:10) {
 }
 abline(1,-1,lty="dashed")
 
+<<<<<<< HEAD
+=======
 
 
 
+>>>>>>> 6a3c92ed688ccc9923d0cc4b900758cd232bc0cc
 
 

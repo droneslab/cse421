@@ -43,6 +43,8 @@ points(1,0,pch=19,cex=1,col="red")
 
 
 
+<<<<<<< HEAD
+=======
 
 
 
@@ -91,3 +93,4 @@ solve(t(mm) %*% mm) %*% t(mm) %*% mr
 
 
 
+>>>>>>> 6a3c92ed688ccc9923d0cc4b900758cd232bc0cc
