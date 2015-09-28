@@ -19,6 +19,12 @@ out4 <- lm(y ~ 1)
 
 anova(out4,out3,out2,out1)
 
+# write out2 v. out3 by hand:
+SSRu <- sum((out2$resid)^2)
+SSRr <- sum((out3$resid)^2)
+
+(SSRr - SSRu) / (SSRr / (n-p))
+
 plot(0,0,col="white",ylim=c(-5,8),xlim=c(-5,8),
       xlab="coef 1", ylab="coef 2")
 points(1,0,pch=19,cex=1,col="red")
