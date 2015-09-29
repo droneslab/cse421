@@ -52,11 +52,11 @@ map("usa")
 map("state",add=TRUE,lwd=0.2)
 cols <- rgb(0,0,1,sdDest / max(sdDest))
 points(air$long[index], air$lat[index],
-        pch=19, col=heat_hcl(100,alpha=0.7))
+        pch=19, cex=1.5, col=heat_hcl(100,alpha=0.7))
 
 # Now, try to fit the linear model using airport as
 # a covariate
-out2 <- lm(arrDelay ~ depDelay + dest, data=x)
+out2 <- lm(arrDelay ~ depDelay + dest - 1, data=x)
 out2
 summary(out2)
 
@@ -70,92 +70,3 @@ anova(out,out2)
 summary(out)$r.squared
 summary(out2)$r.squared
 plot(out$resid,out2$res, pch=".")
-
-# Now let's look at the time variable
-#?strptime
-x$aTime[1:10]
-format(x$aTime[1:10], "%H")
-
-dow <- as.numeric(format(x$aTime + x$aOffset, "%w", tz="GMT"))
-round(table(dow) / length(dow) * 100)
-tapply(out$resid, dow, mean)
-
-hour <- as.numeric(format(x$aTime + x$aOffset, "%H", tz="GMT"))
-hist(hour, breaks=0:24)
-tapply(out$resid, dow, mean)
-
-day <- as.numeric(format(x$aTime + x$aOffset, "%j", tz="GMT"))
-hist(day, breaks=0:365, col="black")
-tapply(out$resid, day, mean)
-sort(tapply(out$resid, day, mean))
-hist(tapply(out$resid, day, mean))
-
-plot(tapply(out$resid, day, mean),type="l")
-abline(h=0, lty="dashed", col="red")
-
-out3 <- lm(arrDelay ~ depDelay + dow, data=x)
-out3 <- lm(arrDelay ~ depDelay + factor(dow), data=x)
-
-#########
-round(quantile(x$arrDelay, seq(0,1,0.01)) / 3600)
-
-bigDelay <- (x$arrDelay > 3600 * 2)
-bigDepDelay <- (x$depDelay > 3600 * 2)
-mean(bigDelay)
-sum(bigDelay)
-
-out <- lm(bigDelay ~ x$depDelay)
-plot(out$fitted, out$resid, pch=".",
-     xlab="Py", ylab="My")
-abline(h=0,col="red", lty="dashed")
-
-out <- lm(bigDelay ~ x$depDelay + bigDepDelay)
-plot(out$fitted, out$resid, pch=".",
-     xlab="Py", ylab="My")
-abline(h=0,col="red", lty="dashed")
-
-##########
-tab <- round(sort(tapply(bigDelay, x$dest, mean)),2)
-tab
-
-tab <- sort(tab,decreasing=TRUE)
-index <- match(names(tab), air$iata)
-
-library(maps)
-map("usa")
-map("state",add=TRUE,lwd=0.2)
-cols <- rgb(0,0,1,sdDest / max(sdDest))
-points(air$long[index], air$lat[index],
-        pch=19, col=heat_hcl(100,alpha=0.7))
-
-out2 <- lm(bigDelay ~ x$depDelay + bigDepDelay + x$dest - 1)
-
-anova(out,out2)
-summary(out)$r.squared
-summary(out2)$r.squared
-plot(out$resid,out2$res, pch=".")
-
-
-###########
-upsetScore <- (x$arrDelay - 15*60) / (3600*2 - 15*60)
-upsetScore[x$arrDelay < 15*60] <- 0
-upsetScore[x$arrDelay > 3600*2] <- 1
-
-out <- lm(upsetScore ~ x$depDelay)
-summary(out)
-
-tab <- round(sort(tapply(upsetScore, x$dest, mean)),2)
-out2 <- lm(upsetScore ~ x$depDelay + x$dest)
-
-hour <- as.numeric(format(x$aTime + x$aOffset, "%H", tz="GMT"))
-tapply(upsetScore, hour, mean)
-plot(tapply(upsetScore, hour, mean),type="l")
-
-out3 <- lm(upsetScore ~ x$depDelay + factor(hour))
-plot(out$resid, out3$resid, pch=".")
-
-
-
-
-
-

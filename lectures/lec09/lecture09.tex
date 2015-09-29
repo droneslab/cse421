@@ -1,0 +1,243 @@
+\input{../header.tex}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\vfill
+
+{\fontsize{0.7cm}{0cm}\selectfont Lecture 09 \\\vspace{0.2cm}
+Prediction and Leverage with ASA Flight Data}\\\vspace{0.5cm}
+30 September 2015
+
+\vspace{2cm}
+
+\begin{minipage}{0.6\textwidth}
+Taylor B. Arnold \\
+Yale Statistics \\
+STAT 312/612
+\end{minipage}
+\hfill
+\begin{minipage}{0.3\textwidth}\raggedleft
+\includegraphics[scale=0.3]{../yale-logo.png}
+\end{minipage}%
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\color{yaleblue}\fontsize{16pt}{20pt}\selectfont Goals for today}
+
+\begin{itemize}
+\item Quantify leverage of an observation
+\item Formulate prediction and confidence intervals for multivariate regression
+\item Apply to ASA airline dataset
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Leverage}
+\end{flushright}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Recall that {\it leverage} was generally defined as the
+amount of influence a point has the estimation of
+$\widehat{\beta}$.
+
+\pause We can formally define leverage as the diagonal
+elements of the projection matrix:
+\begin{align*}
+l_i &= P_{ii} \\
+&= \left[ X (X^t X)^{-1} X^t \right]_{ii}
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Notice that $l_{i}$ will be a number between $0$ and $1$;
+because $P$ is idempotent and symmetric:
+\begin{eqnarray*}
+l_{i} &=& \sum_j p_{i,j} p_{j,i} \\ \pause
+&=& \sum_j p_{i,j}^2 \\ \pause
+&=& p_{i,i}^2 + \sum_{j \neq i} p_{i,j}^2 \\ \pause
+&=& l_{i}^2 + \sum_{j \neq i} p_{i,j}^2
+\end{eqnarray*}
+\pause So then $l_i \geq l_i^2$, which shows the bounds on the
+leverage values.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+To see why we use the diagonal of the projection matrix,
+look at the variance of the residuals:
+\begin{eqnarray*}
+\mathbb{V} (r | X) &=& \mathbb{E} (r r^t | X) \\ \pause
+&=& \mathbb{E} (M\epsilon \epsilon^t M^t | X) \\ \pause
+&=& M \cdot \mathbb{E} (\epsilon \epsilon^t| X) \cdot  M^t \\ \pause
+&=& \sigma^2 M M^t \\ \pause
+&=& \sigma^2 \left[ \mathbb{I}_n - P \right]
+\end{eqnarray*}
+\pause So the variance of an individual residual is $(1 - l_i)$, so
+for a leverage close to $1$ the regression line will generally pass
+very close to the point $i$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+The individual variance of the $i$'th residual suggests that we
+could standardize each residual as such:
+\begin{align*}
+\frac{r_i}{\sqrt{s^2 (1 - l_i)}}
+\end{align*}
+\pause This is known as the Studentized residual. If $s^2$ is modifed
+to be calculated without the point $i$, externally studentized, then
+this quantity follows a $t$ distribution with $n-p$ degrees of freedom.
+(Note: This is actually very easy to prove given our already established
+results.)
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Confidence and Prediction Intervals}
+\end{flushright}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Now, we consider the case where we observe a new set of
+observations that were not used in the estimation of $\widehat{\beta}$:
+\begin{align*}
+y_{new} &= X_{new} \beta + \epsilon_{new}
+\end{align*}
+Often we do not actually observe the new values of $y$, but wish
+to estimate them from the estimate of $\beta$ and the new
+data points.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+An obvious guess of $\hat{y}_{new}$ is $X_{new} \widehat{\beta}$.
+\pause We see easily that:
+\begin{align*}
+\mathbb{E} (\hat{y}_{new} | X) &= \mathbb{E} (X_{new} \widehat{\beta} | X) \\
+&= X_{new} \beta
+\end{align*}
+Where the conditional on $X$ is with respect to the original data and
+the new data matrix $X_{new}$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+What would we do if we needed a confidence interval for where
+the values $y_{new}$ should be located? \pause We need to
+calculate the variance of our estimator:
+\begin{align*}
+\mathbb{V} (\hat{y}_{new} | X) &= \mathbb{V} ( X_{new} \widehat{\beta} | X ) \\
+&= X_{new} \mathbb{V} (\widehat{\beta} | X) X_{new}^t \\
+&= \sigma^2 X_{new} (X^t X)^{-1} X_{new}^t \\
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Notice that in the special case that row $j$ of $X_{new}$ is equal
+to row $i$ of $X$, we have:
+\begin{align*}
+\mathbb{V} (\left[ \hat{y}_{new} \right]_j | X) &= \sigma^2 P_{ii} \\
+&= \sigma^2 l_i
+\end{align*}
+So points with high leverage are points where predictions are
+particularly variable. \pause This may seem counterintuitive.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+This suggests that we construct the following confidence interval
+for the mean of $y_{new}$:
+\begin{align*}
+\widehat{\mathbb{E}(y_{new} | X)} &\in X_{new} \widehat{\beta} \pm t_{n-p,1-\alpha/2} \cdot
+\sqrt{s^2 X_{new} (X^t X)^{-1} X_{new}^t} \\
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Typically, we are interested in an interval for the actually
+observations $y_{new}$ rather than the mean of $y_{new}$.
+
+\pause To calculate the variance of the actual prediction,
+see that ($k$ is the number of row of $X_{new}$)
+\begin{align*}
+\mathbb{V} (y_{new} - \hat{y}_new | X) &= \mathbb{V} (y_{new} | X) + \mathbb{V} (\hat{y}_{new} | X) \\
+&= \sigma^2 I_k + \sigma^2 X_{new} (X^t X)^{-1} X_{new}^t \\
+&= \sigma^2 \left[I_k + \sigma^2 X_{new} (X^t X)^{-1} X_{new}^t \right]
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+From here, we now have the following prediction interval:
+\begin{align*}
+y_{new} | X &\in X_{new} \widehat{\beta} \pm t_{n-p,1-\alpha/2} \cdot
+\sqrt{s^2 \left[ I_k + X_{new} (X^t X)^{-1} X_{new}^t \right]} \\
+\end{align*}
+Which is exactly a factor of $s$ wider than the confidence interval.
+
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Application to ASA Data}
+\end{flushright}
+
+\end{frame}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
