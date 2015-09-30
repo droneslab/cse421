@@ -3,7 +3,14 @@
 setwd("~/files/class_data/")
 dir()
 
-# A sample of the raw data
+# Calculate the day of the year of arrival for
+# everything in the dataset
+day <- as.numeric(format(x$aTime + x$aOffset, "%j", tz="GMT"))
+hist(day, breaks=0:365, col="black")
+
+
+
+
 x <- read.csv(bzfile("2007.csv.bz2"), as.is=TRUE, nrow=1000)
 str(x)
 

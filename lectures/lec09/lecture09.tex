@@ -92,7 +92,7 @@ look at the variance of the residuals:
 &=& \sigma^2 M M^t \\ \pause
 &=& \sigma^2 \left[ \mathbb{I}_n - P \right]
 \end{eqnarray*}
-\pause So the variance of an individual residual is $(1 - l_i)$, so
+\pause So the variance of an individual residual is $\sigma^2(1 - l_i)$, so
 for a leverage close to $1$ the regression line will generally pass
 very close to the point $i$.
 
@@ -140,7 +140,7 @@ data points.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-An obvious guess of $\hat{y}_{new}$ is $X_{new} \widehat{\beta}$.
+An obvious estimate, $\hat{y}_{new}$, is $X_{new} \widehat{\beta}$.
 \pause We see easily that:
 \begin{align*}
 \mathbb{E} (\hat{y}_{new} | X) &= \mathbb{E} (X_{new} \widehat{\beta} | X) \\
@@ -175,7 +175,7 @@ to row $i$ of $X$, we have:
 &= \sigma^2 l_i
 \end{align*}
 So points with high leverage are points where predictions are
-particularly variable. \pause This may seem counterintuitive.
+particularly variable. \pause Counterintuitive?
 
 \end{frame}
 
@@ -200,9 +200,9 @@ observations $y_{new}$ rather than the mean of $y_{new}$.
 \pause To calculate the variance of the actual prediction,
 see that ($k$ is the number of row of $X_{new}$)
 \begin{align*}
-\mathbb{V} (y_{new} - \hat{y}_new | X) &= \mathbb{V} (y_{new} | X) + \mathbb{V} (\hat{y}_{new} | X) \\
+\mathbb{V} (y_{new} - \hat{y}_{new} | X) &= \mathbb{V} (y_{new} | X) + \mathbb{V} (\hat{y}_{new} | X) \\
 &= \sigma^2 I_k + \sigma^2 X_{new} (X^t X)^{-1} X_{new}^t \\
-&= \sigma^2 \left[I_k + \sigma^2 X_{new} (X^t X)^{-1} X_{new}^t \right]
+&= \sigma^2 \left[I_k + X_{new} (X^t X)^{-1} X_{new}^t \right]
 \end{align*}
 
 \end{frame}

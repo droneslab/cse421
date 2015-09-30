@@ -14,6 +14,7 @@ hist(day, breaks=0:365, col="black")
 
 # Also calculate local hour of arrival for every flight
 hour <- as.numeric(format(x$aTime + x$aOffset, "%H", tz="GMT"))
+hist(hour, breaks=0:24)
 
 # Start by just taking a single day of data:
 z <- x[day == 45 & hour == 12,]
@@ -66,6 +67,10 @@ index <- sample(0:1,nrow(x),replace=TRUE)
 newx <- x[index == 0,]
 oldx <- x[index != 0,]
 
+topArr <- names(sort(table(x$dest),decreasing=TRUE)[1:30])
+newx <- newx[newx$dest %in% topArr,]
+oldx <- oldx[oldx$dest %in% topArr,]
+
 # Calculate the linear model with airport effects
 out <- lm(arrDelay ~ depDelay + dest - 1, data=oldx)
 out
@@ -84,11 +89,18 @@ varhat <- tapply(out$resid, oldx$dest, var)
 index <- match(newx$dest, names(varhat))
 pred.var <- varhat[index]
 
-pred <- predict(out, newx, interval="prediction", pred.var=pred.var)
+pred2 <- predict(out, newx, interval="prediction", pred.var=pred.var)
 
-successFlag <- (pred[,2] < newx$arrDelay & pred[,3] > newx$arrDelay)
-mean(successFlag)
-sort(tapply(successFlag, newx$dest, mean))
+successFlag2 <- (pred2[,2] < newx$arrDelay & pred2[,3] > newx$arrDelay)
+mean(successFlag2)
+sort(tapply(successFlag2, newx$dest, mean))
+
+
+par(mfrow=c(1,2))
+hist(tapply(successFlag, newx$dest, mean),xlim=c(0.89,1))
+hist(tapply(successFlag2, newx$dest, mean),xlim=c(0.89,1))
+
+
 
 
 ##########
