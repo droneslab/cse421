@@ -70,7 +70,9 @@ the variance of $\epsilon$ is instead given by:
 \end{align}
 For some matrix $V(X)$. We decompose the variance into $\sigma^2$ and $V(x)$ because
 in what follows we assume that $V(x)$ is known beforehand but $\sigma^2$ is estimated
-from the data. Using the Cholesky decomposition of $V$, where $V = C^t C$, consider
+from the data. Using the Cholesky decomposition of (Note: an earlier version of the
+notes incorrectly stated that this was the decomposition of $V(x)$ rather than $V(x)^{-1}$)
+$V^{-1}$, where $V^{-1} = C^t C$, consider
 the transformed variants of $X$, $\epsilon$ and $y$:
 \begin{align}
 \tilde{y} &= Cy \\
@@ -97,7 +99,9 @@ Assume that $V(X)$ is a diagonal matrix that depends only on the arrival airport
 
 Estimate the form of $V(X)$ using the data from group I and fit the following linear
 model to the data in group II using both ordinary least squares and the generalized
-model suggested by your estimate of $V(X)$:
+model suggested by your estimate of $V(X)$ (Hint: $V(X)$ is likely too large to
+construct directly on your machine; either use sparse matricies or do the
+matrix multiplication manually):
 \begin{align}
 \text{arrDelay}_i &= \text{dest}_i + \text{depDelay}_i + \epsilon_i \label{airlineMod}
 \end{align}
