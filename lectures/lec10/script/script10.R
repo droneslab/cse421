@@ -3,165 +3,211 @@
 setwd("~/files/class_data/")
 dir()
 
-# Calculate the day of the year of arrival for
-# everything in the dataset
-day <- as.numeric(format(x$aTime + x$aOffset, "%j", tz="GMT"))
-hist(day, breaks=0:365, col="black")
-
-
-
-
-x <- read.csv(bzfile("2007.csv.bz2"), as.is=TRUE, nrow=1000)
-str(x)
-
 # The cleaned version:
 x <- readRDS("airline2007_clean.Rds")
 rownames(x) <- NULL
 dim(x)
 str(x)
 
-# For now, going to take a 5% sample to speed up the
+# For now, going to take two 5% samples to speed up the
 # plots and exploration
-x <- x[sample(1:nrow(x),nrow(x)*0.05),]
+index <- sample(1:20,nrow(x),replace=TRUE)
+w <- x[index == 1,]
+x <- x[index == 2,]
+x$hour <- as.numeric(format(x$aTime + x$aOffset, "%H", tz="GMT"))
+w$hour <- as.numeric(format(w$aTime + w$aOffset, "%H", tz="GMT"))
+rownames(x) <- NULL
+rownames(w) <- NULL
 
-# Calculate the base linear model
-out <- lm(arrDelay ~ depDelay, data=x)
-out
+##################################
+# If we do a model of arrDelay ~ depDelay + carrier, what
+# does model.matrix look like?
+mf <- model.frame(arrDelay ~ depDelay + carrier, data=x)
+mm <- model.matrix(mf, data=x)
+
+head(mm)
+table(x$carrier)
+
+mf <- model.frame(arrDelay ~ depDelay*carrier, data=x)
+mm <- model.matrix(mf, data=x)
+head(mm)
+
+###################################
+# How could we do this by hand?
+carrierFactor <- factor(x$carrier)
+con <- contr.treatment(levels(carrierFactor))
+con
+
+con <- contr.treatment(levels(carrierFactor), contrasts=FALSE)
+con
+
+con <- contr.sum(levels(carrierFactor))
+con
+
+t(con) %*% con
+
+con <- contr.helmert(levels(carrierFactor))
+con
+
+t(con) %*% con
+
+# How to apply?
+mf <- model.frame(arrDelay ~ depDelay + carrier, data=x)
+mm <- model.matrix(mf, data=x, contrasts = list(carrier="contr.helmert"))
+head(mm)
+
+out <- lm(arrDelay ~ depDelay + carrier, data=x,
+           contrasts = list(carrier="contr.helmert"))
 summary(out)
 
-# plot the residuals
-plot(out$fitted, out$resid, pch=".")
+###############################
+# Sparsity
+con <- contr.treatment(levels(carrierFactor), sparse=TRUE)
+con
 
-plot(out$fitted/3600, out$resid/3600, pch=".",
-     xlab="Py", ylab="My")
-abline(h=0,col="red", lty="dashed")
+class(con)
+t(con)
 
-plot(out$fitted/3600, out$resid/3600, pch=19,
-     xlab="Py", ylab="My", cex=0.5,
-     col=rgb(0,0,0,0.01))
+sessionInfo()
 
-# Let's explore relationship to other covariates
-tapply(out$resid, x$dest, mean)
-sort(round(tapply(out$resid, x$dest, mean) / 60))
-sort(round(tapply(out$resid, x$dest, sd) / 60))
+library(Matrix)
+t(con)
 
-# make sense of this data:
-sdDest <- sort(round(tapply(out$resid, x$dest, sd) / 60),
-                decreasing=TRUE)
-air <- read.csv("airports.csv", as.is=TRUE)
-index <- match(names(sdDest), air$iata)
+p <- 10
+m <- matrix(sample(0:1,p^2,prob=c(0.9,0.1),replace=TRUE),p,p)
+m
+Matrix(m)
 
-cat(sprintf("%40s - %d", air$airport[index], sdDest),
-     sep="\n")
+p <- 10
+m <- matrix(sample(0:1,p^2,prob=c(0.2,0.8),replace=TRUE),p,p)
+m
+Matrix(m)
+Matrix(m,sparse=TRUE)
 
-library(maps)
-map("usa")
-map("state",add=TRUE,lwd=0.2)
-cols <- rgb(0,0,1,sdDest / max(sdDest))
-points(air$long[index], air$lat[index],
-        pch=19, cex=1.5, col=heat_hcl(100,alpha=0.7))
+m <- matrix(sample(0:1,p^2,prob=c(0.9,0.1),replace=TRUE),p,p)
+M <- Matrix(m)
+object.size(m)
+object.size(M)
 
-# Now, try to fit the linear model using airport as
-# a covariate
-out2 <- lm(arrDelay ~ depDelay + dest - 1, data=x)
-out2
-summary(out2)
+for (p in c(10,100,1000)) {
+  m <- matrix(sample(0:1,p^2,prob=c(0.9,0.1),replace=TRUE),p,p)
+  M <- Matrix(m)
+  cat("p:", p, "\n")
+  cat("m:", object.size(m), "\n")
+  cat("M:", object.size(M), "\n\n")
+}
 
-out2 <- lm(arrDelay ~ depDelay + dest - 1, data=x)
-plot(out2$fitted/3600, out2$resid/3600, pch=".",
-     xlab="Py", ylab="My")
-abline(h=0,col="red", lty="dashed")
+Mnew <- M %*% m
+class(Mnew)
+class(as.matrix(Mnew))
 
-# How do the two fits align?
-anova(out,out2)
-summary(out)$r.squared
-summary(out2)$r.squared
-plot(out$resid,out2$res, pch=".")
+for (p in c(10,100,1000)) {
+  m <- matrix(sample(0:1,p^2,prob=c(0.9,0.1),replace=TRUE),p,p)
+  M <- Matrix(m)
+  cat("p:", p, "\n")
+  cat("m:", object.size(m), "\n")
+  cat("M:", object.size(M), "\n\n")
+}
 
-# Now let's look at the time variable
-#?strptime
-x$aTime[1:10]
-format(x$aTime[1:10], "%H")
+for (p in c(10,100,1000)) {
+  m <- diag(p)
+  M <- Matrix(m)
+  cat("p:", p, "\n")
+  cat("m:", object.size(m), "\n")
+  cat("M:", object.size(M), "\n\n")
+}
 
-dow <- as.numeric(format(x$aTime + x$aOffset, "%w", tz="GMT"))
-round(table(dow) / length(dow) * 100)
-tapply(out$resid, dow, mean)
+# Look how fast this is!
+M <- Diagonal(1e7)
+class(M)
 
-hour <- as.numeric(format(x$aTime + x$aOffset, "%H", tz="GMT"))
-hist(hour, breaks=0:24)
-tapply(out$resid, dow, mean)
+# Try in another window: m <- diag(1e7)
 
-day <- as.numeric(format(x$aTime + x$aOffset, "%j", tz="GMT"))
-hist(day, breaks=0:365, col="black")
-tapply(out$resid, day, mean)
-sort(tapply(out$resid, day, mean))
-hist(tapply(out$resid, day, mean))
+mf <- model.frame(arrDelay ~ depDelay + carrier, data=x)
+mm <- sparse.model.matrix(mf, data=x)
+head(mm)
 
-plot(tapply(out$resid, day, mean),type="l")
-abline(h=0, lty="dashed", col="red")
-
-out3 <- lm(arrDelay ~ depDelay + dow, data=x)
-out3 <- lm(arrDelay ~ depDelay + factor(dow), data=x)
-
-#########
-round(quantile(x$arrDelay, seq(0,1,0.01)) / 3600)
-
-bigDelay <- (x$arrDelay > 3600 * 2)
-bigDepDelay <- (x$depDelay > 3600 * 2)
-mean(bigDelay)
-sum(bigDelay)
-
-out <- lm(bigDelay ~ x$depDelay)
-plot(out$fitted, out$resid, pch=".",
-     xlab="Py", ylab="My")
-abline(h=0,col="red", lty="dashed")
-
-out <- lm(bigDelay ~ x$depDelay + bigDepDelay)
-plot(out$fitted, out$resid, pch=".",
-     xlab="Py", ylab="My")
-abline(h=0,col="red", lty="dashed")
-
-##########
-tab <- round(sort(tapply(bigDelay, x$dest, mean)),2)
-tab
-
-tab <- sort(tab,decreasing=TRUE)
-index <- match(names(tab), air$iata)
-
-library(maps)
-map("usa")
-map("state",add=TRUE,lwd=0.2)
-cols <- rgb(0,0,1,sdDest / max(sdDest))
-points(air$long[index], air$lat[index],
-        pch=19, col=heat_hcl(100,alpha=0.7))
-
-out2 <- lm(bigDelay ~ x$depDelay + bigDepDelay + x$dest - 1)
-
-anova(out,out2)
-summary(out)$r.squared
-summary(out2)$r.squared
-plot(out$resid,out2$res, pch=".")
-
-
-###########
-upsetScore <- (x$arrDelay - 15*60) / (3600*2 - 15*60)
-upsetScore[x$arrDelay < 15*60] <- 0
-upsetScore[x$arrDelay > 3600*2] <- 1
-
-out <- lm(upsetScore ~ x$depDelay)
+###############################
+# multcomp (automatic F tests)
+library(multcomp)
+out <- lm(arrDelay ~ depDelay + carrier, data=x)
 summary(out)
 
-tab <- round(sort(tapply(upsetScore, x$dest, mean)),2)
-out2 <- lm(upsetScore ~ x$depDelay + x$dest)
+D <- matrix(0, ncol=length(coef(out)), nrow=3)
+D[1,11] <- D[2,17] <- D[3,18] <- 1
+d <- c(0,0,0)
+summary(glht(out, linfct=D, rhs=d), test=Ftest())
 
-hour <- as.numeric(format(x$aTime + x$aOffset, "%H", tz="GMT"))
-tapply(upsetScore, hour, mean)
-plot(tapply(upsetScore, hour, mean),type="l")
+###############################
+# Heirarchical models
+out <- lm(arrDelay ~ depDelay + dest - 1, data=w)
+summary(out)
 
-out3 <- lm(upsetScore ~ x$depDelay + factor(hour))
-plot(out$resid, out3$resid, pch=".")
+destSet <- sort(unique(w$dest))
+predDF <- data.frame(depDelay = 0, dest = destSet)
+pred <- predict(out, predDF)
+hist(pred)
+
+# Heirarchy
+index <- match(x$dest, destSet)
+x$predDest <- pred[index]
+
+out1 <- lm(arrDelay ~ depDelay + dest, data=x)
+out2 <- lm(arrDelay ~ depDelay + predDest, data=x)
+
+mean(out1$resid^2) / mean(out2$resid^2)
 
 
+# Why so useful?
+# Now, use carrier and arrival airport
+
+outDest <- lm(arrDelay ~ depDelay + dest - 1, data=w)
+outOrigin <- lm(arrDelay ~ depDelay + origin - 1, data=w)
+outCarrier <- lm(arrDelay ~ depDelay + carrier - 1, data=w)
+outHour <- lm(arrDelay ~ depDelay + factor(hour) - 1, data=w)
+
+destSet <- sort(unique(w$dest))
+originSet <- sort(unique(w$origin))
+carrierSet <- sort(unique(w$carrier))
+hourSet <- sort(unique(w$hour))
+
+predDestDF <- data.frame(depDelay = 0, dest = destSet)
+predOriginDF <- data.frame(depDelay = 0, origin = originSet)
+predCarrierDF <- data.frame(depDelay = 0, carrier = carrierSet)
+predHourDF <- data.frame(depDelay = 0, hour = hourSet)
+
+predDest <- predict(outDest, predDestDF)
+predOrigin <- predict(outOrigin, predOriginDF)
+predCarrier <- predict(outCarrier, predCarrierDF)
+predHour <- predict(outHour, predHourDF)
+
+index <- match(x$dest, destSet)
+x$predDest <- predDest[index]
+index <- match(x$origin, originSet)
+x$predOrigin <- predOrigin[index]
+index <- match(x$carrier, carrierSet)
+x$predCarrier <- predCarrier[index]
+index <- match(x$hour, hourSet)
+x$predHour <- predHour[index]
+
+
+out1 <- lm(arrDelay ~ depDelay + dest + origin + carrier + factor(hour), data=x)
+out2 <- lm(arrDelay ~ depDelay + predDest + predOrigin + predCarrier + predHour, data=x)
+
+mean(out1$resid^2) / mean(out2$resid^2)
+
+p1 <- predict(out1, interval="confidence")
+p2 <- predict(out2, interval="confidence")
+
+round(quantile(p1[,"upr"] - p1[,"lwr"]) / 60, 1)
+round(quantile(p2[,"upr"] - p2[,"lwr"]) / 60, 1)
+
+pred <- predict(out2)
+bins <- cut(pred, quantile(pred, seq(0,1,0.1)), labels=FALSE)
+tapply(pred, bins, range)
+
+tapply(pred, bins, range)
+tapply(pred, bins, range)
 
 
 
