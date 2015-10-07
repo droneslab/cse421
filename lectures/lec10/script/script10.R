@@ -102,14 +102,6 @@ class(Mnew)
 class(as.matrix(Mnew))
 
 for (p in c(10,100,1000)) {
-  m <- matrix(sample(0:1,p^2,prob=c(0.9,0.1),replace=TRUE),p,p)
-  M <- Matrix(m)
-  cat("p:", p, "\n")
-  cat("m:", object.size(m), "\n")
-  cat("M:", object.size(M), "\n\n")
-}
-
-for (p in c(10,100,1000)) {
   m <- diag(p)
   M <- Matrix(m)
   cat("p:", p, "\n")
@@ -152,11 +144,10 @@ hist(pred)
 index <- match(x$dest, destSet)
 x$predDest <- pred[index]
 
-out1 <- lm(arrDelay ~ depDelay + dest, data=x)
+out1 <- lm(arrDelay ~ depDelay + dest - 1, data=x)
 out2 <- lm(arrDelay ~ depDelay + predDest, data=x)
 
 mean(out1$resid^2) / mean(out2$resid^2)
-
 
 # Why so useful?
 # Now, use carrier and arrival airport
