@@ -13,7 +13,8 @@ weights <- 1/sqrt(as.numeric(varTable)[index])
 
 # Compute betaOLS and betaGLS
 ols <- lm(arrDelay ~ depDelay + dest - 1, data = groupII)
-gls <- lm(arrDelay ~ depDelay + dest - 1, data = groupII, weights=weights)
+gls <- lm(arrDelay ~ depDelay + dest - 1, data = groupII,
+            weights=weights)
 
 ols$coefficients - gls$coefficients
 
@@ -22,7 +23,8 @@ index <- match(groupIII$dest, names(varTable))
 predVar <- as.numeric(varTable)[index]
 
 predOLS <- predict(ols, newdata=groupIII, interval="prediction")
-predGLS <- predict(gls, newdata=groupIII, interval="prediction", pred.var=predVar)
+predGLS <- predict(gls, newdata=groupIII, interval="prediction",
+                       pred.var=predVar)
 
 res <- groupIII$arrDelay
 mean(predOLS[,2] < res & res < predOLS[,3])

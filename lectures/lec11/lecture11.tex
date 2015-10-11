@@ -1,4 +1,4 @@
-\input{../header.tex}
+\input{../header-ho.tex}
 
 \begin{document}
 
@@ -111,7 +111,7 @@ In particular, prediction can be done as follows (only the colored
 parts are different):
 \begin{align*}
 y_{new} | X &\in X_{new} \widehat{\beta} \pm t \cdot
-\sqrt{s^2 \text{diag} \left( {\color{solarized@blue} V_{new}(X_{new})} + X_{new} (X^t {\color{solarized@red} V(X)} X)^{-1} X_{new}^t\right)}
+\sqrt{s^2 \text{diag} \left( {\color{solarized@blue} V_{new}(X_{new})} + X_{new} (X^t {\color{solarized@red} V^{-1}(X)} X)^{-1} X_{new}^t\right)}
 \end{align*}
 \pause Notice that we only need the diagonal of $V_{new}(X_{new})$. For
 prediction, we do not care about the covariance between predictions;
