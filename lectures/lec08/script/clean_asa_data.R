@@ -67,5 +67,6 @@ table(aOffset / 3600)
 # Construct the final dataset
 df <- data.frame(dTime=dTime, aTime=aTime, dOffset=dOffset, aOffset=aOffset,
                  origin=x$Origin, dest=x$Dest, carrier=x$UniqueCarrier,
-                 depDelay=depDelay, arrDelay=arrDelay, stringsAsFactors=FALSE)
+                 depDelay=depDelay, arrDelay=arrDelay, dist=dist,
+                 stringsAsFactors=FALSE)
 saveRDS(df, "airline2007_clean.Rds")

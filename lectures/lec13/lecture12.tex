@@ -43,7 +43,8 @@ STAT 312/612
 {\color{yaleblue}\fontsize{16pt}{20pt}\selectfont Goals for today}
 
 \begin{itemize}
-\item Logistic regression
+\item Logistic regression introduction
+\item Solving via least squares
 \item Running GLMs in R
 \end{itemize}
 
@@ -53,7 +54,7 @@ STAT 312/612
 \begin{frame}[fragile] \frametitle{}
 
 \begin{flushright}
-{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Logistic regression}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Logistic regression introduction}
 \end{flushright}
 
 \end{frame}
@@ -73,30 +74,16 @@ Why does it not make sense for $\epsilon$ to be independent of X?
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-One way to generlize the classical linear model to this case is to
-write the equation in a slightly different form:
-\begin{align*}
-\mathbb{E} (y | X) &= X \beta
-\end{align*}
-\pause Does this solve our problem in the case of $y \in \{0,1\}$?
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile] \frametitle{}
-
-A further generalization is to make the mean a function of $X\beta$,
-rather than directly equal to it:
+A natural extension of the classical linear regression to handle
+this case is, then:
 \begin{align*}
 \mathbb{E} (y | X) &= g^{-1} \left( X \beta \right)
 \end{align*}
-\pause Here $g$, called the \textit{link function}, is
-some fixed and known function.
+For some fixed and known function $g$, called the \textit{link function}.
 
-\pause If $g$ is the identity how does this relate to the linear case?
+\pause If $g$ is the identity how does this relate the linear case?
 
 \end{frame}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
@@ -139,7 +126,7 @@ In other words, $g$ is equal to the logit function.
 \begin{frame}[fragile] \frametitle{}
 
 Now, consider determining the mean of $y_i$ given a regression
-vector $\beta$ (in other words, invert the logit function): \pause
+vector $\beta$:
 \begin{align*}
 \text{log} \left( \frac{p_i}{1 - p_i} \right) &= x_i^t \beta \\
 \frac{p_i}{1 - p_i} &= e^{x_i^t \beta} \\
@@ -148,19 +135,6 @@ p_i &= (1 - p_i) \cdot e^{x_i^t \beta} \\
 p_i &= \frac{e^{x_i^t \beta}}{1 + e^{x_i^t \beta}} \\
 &= \frac{1}{1 + e^{-x_i^t \beta}}
 \end{align*}
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile] \frametitle{}
-
-So, plugging this back in, what we are assuming is the
-following statistical model:
-\begin{align*}
-\mathbb{E} (y | X) &= \frac{1}{1 + e^{-X\beta}}
-\end{align*}
-\pause If $y_i$ are independent Bernoilli trials  this
-fully describes the density of $y | x$.
 
 \end{frame}
 
@@ -178,14 +152,34 @@ What does the relationship between $x^t \beta$ and $p_i$ look like?
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-Let's consider a very simple logistic regresion function
-with just an intercept $\alpha$ and one slope parameter $\beta$
-for a dummy variable $X$.
+Note: we could use other link functions $g$, the logit is simply
+a popular choice given the theoretical connections to exponential
+families.
 
-\pause Now calculate:
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Parameter estimation}
+\end{flushright}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+The parameters in logistic regression are generally fit using maximum
+likelihood estimation. The likelihood for the entire model, building
+on what we saw before, is given by:
 \begin{align*}
-\mathbb{E} (y_i | x_i=0) &= \frac{1}{1+e^{-\alpha}} \\
-\mathbb{E} (y_i | x_i=1) &= \frac{1}{1+e^{-\alpha - \beta}}
+L(y | X) &= \prod_i p_i^{y_i} \cdot (1 - p_i)^{1 - y_i}
+\end{align*}
+\pause And therefore the log-likelihood is:
+\begin{align*}
+l(y | X) &= \sum_i \left\{ y_i \cdot \log(p_i) + (1 - y_i) \cdot \log(1 - p_i) \right\} \\
+&= \sum_i \left\{ y_i \beta^t x_i - \log\left( 1 + e^{\beta^t x_i} \right) \right\}
 \end{align*}
 
 \end{frame}
@@ -193,12 +187,15 @@ for a dummy variable $X$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-Note: we could use other link functions $g$, the logit is simply
-a popular choice given the theoretical connections to exponential
-families.
+To find critical points of this,
+we set the first derivatives of the log-likelihood with respect to $\beta$
+to zero:
+\begin{align*}
+\frac{\partial}{\partial \beta} l(\beta) &= \sum_i x_i \cdot (y_i - p_i(\beta)) = 0
+\end{align*}
+
 
 \end{frame}
-
 
 
 \end{document}
