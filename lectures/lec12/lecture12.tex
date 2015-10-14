@@ -73,12 +73,28 @@ Why does it not make sense for $\epsilon$ to be independent of X?
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-One way to generlize the classical linear model to this case is to
-write the equation in a slightly different form:
+If $x_i^t \beta$ is equal to $0.2$, then $\epsilon_i$
+has to be either $-0.2$ or $0.8$.
+
+\pause If $\mathbb{E}\epsilon_i | x_i$ is zero, it then
+implies that $y_i$ is always $0$ with probability $0.5$
+and $1$ with probability $0.5$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Consier this variant on the classical linear regression
+model:
 \begin{align*}
 \mathbb{E} (y | X) &= X \beta
 \end{align*}
+
 \pause Does this solve our problem in the case of $y \in \{0,1\}$?
+
+\pause {\bf No!} The classical case, under assumptions I, II, and III
+already follow this.
 
 \end{frame}
 
@@ -93,7 +109,8 @@ rather than directly equal to it:
 \pause Here $g$, called the \textit{link function}, is
 some fixed and known function.
 
-\pause If $g$ is the identity how does this relate to the linear case?
+\pause What properties of $g$ would we need to make regression on $\{0,1\}$
+work?
 
 \end{frame}
 
@@ -178,28 +195,145 @@ What does the relationship between $x^t \beta$ and $p_i$ look like?
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-Let's consider a very simple logistic regresion function
-with just an intercept $\alpha$ and one slope parameter $\beta$
-for a dummy variable $X$.
-
-\pause Now calculate:
-\begin{align*}
-\mathbb{E} (y_i | x_i=0) &= \frac{1}{1+e^{-\alpha}} \\
-\mathbb{E} (y_i | x_i=1) &= \frac{1}{1+e^{-\alpha - \beta}}
-\end{align*}
+We could use other link functions $g$, the logit is simply
+a popular choice given the theoretical connections to exponential
+families.
 
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-Note: we could use other link functions $g$, the logit is simply
-a popular choice given the theoretical connections to exponential
-families.
+Assume instead that there exists a hidden variable $Z$ such that:
+\begin{align*}
+Z &= X\beta + \epsilon_i, \quad \epsilon_i \sim_{i.i.d.} \mathcal{N}(0, \sigma^2)
+\end{align*}
+And then:
+\begin{align*}
+y_i = \left\{ \begin{array}{c} 0, \, z_i < 0 \\ 1, \, z_i \geq 0 \end{array}  \right.
+\end{align*}
+
+\pause What link function would give us this model?
 
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
 
+\begin{center}
+\includegraphics[width=\textwidth]{img/fig02a}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{center}
+\includegraphics[width=\textwidth]{img/fig02b}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{center}
+\includegraphics[width=\textwidth]{img/fig02c}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{center}
+\includegraphics[width=\textwidth]{img/fig02d}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{center}
+\includegraphics[width=\textwidth]{img/fig02e}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+So this model uses the inverse cdf of the standard normal
+distribution:
+\begin{align*}
+\mathbb{E} (y | X) &= \Phi^{-1} (X\beta)
+\end{align*}
+Called the probit link. \pause Any other distribution with
+support on the entire real line can be used.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont GLMs in R}
+\end{flushright}
+
+\end{frame}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}[fragile] \frametitle{}
+
+% {\bf Deviance}
+
+% Consider the likelihood for the classical linear regression
+% model:
+% \begin{align*}
+% \mathcal{L}(y | x) &=  (2\pi\sigma^2)^{-n/2} \times
+%     exp \left\{\frac{1}{2\sigma^2} || y - X\beta||_2^2 \right\}
+% \end{align*}
+% \pause If we take the log and remove the leading term that depends on
+% only the $\sigma^2$ term we see that the log density is
+% \begin{align*}
+% l(y | x) &=  - \frac{1}{2\sigma^2} || y-X\beta ||_2^2
+% \end{align*}
+% \pause If we then multiply by $-2$, this yields the standardized sum
+% of squares:
+% \begin{align*}
+% l(y | x) &=  || (y-X\beta) / \sigma ||_2^2
+% \end{align*}
+
+% \end{frame}
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}[fragile] \frametitle{}
+
+% {\bf Deviance}
+
+% We know that this has a chi-square distribution
+% \begin{align*}
+% || (y-X\beta) / \sigma ||_2^2 \sim \chi^2_{n-p}
+% \end{align*}
+
+% \end{frame}
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}[fragile] \frametitle{}
+
+% {\bf Deviance, cont.}
+
+% This notion also applies to generalized least squares. For logistic,
+% regression we see that:
+% \begin{align*}
+% -2 \cdot l(y_i | x_i) = \left\{ \begin{array}{c} 2 \cdot \log\left(\frac{1}{1 - x_i^t \beta}\right), \, y_i = 0 \\ 2 \cdot \log\left(\frac{1}{x_i^t}\right), \, y_i = 1 \end{array}  \right.
+% \end{align*}
+
+% \end{frame}
 
 \end{document}
 

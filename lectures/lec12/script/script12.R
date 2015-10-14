@@ -1,34 +1,69 @@
-### A clever solution to I.2 on problem set 3
-x <- readRDS("airline2007_pset03.Rds")
+# Simulate a probit model
+n <- 1000
+p <- 10
+beta <- rnorm(p)
+X <- matrix(runif(n*p),ncol=p)
 
-groupI <- x[x$group == "I",]
-groupII <- x[x$group == "II",]
-groupIII <- x[x$group == "III",]
+z <- X %*% beta + rnorm(n,sd=1)
+y <- as.numeric(z > 0)
 
-# Calculate form of V:
-outI <- lm(arrDelay ~ depDelay + dest - 1, data = groupI)
-varTable <- tapply(outI$resid, groupI$dest, var)
-index <- match(groupII$dest, names(varTable))
-weights <- 1/sqrt(as.numeric(varTable)[index])
+# ?
+lm(y ~ X - 1)
+glm(y ~ X - 1)
 
-# Compute betaOLS and betaGLS
-ols <- lm(arrDelay ~ depDelay + dest - 1, data = groupII)
-gls <- lm(arrDelay ~ depDelay + dest - 1, data = groupII,
-            weights=weights)
+out <- glm(y ~ X - 1, family=binomial(link="probit"))
+out
 
-ols$coefficients - gls$coefficients
+plot(beta, coef(out))
+abline(0,1, col="red")
 
-# To do prediction, need variance of the new terms
-index <- match(groupIII$dest, names(varTable))
-predVar <- as.numeric(varTable)[index]
+plot(out$fitted.values, out$residuals)
+plot(out$fitted.values, out$residuals, col=(y == 1) + 1)
+plot(out$fitted.values, y-out$fitted.values, col=(y == 1) + 1)
 
-predOLS <- predict(ols, newdata=groupIII, interval="prediction")
-predGLS <- predict(gls, newdata=groupIII, interval="prediction",
-                       pred.var=predVar)
+pred <- predict(out)
+range(pred)
+plot(pred, z)
+abline(0,1, col="red", lwd=2)
+cor(pred, z)
 
-res <- groupIII$arrDelay
-mean(predOLS[,2] < res & res < predOLS[,3])
-mean(predGLS[,2] < res & res < predGLS[,3])
+pred <- predict(out, type="response")
+range(pred)
+hist(pred,breaks=20)
 
-sort(tapply(predOLS[,2] < res & res < predOLS[,3], groupIII$dest, mean))
-sort(tapply(predGLS[,2] < res & res < predGLS[,3], groupIII$dest, mean))
+# Confusion matrix & error rate
+tab <- table(pred > 0.5, y)
+sum(diag(tab)) / sum(tab)
+
+# sensetivity/specificity
+alpha <- pred
+predClass <- as.numeric(pred >= alpha)
+sens <- sum(predClass == 1 & y == 1) / sum(y == 1)
+spec <- sum(predClass == 0 & y == 0) / sum(y == 0)
+
+sens
+spec
+
+# a curve
+alpha <- quantile(pred, seq(0,1,by=0.01))
+N <- length(alpha)
+
+sens <- rep(NA,N)
+spec <- rep(NA,N)
+for (i in 1:N) {
+  predClass <- as.numeric(pred >= alpha[i])
+  sens[i] <- sum(predClass == 1 & y == 1) / sum(y == 1)
+  spec[i] <- sum(predClass == 0 & y == 0) / sum(y == 0)
+}
+
+plot(spec, sens, xlab="specificity", ylab="sensitivity", type="l")
+
+# ROC curve
+plot(1- spec, sens, xlab="false positive rate", ylab="true positive rate", type="l")
+
+
+
+
+
+
+
