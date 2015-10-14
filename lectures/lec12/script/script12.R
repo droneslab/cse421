@@ -36,7 +36,7 @@ tab <- table(pred > 0.5, y)
 sum(diag(tab)) / sum(tab)
 
 # sensetivity/specificity
-alpha <- pred
+alpha <- 0.2
 predClass <- as.numeric(pred >= alpha)
 sens <- sum(predClass == 1 & y == 1) / sum(y == 1)
 spec <- sum(predClass == 0 & y == 0) / sum(y == 0)
@@ -56,7 +56,8 @@ for (i in 1:N) {
   spec[i] <- sum(predClass == 0 & y == 0) / sum(y == 0)
 }
 
-plot(spec, sens, xlab="specificity", ylab="sensitivity", type="l")
+plot(spec, sens, xlab="specificity", ylab="sensitivity",
+     type="l")
 
 # ROC curve
 plot(1- spec, sens, xlab="false positive rate", ylab="true positive rate", type="l")
