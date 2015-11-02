@@ -1,0 +1,173 @@
+\input{../header.tex}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\vfill
+
+{\fontsize{0.7cm}{0cm}\selectfont Lecture 14 \\\vspace{0.2cm}
+PCR and Ridge Regression}\\\vspace{0.5cm}
+04 November 2015
+
+\vspace{2cm}
+
+\begin{minipage}{0.6\textwidth}
+Taylor B. Arnold \\
+Yale Statistics \\
+STAT 312/612
+\end{minipage}
+\hfill
+\begin{minipage}{0.3\textwidth}\raggedleft
+\includegraphics[scale=0.3]{../yale-logo.png}
+\end{minipage}%
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\color{yaleblue}\fontsize{16pt}{20pt}\selectfont Goals for today}
+
+\begin{itemize}
+\item ridge regression
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\textbf{Ridge regression}
+
+The ridge regression estimator is the solution to the following
+modified least squares optimization problem for some value of $\lambda > 0$.
+\begin{align*}
+\widehat{\beta}_{ridge} &= \argmin_b \left\{ || y - Xb ||_2^2 + \lambda || b ||_2^2 \right\}
+\end{align*}
+\pause The equation shrinks the coefficients towards zero, adding some bias but
+reducing the variance of the estimator.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Ridge regression has an analytical solution. Write the criterion
+as a matrix equation:
+\begin{align*}
+(y - Xb)^t (y - Xb)  + \lambda b^t b
+&= y^t y + b^t X^t X b - 2 y^t X b + \lambda b^t b \\
+\end{align*}
+\pause And take its derivative:
+\begin{align*}
+\frac{\partial}{\partial \beta} \left( y^t y + b^t X^t X b - 2 y^t X b + \lambda b^t b \right)
+&= 2 X^t X b - 2 X^t y + 2 \lambda b
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Setting this to zero yields
+\begin{align*}
+2 X^t X \widehat{\beta} + 2 \lambda \widehat{\beta} &= 2 X^t y \\
+(X^t X + I_p \lambda) \widehat{\beta} &=  X^t y \\
+\widehat{\beta} &= (X^t X + I_p \lambda)^{-1} \times X^t y \\
+\end{align*}
+\pause This is a useful analytical form, though as with least
+squares we would generally not invert the matrix directly but
+instead use a stable matrix decomposition.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Now consider the singular value decomposition $U\Sigma V^t$ of
+the matrix $X$. We can write the projection matrix $P$ in terms
+of this as:
+\begin{align*}
+P &= X (X^t X)^{-1} X^t \\
+&= U \Sigma V^t (V^t \Sigma^2 V)^{-1} V \Sigma U^t \\
+&= U \Sigma V^t V \Sigma^{-2} V^t V \Sigma U^t \\
+&= U U^t \\
+\end{align*}
+\pause Remember how important the projection matrix was? This is
+a very important result!
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+The analogue of the projection matrix for ridge regression
+is given by:
+\begin{align*}
+P_{\lambda} &= X (X^t X + \lambda I_p)^{-1} X^t \\
+\end{align*}
+Where $P_{0}$ is equal to the ordinary $P$. \pause As was
+the case last time, this matrix maps $y$ into the predicted
+values $\hat{y}$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+What is the decomposition of $P_\lambda$ in terms of the singular
+value decomposition?
+\begin{align*}
+P_\lambda &= X (X^t X + \lambda I_p)^{-1} X^t \\
+&= U \Sigma V^t (V^t \Sigma^2 V)^{-1} V \Sigma U^t \\
+&= U \Sigma (\Sigma^{2} + \lambda I_p)^{-1} \Sigma U^t \\
+&= U D U^t \\
+\end{align*}
+For the diagonal matrix $D$:
+\begin{align}
+D &= \text{diag} \left( \frac{\sigma_1^2}{\sigma_1^2 + \lambda}, \ldots, \frac{\sigma_p^2}{\sigma_p^2 + \lambda}  \right)
+\end{align}
+\pause So we are shrinking the directions of the singular vectors, with
+more shrinkage on the smaller singular values.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+What is the bias of the ridge regression?
+
+\begin{align*}
+Var \left(\widehat{\beta} | X \right) &= (X^t X + I_p \lambda)^{-1} \times X^t Var(y | X) \\
+&= (X^t X + I_p \lambda)^{-1} \times X^t X \beta
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+What is the bias of the ridge regression?
+
+\begin{align*}
+\mathbb{E} \widehat{\beta} &= (X^t X + I_p \lambda)^{-1} \times X^t \mathbb{E}y \\
+&= (X^t X + I_p \lambda)^{-1} \times X^t X \beta
+\end{align*}
+
+\end{frame}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
