@@ -1,0 +1,87 @@
+\input{../header.tex}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\vfill
+
+{\fontsize{0.7cm}{0cm}\selectfont Lecture 16 \\\vspace{0.2cm}
+Solving GLMs via IRWLS}\\\vspace{0.5cm}
+09 November 2015
+
+\vspace{2cm}
+
+\begin{minipage}{0.6\textwidth}
+Taylor B. Arnold \\
+Yale Statistics \\
+STAT 312/612
+\end{minipage}
+\hfill
+\begin{minipage}{0.3\textwidth}\raggedleft
+\includegraphics[scale=0.3]{../yale-logo.png}
+\end{minipage}%
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\color{yaleblue}\fontsize{16pt}{20pt}\selectfont Notes}
+
+\begin{itemize}
+\item problem set 5 posted; due next class \pause
+\item problem set 6, November 18th
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\color{yaleblue}\fontsize{16pt}{20pt}\selectfont Goals for today}
+
+\begin{itemize}
+\item how to solve logistic regression via weighted least squares
+\item ridge logistic regression
+\item image classification
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\textbf{Statistical noise as numerical noise}
+
+In problem set $5$ you are going to construct the pseudo-inverse $A^{+}$
+of an arbitrary matrix $A$ in terms of $A$'s singular value decomposition.
+
+\pause Consider the standard description of a statistical linear model:
+\begin{align*}
+y &= X \beta + \epsilon
+\end{align*}
+If we have some sort of inverse of $X$, we can try to write this as:
+\begin{align*}
+y' &= X (\beta + X^{+} \epsilon)
+\end{align*}
+And now the error is in $\beta$ rather than in $y$.
+
+\end{frame}
+
+
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+

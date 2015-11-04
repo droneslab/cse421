@@ -1,48 +1,65 @@
 ####################
 # Columbia images
 library(jpeg)
-pm <- read.csv("photoMetaData.csv", as.is=TRUE)
+img <- readJPEG("columbiaImages/DSC_1785.jpg")
+system("open columbiaImages/DSC_1785.jpg")
 
-system(paste0("open columbiaImages/",pm$name[94]))
-table(pm$category)
+X <- matrix(img,ncol=3)
+cor(X)
 
-pm <- pm[pm$category != "artificial",]
-pm <- pm[pm$category != "natural",]
-n <- nrow(pm)
+index <- sample(nrow(X),5e4)
+par(mfrow=c(1,2))
+plot(X[index,1], X[index,2], pch=19, cex=0.5, col="#ff00ff08",
+     xlab="red", ylab="green")
+plot(X[index,2], X[index,3], pch=19, cex=0.5, col="#ff00ff08",
+     xlab="green", ylab="blue")
 
-y <- rep(0, nrow(pm))
-y[grep("indoor", pm$category)] <- 1
+y <- as.numeric(row(img[,,1]))
+y <- (y - mean(y)) / sd(y)
 
-set.seed(1)
-tFlag <- as.numeric(runif(n) > 0.5)
+summary(lm(y ~ X - 1))
 
-X <- matrix(0,nrow=n,ncol=3)
-for (j in 1:n) {
-  img <- readJPEG(paste0("columbiaImages/",pm$name[j]))
-  X[j,] <- apply(img, 3, median)
-  print(j)
-}
+library(MASS)
+lm.ridge(y ~ X - 1, lambda=10)
+lm.ridge(y ~ X - 1, lambda=100)
 
-y1 <- y[tFlag == 1]
-y2 <- y[tFlag == 0]
-X1 <- X[tFlag == 1,]
-X2 <- X[tFlag == 0,]
+##################
+SVD <- svd(X)
+SVD$v
+T <- SVD$u %*% diag(SVD$d)
 
-betaHat <- qr.solve(crossprod(X1),crossprod(X1,y1))
+# Notice, components are uncorrelated
+cor(T)
 
-y2Hat <- X2 %*% betaHat
-table(y2Hat > 0.5, y2)
+# Plot first two components
+index <- sample(nrow(X),5e4)
+plot(T[index,1],T[index,2], xlab="PC1", ylab="PC2")
 
-mean((y2Hat > 0.5) == y2)
-mean(0 == y2)
+# Fit PCR for k equal to 1, 2, and 3
+trainSet <- (runif(nrow(T)) > 0.99)
+m1 <- lm(y ~ T[,1] - 1, subset=trainSet)$coef
+m2 <- lm(y ~ T[,1:2] - 1, subset=trainSet)$coef
+m3 <- lm(y ~ T[,1:3] - 1, subset=trainSet)$coef
 
+# notice the relationship between the coefs; why?
+m1
+m2
+m3
 
-X <- matrix(0,nrow=n,ncol=3)
-for (j in 1:n) {
-  img <- readJPEG(paste0("columbiaImages/",pm$name[j]))
-  X[j,] <- apply(img, 3, median)
-  print(j)
-}
+# Fit data on the testing set
+pred1 <- T[!trainSet,1,drop=FALSE] %*% m1
+pred2 <- T[!trainSet,1:2,drop=FALSE] %*% m2
+pred3 <- T[!trainSet,1:3,drop=FALSE] %*% m3
+
+# Notice how much variance is decreased in PCR
+sd(pred1)
+sd(pred2)
+sd(pred3)
+
+# How do the predictions stack up?
+mean((pred1 - y[!trainSet])^2)
+mean((pred2 - y[!trainSet])^2)
+mean((pred3 - y[!trainSet])^2)
 
 
 
