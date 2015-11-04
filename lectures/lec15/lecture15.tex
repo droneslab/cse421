@@ -28,10 +28,29 @@ STAT 312/612
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
+{\color{yaleblue}\fontsize{16pt}{20pt}\selectfont Notes}
+
+\begin{itemize}
+\item problem set 5 posted; due next Wednesday \pause
+\item problem set 6 will be due in two weeks, November 18th
+  and is also posted (courtesy of DP) \pause
+\item the second midterm will be a take-home exam; available online on
+  December 2nd, and due December 7th \pause
+\item the final problem set, 7, is formally due the last day of
+  classes (but we'll accept them through December 14th)
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
 {\color{yaleblue}\fontsize{16pt}{20pt}\selectfont Goals for today}
 
 \begin{itemize}
-\item ridge regression
+\item ridge regression formulation and link to SVD
+\item principal component analysis
+\item applications to image data
 \end{itemize}
 
 \end{frame}
@@ -54,8 +73,8 @@ reducing the variance of the estimator.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-Ridge regression has an analytical solution. Write the criterion
-as a matrix equation:
+Ridge regression has an analytical solution. \pause
+To see this write the criterion as a matrix equation:
 \begin{align*}
 (y - Xb)^t (y - Xb)  + \lambda b^t b
 &= y^t y + b^t X^t X b - 2 y^t X b + \lambda b^t b \\
@@ -75,7 +94,7 @@ Setting this to zero yields
 \begin{align*}
 2 X^t X \widehat{\beta} + 2 \lambda \widehat{\beta} &= 2 X^t y \\
 (X^t X + I_p \lambda) \widehat{\beta} &=  X^t y \\
-\widehat{\beta} &= (X^t X + I_p \lambda)^{-1} \times X^t y \\
+\widehat{\beta} &= (X^t X + I_p \lambda)^{-1} \cdot X^t y \\
 \end{align*}
 \pause This is a useful analytical form, though as with least
 squares we would generally not invert the matrix directly but
@@ -91,7 +110,7 @@ the matrix $X$. We can write the projection matrix $P$ in terms
 of this as:
 \begin{align*}
 P &= X (X^t X)^{-1} X^t \\
-&= U \Sigma V^t (V^t \Sigma^2 V)^{-1} V \Sigma U^t \\
+&= U \Sigma V^t (V \Sigma^2 V^t)^{-1} V \Sigma U^t \\
 &= U \Sigma V^t V \Sigma^{-2} V^t V \Sigma U^t \\
 &= U U^t \\
 \end{align*}
@@ -117,8 +136,48 @@ values $\hat{y}$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-What is the decomposition of $P_\lambda$ in terms of the singular
-value decomposition?
+Notice that because $VV^t$ is equal to the identity matrix, we
+can write the inner term of this projection matrix in a nice form:
+\begin{align*}
+X^t X + \lambda I_p &= V \Sigma^2 V^t + \lambda V V^t \\
+&= V(\Sigma^2 + \lambda)V^t
+\end{align*}
+\pause And the inverse is given as:
+\begin{align*}
+(X^t X + \lambda I_p)^{-1}
+&= V(\Sigma^2 + \lambda)^{-1}V^t \\
+&= V E_{\lambda} V^t
+\end{align*}
+\pause Where $E_{\lambda}$ is a diagonal matrix with entries:
+\begin{align*}
+E_{\lambda} &=
+\text{diag} \left( \frac{1}{\sigma^2_{max} + \lambda}, \ldots, \frac{1}{\sigma^2_{min} + \lambda}\right)
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Remember that the condition number is the ratio of the largest and smallest
+singular value of a matrix.\pause What is the condition number of $X^tX$?
+\begin{align}
+\text{cond} (X^t X) &= \frac{\sigma_max^2}{\sigma_min^2}
+\end{align}
+\pause How about the condition number of $X^t X + \lambda I_p$?
+\begin{align}
+\text{cond} (X^t X + \lambda I_p) &= \frac{\sigma_max^2 + \lambda}{\sigma_min^2 + \lambda}
+\end{align}
+\pause How does the incorporation of $\lambda$ change our ability to invert the
+matrix?
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Back to the projection matrix, what is the decomposition of
+$P_\lambda$ in terms of the singular value decomposition? \pause
 \begin{align*}
 P_\lambda &= X (X^t X + \lambda I_p)^{-1} X^t \\
 &= U \Sigma V^t (V^t \Sigma^2 V)^{-1} V \Sigma U^t \\
@@ -129,35 +188,12 @@ For the diagonal matrix $D$:
 \begin{align}
 D &= \text{diag} \left( \frac{\sigma_1^2}{\sigma_1^2 + \lambda}, \ldots, \frac{\sigma_p^2}{\sigma_p^2 + \lambda}  \right)
 \end{align}
-\pause So we are shrinking the directions of the singular vectors, with
-more shrinkage on the smaller singular values.
+\pause So we are shrinking in the directions of the singular vectors,
+with more shrinkage on the smaller singular values.
 
 \end{frame}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile] \frametitle{}
-
-What is the bias of the ridge regression?
-
-\begin{align*}
-Var \left(\widehat{\beta} | X \right) &= (X^t X + I_p \lambda)^{-1} \times X^t Var(y | X) \\
-&= (X^t X + I_p \lambda)^{-1} \times X^t X \beta
-\end{align*}
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile] \frametitle{}
-
-What is the bias of the ridge regression?
-
-\begin{align*}
-\mathbb{E} \widehat{\beta} &= (X^t X + I_p \lambda)^{-1} \times X^t \mathbb{E}y \\
-&= (X^t X + I_p \lambda)^{-1} \times X^t X \beta
-\end{align*}
-
-\end{frame}
 
 \end{document}
 
