@@ -9,10 +9,12 @@ cor(X)
 
 index <- sample(nrow(X),5e4)
 par(mfrow=c(1,2))
-plot(X[index,1], X[index,2], pch=19, cex=0.5, col="#ff00ff08",
-     xlab="red", ylab="green")
-plot(X[index,2], X[index,3], pch=19, cex=0.5, col="#ff00ff08",
-     xlab="green", ylab="blue")
+plot(X[index,1], X[index,2], pch=19, cex=0.5,
+      col="#ff00ff08",
+      xlab="red", ylab="green")
+plot(X[index,3], X[index,2], pch=19, cex=0.5,
+      col="#ff00ff08",
+      xlab="blue", ylab="green")
 
 y <- as.numeric(row(img[,,1]))
 y <- (y - mean(y)) / sd(y)

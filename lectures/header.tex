@@ -40,6 +40,20 @@
 % \setbeamerfont{frametitle}{family=\oldA}
 % \setbeamerfont{date}{family=\dfont}
 
+% \addtobeamertemplate{navigation symbols}{}{%
+%     \usebeamerfont{footline}%
+%     \usebeamercolor[fg]{footline}%
+%     \hspace{1em}%
+%     \insertframenumber/\inserttotalframenumber
+% }
+
+\setbeamertemplate{footline}[text line]{%
+  \parbox{0.99\linewidth}{
+    \normalsize\vspace*{-24pt}\hfill{\color{solarized@base00}\insertframenumber/\inserttotalframenumber}
+  }
+}
+
+
 \setbeamertemplate{itemize items}{--}
 \setbeamercolor*{item}{fg=black}
 
