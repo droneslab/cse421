@@ -31,7 +31,7 @@ SVD$v
 T <- SVD$u %*% diag(SVD$d)
 
 # Notice, components are uncorrelated
-cor(T)
+t(T) %*% T
 
 # Plot first two components
 index <- sample(nrow(X),5e4)
@@ -39,14 +39,20 @@ plot(T[index,1],T[index,2], xlab="PC1", ylab="PC2")
 
 # Fit PCR for k equal to 1, 2, and 3
 trainSet <- (runif(nrow(T)) > 0.99)
-m1 <- lm(y ~ T[,1] - 1, subset=trainSet)$coef
-m2 <- lm(y ~ T[,1:2] - 1, subset=trainSet)$coef
-m3 <- lm(y ~ T[,1:3] - 1, subset=trainSet)$coef
+m1 <- lm(y ~ T[,1] - 1)$coef
+m2 <- lm(y ~ T[,1:2] - 1)$coef
+m3 <- lm(y ~ T[,1:3] - 1)$coef
 
 # notice the relationship between the coefs; why?
 m1
 m2
 m3
+
+# Now, refit just on the training set
+trainSet <- (runif(nrow(T)) > 0.99)
+m1 <- lm(y ~ T[,1] - 1, subset=trainSet)$coef
+m2 <- lm(y ~ T[,1:2] - 1, subset=trainSet)$coef
+m3 <- lm(y ~ T[,1:3] - 1, subset=trainSet)$coef
 
 # Fit data on the testing set
 pred1 <- T[!trainSet,1,drop=FALSE] %*% m1

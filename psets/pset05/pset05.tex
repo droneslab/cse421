@@ -79,7 +79,8 @@ inverse.
 {\bf 2.} An additional way to solve the ordinary least squares problem is to take the
 pseudoinverse of the design matrix $X$, and let $\widehat{\beta}$ be equal to $X^{+} y$.
 (a) Explain why this seems reasonable.  (b) Show, directly, that
-the predicted values $X\widehat{\beta}$ will be equal to $UU^t y$.
+the predicted values $X\widehat{\beta}$ will be equal to $U_pU_p^t y$ (where $U_p$ is
+the first $p$ columns of $U$, also known as the \textit{thin SVD}).
 (c) Apply this technique to solve the ill-conditioned system we observed in class:
 \begin{verbatim}
 > X  <- matrix(c(10^9, -1, -1, 10^(-5)), 2, 2)
@@ -120,7 +121,14 @@ and metadata
 \end{quote}
 Read the image \texttt{DSC\_1739.jpg} into R using
 the \textbf{jpeg} package. Construct a greyscale matrix by averaging the three color
-channels together and take the singular value decomposition of the matrix.
+channels together and take the singular value decomposition of the matrix. For example,
+the following code will construct and save a black and white version of the
+image \texttt{DSC\_1785.jpg}:
+\begin{verbatim}
+> img <- jpeg::readJPEG("columbiaImages/DSC_1785.jpg")
+> matBW <- (img[,,1] + img[,,2] + img[,,3]) / 3
+> jpeg::writeJPEG(matBW, "DS_1785_BW.jpg")
+\end{verbatim}
 (a) Plot a histogram of the log of the
 singular values. (b) Now create a new matrix $\Sigma$ where all but the largest $60$ singular values
 have been set to $0$ and reconstruct the matrix with the new $\Sigma$. Save the image and open it

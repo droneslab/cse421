@@ -43,9 +43,9 @@ STAT 312/612
 {\color{yaleblue}\fontsize{16pt}{20pt}\selectfont Goals for today}
 
 \begin{itemize}
+\item fixed PCA example from last time
 \item how to solve logistic regression via weighted least squares
-\item ridge logistic regression
-\item image classification
+\item classification problem on image corpus
 \end{itemize}
 
 \end{frame}
@@ -53,25 +53,118 @@ STAT 312/612
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-\textbf{Statistical noise as numerical noise}
-
-In problem set $5$ you are going to construct the pseudo-inverse $A^{+}$
-of an arbitrary matrix $A$ in terms of $A$'s singular value decomposition.
-
-\pause Consider the standard description of a statistical linear model:
-\begin{align*}
-y &= X \beta + \epsilon
-\end{align*}
-If we have some sort of inverse of $X$, we can try to write this as:
-\begin{align*}
-y' &= X (\beta + X^{+} \epsilon)
-\end{align*}
-And now the error is in $\beta$ rather than in $y$.
+{\color{yaleblue}\fontsize{16pt}{20pt}\selectfont fixed PCA example from last time}
 
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
 
+\textbf{GLMs}
 
+Recall that we define generalized linear models such that
+the mean of $y$ is some function of $X\beta$, rather than
+directly equal to it:
+\begin{align*}
+\mathbb{E} (y | X) &= g^{-1} \left( X \beta \right)
+\end{align*}
+With $g$, called the \textit{link function}, equal to some
+fixed and known function.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\textbf{GLMs}
+
+Recall that we define generalized linear models such that
+the mean of $y$ is some function of $X\beta$, rather than
+directly equal to it:
+\begin{align*}
+\mathbb{E} (y | X) &= g^{-1} \left( X \beta \right)
+\end{align*}
+With $g$, called the \textit{link function}, equal to some
+fixed and known function.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\textbf{Logistic regression}
+
+The logistic regression function uses $g$ equal to the logit
+function to describe a distribution with $y \in \{0,1\}$.
+Specifically, we have the following description of the statistical
+model:
+\begin{align*}
+\mathbb{E} (y | X) &= \text{logit}^{-1} \left( X \beta \right) \\
+&= \frac{1}{1 + e^{- X \beta}}
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Now that we have discussed how to solve the ordinary least squares
+equation, you may wonder how we would go about solving the logistic
+regression problem.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Recall that the likelihood of the data point $y_i$ given its
+mean $p_i$ is equal to:
+\begin{align*}
+L_i(y_i | p_i)
+&= \text{exp} \left\{y_i \cdot \log\left(\frac{p_i}{1-p_i}\right) + \log(1 - p_i) \right\} \\
+&= \text{exp} \left\{y_i \cdot \theta_i + \frac{e^{\theta_i}}{e^{\theta_i} + 1}\right\} \\
+&= \text{exp} \left\{y_i \cdot \theta_i - b(\theta_i) \right\}
+\end{align*}
+Where:
+\begin{align*}
+\theta_i &= \log\left(\frac{p_i}{1-p_i}\right) \\
+b(\theta_i) &= -1 \cdot \frac{e^{\theta_i}}{e^{\theta_i} + 1}
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+The derivative of the log-likelihood is then given by:
+\begin{align*}
+\frac{\partial}{\partial \theta_i}  l_i(y_i | \theta_i)
+&= y_i - b'(\theta_i)
+\end{align*}
+And
+\begin{align*}
+\frac{\partial \theta_i}{\partial p_i} &=
+  \frac{1-p_i}{p_i} \cdot \frac{1}{1}
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Recall that the log-likelihood of the data point $y_i$ given its
+mean $p_i$ is equal to:
+\begin{align*}
+l_i(y_i | p_i)
+&= \log(1-p_i) + y_i \cdot \text{log} \left( \frac{p_i}{1 - p_i} \right)
+\end{align*}
+\pause Taking the derivative with respect to $p_i$ yields:
+\begin{align*}
+\frac{\partial}{\partial p_i} l_i(y_i | p_i)
+&= \frac{1}{p_i - 1} + y_i \cdot \frac{1 - p_i}{p_i} \cdot \frac{}{}
+\end{align*}
+
+\end{frame}
 
 \end{document}
 
