@@ -134,7 +134,7 @@ of the regression vector $x_i^t \beta$.
 p_i &= \frac{1}{1 + e^{-x_i^t \beta}} \\
 1 - p_i &= \frac{ e^{-x_i^t \beta}}{1 + e^{-x_i^t \beta}} \\
 &=\frac{ 1}{1 + e^{x_i^t \beta}} \\
-\log(1 - p_i) &= -1 \cdot \log(1 + ^{x_i^t \beta})
+\log(1 - p_i) &= -1 \cdot \log(1 + e^{x_i^t \beta})
 \end{align*}
 
 \end{frame}
@@ -155,7 +155,7 @@ l(y_i | x_i, \beta)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-To find the MLE estimator, we want to find zeros of the deriviate of
+To find the MLE estimator, we want to find zeros of the derivative of
 the log-likelihood. The derivative is given by:
 \begin{align*}
 \nabla_\beta l(y_i | x_i, \beta)
@@ -174,14 +174,14 @@ In other words, we see from a simple application of the chain
 rule that:
 \begin{align*}
 \frac{\partial}{\partial \beta_k} \log(1 + e^{X \beta})
-&= \frac{1}{1 + e^{X \beta}} \cdot X_k^t \cdot e^{X \beta}
+&= \frac{1}{1 + e^{X \beta}} \cdot x_k^t \cdot e^{X \beta}
 \end{align*}
-\pause Which can be simplified in terms of $p_i$:
+\pause Which can be simplified in terms of $p$:
 \begin{align*}
-\frac{1}{1 + e^{X \beta}} \cdot X_k^t \cdot e^{X \beta}
-&= X_k^t p
+\frac{1}{1 + e^{X \beta}} \cdot x_k^t \cdot e^{X \beta}
+&= x_k^t p
 \end{align*}
-\pause And in vector form gives the gradient as:
+\pause In vector form gives the gradient as:
 \begin{align*}
 \nabla \log(1 + e^{X\beta}) &= X^t p
 \end{align*}
@@ -191,7 +191,7 @@ rule that:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-So now me have an explicit form of the gradient of the
+So now we have an explicit form of the gradient of the
 log-likelihood:
 \begin{align*}
 \nabla_\beta l(y_i | x_i, \beta)
@@ -226,15 +226,16 @@ illustractions.
 \begin{frame}[fragile] \frametitle{}
 
 We saw that the scalar version of using Newton–Raphson to determine
-the optimal values of $f$ is given by (remember the derivaties are
-one more than the root:
+the optimal values of $f$ is given by (remember the derivatives are
+one more than the illustration because we want critical points rather
+than zeros of $f$):
 \begin{align*}
-\beta^{(1)} &= \beta^{(0)} - \frac{f\,'(\beta^{(0)})}{f\,''(\beta^{(0)})}
+\beta^{(k+1)} &= \beta^{(k)} - \frac{f\,'(\beta^{(k)})}{f\,''(\beta^{(k)})}
 \end{align*}
 \pause The multivariate version of Newton–Raphson applies the following
 set of updates:
 \begin{align*}
-\beta^{(1)} &= \beta^{(0)} - H^{-1}(\beta^{(0)}) \nabla f\,(\beta^{(0)})
+\beta^{(k+1)} &= \beta^{(k)} - H^{-1}(\beta^{(k)}) \nabla f\,(\beta^{(k)})
 \end{align*}
 Where $H$ is the Hessian matrix of all second order partial derivatives.
 
@@ -258,7 +259,6 @@ In componentwise form, we see that:
 \begin{align*}
 \frac{\partial^2 l(\beta)}{\partial \beta_j \partial \beta_k}
 &= \frac{\partial}{\partial \beta_j} \sum_i x_{i,k} \cdot p_i \\
-&= \sum_i x_{i,k} \cdot \frac{\partial p_i}{\partial \beta_j} \\
 &= \sum_i x_{i,k} \cdot \frac{\partial p_i}{\partial \beta_j} \\
 \end{align*}
 
@@ -302,8 +302,8 @@ to $p_i\cdot(1-p_i)$.
 
 And therefore the Newton-Raphson step is given by:
 \begin{align*}
-\beta^{(1)} &= \beta^{(0)} - H^{-1}(\beta^{(0)}) \nabla f\,(\beta^{(0)})
-&= \beta^{(0)} + (X^t D^{(0)} X)^{-1} X^t (y - p^{(0)})
+\beta^{(k+1)} &= \beta^{(k)} - H^{-1}(\beta^{(k)}) \nabla f\,(\beta^{(k)}) \\
+&= \beta^{(k)} + (X^t D X)^{-1} X^t (y - p^{(k)})
 \end{align*}
 \pause Look familiar?
 
@@ -312,27 +312,30 @@ And therefore the Newton-Raphson step is given by:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-If we let $S = D^{1/2}$, the standard deviations of $y$, and set
+We can re-write this, for a suitable $z$, as:
 \begin{align*}
-X' &= SX \\
-z &= S^{-1} (y - p)
+\beta^{(k+1)}
+&= (X^t D X)^{-1} (X^t D X) \beta^{(k)} + (X^t D X)^{-1} X^t (y - p^{(k)}) \\
+&= (X^t D X)^{-1} X^t D (X \beta^{(k)}  + D^{-1} (y - p) ) \\
+&= (X^t D X)^{-1} X^t D z
 \end{align*}
-\pause The least squares regression of $z$ on $X'$ gives:
+\pause So solving the logistic regression amounts to solving a sequence of
+weighted least squares models:
 \begin{align*}
-(X'^t X')^{-1} X'^t z &= (X^t S^2 X)^{-1} X^t S S^{-1} (y - p)\\
-&= (X^t D X)^{-1} X^t (y - p)
+\beta^{(k+1)} &= \argmin_b \left\{ || D^{1/2} (z - Xb) ||_2^2  \right\}
 \end{align*}
-So solving the logistic regression amounts to solving a sequence of
-weighted least squares models.
 
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-Notice that the scheme weights those observations which
+Notice that the scheme weights observations more if they
 have predicted probabilities close to $0$ or $1$. \pause
 Does this make sense based on our other lecture?
+
+\pause Another interpretation is that it put the highest
+weight on points with the lowest variance.
 
 \end{frame}
 
