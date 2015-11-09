@@ -52,5 +52,27 @@ mean((pred2 - y[!trainSet])^2)
 mean((pred3 - y[!trainSet])^2)
 
 #####################
+n <- 1000
+p <- 10
+X <- matrix(rnorm(n*p),ncol=p)
+beta <- runif(p)
+y <- as.numeric(X%*%beta + rnorm(n) > 0)
+
+# Fit a model; what do you think the iter is?
+out <- glm(y ~ X - 1, family=binomial())
+out$iter
+
+# Show that the residuals are orthogonal to col space of X
+t(X) %*% (y - predict(out, type="response"))
+
+#####################
+
+
+
+
+
+
+
+
 
 

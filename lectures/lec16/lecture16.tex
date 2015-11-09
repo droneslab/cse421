@@ -60,16 +60,7 @@ STAT 312/612
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-\textbf{GLMs}
-
-Recall that we define generalized linear models such that
-the mean of $y$ is some function of $X\beta$, rather than
-directly equal to it:
-\begin{align*}
-\mathbb{E} (y | X) &= g^{-1} \left( X \beta \right)
-\end{align*}
-With $g$, called the \textit{link function}, equal to some
-fixed and known function.
+{\color{yaleblue}\fontsize{16pt}{20pt}\selectfont solving logistic regression}
 
 \end{frame}
 
@@ -88,6 +79,7 @@ With $g$, called the \textit{link function}, equal to some
 fixed and known function.
 
 \end{frame}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
@@ -122,13 +114,6 @@ mean $p_i$ is equal to:
 \begin{align*}
 L_i(y_i | p_i)
 &= \text{exp} \left\{y_i \cdot \log\left(\frac{p_i}{1-p_i}\right) + \log(1 - p_i) \right\} \\
-&= \text{exp} \left\{y_i \cdot \theta_i + \frac{e^{\theta_i}}{e^{\theta_i} + 1}\right\} \\
-&= \text{exp} \left\{y_i \cdot \theta_i - b(\theta_i) \right\}
-\end{align*}
-Where:
-\begin{align*}
-\theta_i &= \log\left(\frac{p_i}{1-p_i}\right) \\
-b(\theta_i) &= -1 \cdot \frac{e^{\theta_i}}{e^{\theta_i} + 1}
 \end{align*}
 
 \end{frame}
@@ -136,15 +121,20 @@ b(\theta_i) &= -1 \cdot \frac{e^{\theta_i}}{e^{\theta_i} + 1}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-The derivative of the log-likelihood is then given by:
+There are two terms here that depend on $p_i$ in different ways:
 \begin{align*}
-\frac{\partial}{\partial \theta_i}  l_i(y_i | \theta_i)
-&= y_i - b'(\theta_i)
+L_i(y_i | p_i)
+&= \text{exp} \left\{y_i \cdot {\color{solarized@red}\log\left( \frac{p_i}{1-p_i}\right)} + {\color{solarized@blue} \log(1 - p_i)} \right\} \\
 \end{align*}
-And
+\pause The {\color{solarized@red} first term} is simply equal to the projection
+of the regression vector $x_i^t \beta$.
+
+\pause We can write the {\color{solarized@blue} second term} using:
 \begin{align*}
-\frac{\partial \theta_i}{\partial p_i} &=
-  \frac{1-p_i}{p_i} \cdot \frac{1}{1}
+p_i &= \frac{1}{1 + e^{-x_i^t \beta}} \\
+1 - p_i &= \frac{ e^{-x_i^t \beta}}{1 + e^{-x_i^t \beta}} \\
+&=\frac{ 1}{1 + e^{x_i^t \beta}} \\
+\log(1 - p_i) &= -1 \cdot \log(1 + ^{x_i^t \beta})
 \end{align*}
 
 \end{frame}
@@ -152,17 +142,226 @@ And
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-Recall that the log-likelihood of the data point $y_i$ given its
-mean $p_i$ is equal to:
+We can then write the log-likelihood of the full model, in vector
+form, as:
 \begin{align*}
-l_i(y_i | p_i)
-&= \log(1-p_i) + y_i \cdot \text{log} \left( \frac{p_i}{1 - p_i} \right)
+l(y_i | x_i, \beta)
+&= \sum_i \left(y_i \cdot x_i^t \beta - \log(1 + ^{x_i^t \beta}) \right) \\
+&= y^t X \beta - \log(1 + e^{X\beta})
 \end{align*}
-\pause Taking the derivative with respect to $p_i$ yields:
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+To find the MLE estimator, we want to find zeros of the deriviate of
+the log-likelihood. The derivative is given by:
 \begin{align*}
-\frac{\partial}{\partial p_i} l_i(y_i | p_i)
-&= \frac{1}{p_i - 1} + y_i \cdot \frac{1 - p_i}{p_i} \cdot \frac{}{}
+\nabla_\beta l(y_i | x_i, \beta)
+&= \nabla y^t X \beta - \nabla \log(1 + e^{X\beta}) \\
+&= X^t y - \nabla \log(1 + e^{X\beta})
 \end{align*}
+\pause The second term can be calculated by writing the gradient out
+component wise.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+In other words, we see from a simple application of the chain
+rule that:
+\begin{align*}
+\frac{\partial}{\partial \beta_k} \log(1 + e^{X \beta})
+&= \frac{1}{1 + e^{X \beta}} \cdot X_k^t \cdot e^{X \beta}
+\end{align*}
+\pause Which can be simplified in terms of $p_i$:
+\begin{align*}
+\frac{1}{1 + e^{X \beta}} \cdot X_k^t \cdot e^{X \beta}
+&= X_k^t p
+\end{align*}
+\pause And in vector form gives the gradient as:
+\begin{align*}
+\nabla \log(1 + e^{X\beta}) &= X^t p
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+So now me have an explicit form of the gradient of the
+log-likelihood:
+\begin{align*}
+\nabla_\beta l(y_i | x_i, \beta)
+&= X^t y - \nabla \log(1 + e^{X\beta}) \\
+&= X^t y - X^t p \\
+&= X^t (y - p)
+\end{align*}
+
+\pause We cannot simply set this to zero because $p$ is a non-linear
+function of $X$. However it does tell us that the residual in logistic
+regression should be uncorrelated with the $X$ matrix (just as was
+the case with linear regression).
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+To find a numerical solution to the zeros of the function
+$\nabla_\beta l(y_i | x_i, \beta)$, the Newton–Raphson method
+can be used.
+
+\pause The technique is best described in a series of
+illustractions.
+\begin{quote}
+\url{http://euler.stat.yale.edu/~tba3/stat612/lectures/lec16/img/NewtonIteration_Ani.gif}
+\end{quote}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+We saw that the scalar version of using Newton–Raphson to determine
+the optimal values of $f$ is given by (remember the derivaties are
+one more than the root:
+\begin{align*}
+\beta^{(1)} &= \beta^{(0)} - \frac{f\,'(\beta^{(0)})}{f\,''(\beta^{(0)})}
+\end{align*}
+\pause The multivariate version of Newton–Raphson applies the following
+set of updates:
+\begin{align*}
+\beta^{(1)} &= \beta^{(0)} - H^{-1}(\beta^{(0)}) \nabla f\,(\beta^{(0)})
+\end{align*}
+Where $H$ is the Hessian matrix of all second order partial derivatives.
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+What is the Hessian of the log-likelihood? The gradient
+was $X^t (y - p)$, so we can quickly see that the
+Hessian only depends on the term $X^t p$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+In componentwise form, we see that:
+\begin{align*}
+\frac{\partial^2 l(\beta)}{\partial \beta_j \partial \beta_k}
+&= \frac{\partial}{\partial \beta_j} \sum_i x_{i,k} \cdot p_i \\
+&= \sum_i x_{i,k} \cdot \frac{\partial p_i}{\partial \beta_j} \\
+&= \sum_i x_{i,k} \cdot \frac{\partial p_i}{\partial \beta_j} \\
+\end{align*}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+The partial derivative of $p_i$ with respect to $\beta_j$ is
+given by the following (it is just calculus with a clever
+grouping of terms at the end):
+\begin{align*}
+\frac{\partial p_i}{\partial \beta_j}
+&= \frac{\partial}{\partial \beta_j} \frac{1}{1+e^{-x_i^t \beta}} \\
+&= \frac{1}{(1+e^{-x_i^t \beta})^2} \cdot -1 \cdot x_{i,j} \cdot e^{-x_i^t \beta} \\
+&= -x_{i,j} \cdot \left(\frac{1}{1+e^{-x_i^t \beta}} \right) \cdot \left(\frac{e^{-x_i^t \beta}}{1+e^{-x_i^t \beta}} \right) \\
+&= -x_{i,j} \cdot p_i \cdot (1 - p_i) \\
+&= -x_{i,j} \cdot \text{Var}(y_i)
+\end{align*}
+\pause We don't actually need the final line, but include it as it
+helps to give some intutition to the next set of steps.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+This now yields the Hessian as:
+\begin{align*}
+H l(\beta | x_i, \beta) &= - X^t D X
+\end{align*}
+Where $D$ is an $n$-by-$n$ diagonal matrix with components equal
+to $p_i\cdot(1-p_i)$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+And therefore the Newton-Raphson step is given by:
+\begin{align*}
+\beta^{(1)} &= \beta^{(0)} - H^{-1}(\beta^{(0)}) \nabla f\,(\beta^{(0)})
+&= \beta^{(0)} + (X^t D^{(0)} X)^{-1} X^t (y - p^{(0)})
+\end{align*}
+\pause Look familiar?
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+If we let $S = D^{1/2}$, the standard deviations of $y$, and set
+\begin{align*}
+X' &= SX \\
+z &= S^{-1} (y - p)
+\end{align*}
+\pause The least squares regression of $z$ on $X'$ gives:
+\begin{align*}
+(X'^t X')^{-1} X'^t z &= (X^t S^2 X)^{-1} X^t S S^{-1} (y - p)\\
+&= (X^t D X)^{-1} X^t (y - p)
+\end{align*}
+So solving the logistic regression amounts to solving a sequence of
+weighted least squares models.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Notice that the scheme weights those observations which
+have predicted probabilities close to $0$ or $1$. \pause
+Does this make sense based on our other lecture?
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+This method generalizes to generalized linear models with
+exponential families, and has some fairly deep connections to
+Fischer information.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Why is this important? \pause
+\begin{enumerate}
+\item Explains many of the results on problem set $4$; in
+particular when linear and logistic regression can be expected
+to give similar predictions and when they don't. \pause
+\item Helps explain and address convergence properties in
+generalized linear models. \pause
+\item The logistic regression version of the normal equations
+can be used to establish large sample theory convergence results. \pause
+\item Gives us an idea of how the geometric and analytic concepts underlying
+ridge regression, principal component analysis, and (later) lasso regression
+connect to generalized linear models.
+\end{enumerate}
 
 \end{frame}
 
