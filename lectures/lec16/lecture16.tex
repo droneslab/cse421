@@ -1,4 +1,4 @@
-\input{../header.tex}
+\input{../header-ho.tex}
 
 \begin{document}
 
@@ -274,10 +274,10 @@ grouping of terms at the end):
 \begin{align*}
 \frac{\partial p_i}{\partial \beta_j}
 &= \frac{\partial}{\partial \beta_j} \frac{1}{1+e^{-x_i^t \beta}} \\
-&= \frac{1}{(1+e^{-x_i^t \beta})^2} \cdot -1 \cdot x_{i,j} \cdot e^{-x_i^t \beta} \\
-&= -x_{i,j} \cdot \left(\frac{1}{1+e^{-x_i^t \beta}} \right) \cdot \left(\frac{e^{-x_i^t \beta}}{1+e^{-x_i^t \beta}} \right) \\
-&= -x_{i,j} \cdot p_i \cdot (1 - p_i) \\
-&= -x_{i,j} \cdot \text{Var}(y_i)
+&= \frac{-1}{(1+e^{-x_i^t \beta})^2} \cdot -1 \cdot x_{i,j} \cdot e^{-x_i^t \beta} \\
+&= x_{i,j} \cdot \left(\frac{1}{1+e^{-x_i^t \beta}} \right) \cdot \left(\frac{e^{-x_i^t \beta}}{1+e^{-x_i^t \beta}} \right) \\
+&= x_{i,j} \cdot p_i \cdot (1 - p_i) \\
+&= x_{i,j} \cdot \text{Var}(y_i)
 \end{align*}
 \pause We don't actually need the final line, but include it as it
 helps to give some intutition to the next set of steps.
@@ -290,7 +290,7 @@ helps to give some intutition to the next set of steps.
 
 This now yields the Hessian as:
 \begin{align*}
-H l(\beta | x_i, \beta) &= - X^t D X
+H l(y | x_i, \beta) &= - X^t D X
 \end{align*}
 Where $D$ is an $n$-by-$n$ diagonal matrix with components equal
 to $p_i\cdot(1-p_i)$.
