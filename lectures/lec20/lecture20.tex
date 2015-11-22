@@ -1,0 +1,148 @@
+\input{../header.tex}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\vfill
+
+{\fontsize{0.7cm}{0cm}\selectfont Lecture 18 \\\vspace{0.2cm}
+Theory of the Lasso}\\\vspace{0.5cm}
+30 November 2015
+
+\vspace{2cm}
+
+\begin{minipage}{0.6\textwidth}
+Taylor B. Arnold \\
+Yale Statistics \\
+STAT 312/612
+\end{minipage}
+\hfill
+\begin{minipage}{0.3\textwidth}\raggedleft
+\includegraphics[scale=0.3]{../yale-logo.png}
+\end{minipage}%
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\color{yaleblue}\fontsize{16pt}{20pt}\selectfont Class Notes}
+
+\begin{itemize}
+\item XXXXX XXXXX XXXXX
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Recall that sasso regression replaces the $\ell_2$ penalty with an $\ell_1$ penalty,
+and looks deceptively similar to the ridge regression:
+\begin{align*}
+\widehat{\beta}_\lambda &= \argmin_b \left\{ || y - Xb ||_2^2 + \lambda ||b||_1 \right\}
+\end{align*}
+Where the $\ell_1$-norm is defined as the sum of the absolute values of the
+vector's components:
+\begin{align*}
+|| \beta ||_1 &= \sum_i | \beta_i |
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+There are three types of errors that we commonly are concerned
+with in lasso regression. \pause The prediction loss:
+\begin{align*}
+|| X (\beta - \widehat{\beta}) ||_2^2
+\end{align*}
+\pause Parameter estimation:
+\begin{align*}
+|| \beta - \widehat{\beta} ||_2^2
+\end{align*}
+\pause And model selection:
+\begin{align*}
+\text{supp} (\beta) &= \text{supp} (\widehat{\beta})
+\end{align*}
+
+\pause Today we are going to focus on the first two types
+of estimation errors.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+The type of results we want to establish may look different than
+you are used to seeing in more introductory courses.
+\pause What we will want to be able to construct is a set
+$\mathcal{A}$ such that:
+\begin{align*}
+\mathbb{P} \mathcal{A} &= 1 - \epsilon
+\end{align*}
+For some small $\epsilon > 0$, and
+\begin{align*}
+|| X (\beta - \widehat{\beta}) ||_2^2 &\leq \delta
+\end{align*}
+Conditioned on being in event $\mathcal{A}$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+We want to establish some result about the lasso solution; where
+to begin?
+
+Let's start with the one relationship we know to be true between
+$\widehat{\beta}$ and $\beta$:
+\begin{align*}
+|| y - X\widehat{\beta} ||_2^2 + \lambda ||\widehat{\beta}||_1 \leq || y - X\beta ||_2^2 + \lambda ||\beta||_1
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+I'll start by expanding the loss terms and canceling on both sides:
+\begin{align*}
+|| y - X\widehat{\beta} ||_2^2 + \lambda ||\widehat{\beta}||_1 &\leq || y - X\beta ||_2^2 + \lambda ||\beta||_1 \\
+y^t y + \widehat{\beta}^t X^t X \widehat{\beta} - 2 y^t X \widehat{\beta} + \lambda ||\widehat{\beta}||_1
+&\leq y^t y + b^t X^t X b - 2 y^t X b + \lambda ||b||_1\\
+\widehat{\beta}^t X^t X \widehat{\beta} - 2 y^t X \widehat{\beta} + \lambda ||\widehat{\beta}||_1
+&\leq b^t X^t X b - 2 y^t X b + \lambda ||b||_1\\
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+The next step is grouping the terms on each side of the equation
+\begin{align*}
+\widehat{\beta}^t X^t X \widehat{\beta} - 2 y^t X \widehat{\beta} + \lambda ||\widehat{\beta}||_1
+&\leq b^t X^t X b - 2 y^t X b + \lambda ||b||_1\\
+|| X (\widehat{\beta} - b) ||_2^2 + \lambda ||\widehat{\beta}||_1
+&\leq 2 y^t X (\beta - \widehat{\beta}) + \lambda ||b||_1
+\end{align*}
+
+\end{frame}
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+

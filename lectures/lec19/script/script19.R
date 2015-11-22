@@ -38,9 +38,11 @@ for (j in 1:n) {
 # Now, going to run two versions of the Lasso
 library(glmnet)
 X20 <- readRDS("quantile_rgb.Rds")
-outLasso20 <- glmnet(X20[trainFlag,], y[trainFlag], family="binomial", alpha=1)
+outLasso20 <- glmnet(X20[trainFlag,], y[trainFlag], family="binomial",
+                    alpha=1)
 X100 <- readRDS("centile_rgb.Rds")
-outLasso100 <- glmnet(X100[trainFlag,], y[trainFlag], family="binomial", alpha=1)
+outLasso100 <- glmnet(X100[trainFlag,], y[trainFlag], family="binomial",
+                      alpha=1)
 
 # Find AUC values for all of the curves
 aucValsLasso20 <- rep(NA, length(outLasso20$lambda))
@@ -184,8 +186,8 @@ plot(log(outLasso100$lambda)[-1], aucValsLassoTrain[-1], type="l",
 lines(log(outLasso100$lambda)[-1], aucValsLassoTest[-1], col="navy", lwd=2)
 
 # Cross validation
-outLasso <- cv.glmnet(X100[trainFlag,], y[trainFlag], family="binomial", alpha=0,
-                      nfolds=10, lambda.min.ratio=1e-6)
+outLasso <- cv.glmnet(X100[trainFlag,], y[trainFlag], family="binomial",
+                      alpha=0, nfolds=10, lambda.min.ratio=1e-6)
 plot(outLasso)
 outLasso$lambda.min
 outLasso$lambda.1se
@@ -220,7 +222,7 @@ img <- (img[,,1] + img[,,2] + img[,,3]) / 3
 
 delta <- abs(img[-1,-1] - img[-nrow(img),-ncol(img)])
 delta <- delta / max(delta)
-writeJPEG(1-abs(img[-1,-1] - img[-nrow(img),-ncol(img)]),
+writeJPEG(1-abs(img[-1,-1] - img[-nrow(img),-ncol(img)]) + 0.5,
            "~/Desktop/texture.jpg")
 
 # Grab texture features as quantiles
