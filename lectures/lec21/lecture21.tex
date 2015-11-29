@@ -1,0 +1,415 @@
+\input{../header.tex}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\vfill
+
+{\fontsize{0.7cm}{0cm}\selectfont Lecture 21 \\\vspace{0.2cm}
+Theory of the Lasso II}\\\vspace{0.5cm}
+02 December 2015
+
+\vspace{2cm}
+
+\begin{minipage}{0.6\textwidth}
+Taylor B. Arnold \\
+Yale Statistics  \\
+STAT 312/612
+\end{minipage}
+\hfill
+\begin{minipage}{0.3\textwidth}\raggedleft
+\includegraphics[scale=0.3]{../yale-logo.png}
+\end{minipage}%
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\color{yaleblue}\fontsize{16pt}{20pt}\selectfont Class Notes}
+
+\begin{itemize}
+\item Midterm II - Available now, due next Monday
+\item Problem Set 7 - Available now, due December 11th (grace period through the 16th)
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Last time}
+\end{flushright}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Last class, we started investigating the theory of the lasso estimator.
+
+For the case of $X^tX$ equal to the identity matrix, we were able to quickly
+establish bounds on the prediction error, estimation of $\beta$, and the
+reconstruction of the support of $\beta$.
+
+\pause For an arbitrary $X$ matrix we were able to calculate a bound on $|| X (\widehat{\beta} - \beta) ||_2^2$.
+
+\pause Today's goal is to establish a bound on $|| \widehat{\beta} - \beta ||_2^2$
+
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+The basic starting point from last time was the following decomposition, which
+had no assumptions beyond linearity of the true model:
+ \begin{align*}
+\red{|| X (\beta - b) ||_2^2} &\leq \violet{2 \epsilon^t X (b - \beta)} + \blue{\lambda \cdot \left( || \beta ||_1 - || b ||_1 \right)}
+\end{align*}
+Where can think of this decomposition as \red{the loss to be minimized}, the \violet{empirical part},
+and \blue{the penalty term}.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+I then defined the set
+\begin{align*}
+\mathcal{A} &= \left\{ 2 || \epsilon^t X ||_\infty \leq \lambda \right\}
+\end{align*}
+And showed that for any $A>1$ we have $\mathbb{P} \mathcal{A} = 1 - A^{-1}$
+whenever
+\begin{align*}
+\lambda \geq A \cdot \sqrt{8 \log(2p) \sigma^2}.
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Today we will motivate a stronger assumption on the model
+and use these two results to establish bounds on the prediction of
+$\beta$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Bounds on estimation error}
+\end{flushright}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+We already know that on $\mathcal{A}(\lambda_0)$ and with $\lambda > 2 \cdot \lambda_0$, we have:
+\begin{align*}
+|| X (b - \beta) ||_2^2 + \lambda \cdot || b ||_1 &\leq 2 \epsilon^t X (b - \beta) + \lambda \cdot || \beta ||_1 \\
+&\leq \lambda_0 || b - \beta ||_1 + \lambda \cdot || \beta ||_1
+\end{align*}
+\pause Now, multiplying by two gives:
+\begin{align*}
+2 || X (b - \beta) ||_2^2 + 2 \lambda \cdot || b ||_1
+&\leq \lambda || b - \beta ||_1 + \lambda \cdot || \beta ||_1
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Recall that we defined the notation: $S = \{j \, : \, \beta_j \neq 0\}$, $s$
+is the size of the set $S$, and $v_{S}$ is the vector
+$v$ which has components not in $S$ set to zero.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Notice that:
+\begin{align*}
+|| b ||_1 &= || b_S ||_1 + || b_{S^c} ||_1
+&\geq || b_S ||_1 - || b_S - \beta ||_1 + || b_{S^c} ||_1
+\end{align*}
+Using the (reverse) triangle inequality and the fact that $\beta_{S^c}$ is zero
+by definition.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Similarly, we have:
+\begin{align*}
+|| b - \beta ||_1 &= || b_S - \beta_S ||_1 + || b_{S^c} ||_1
+\end{align*}
+Where clearly $\beta_S$ is redundant, but useful to keep the
+notation straight.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Plugging these in, we now get:
+\begin{align*}
+2 || X (b - \beta) ||_2^2 + &2 \lambda \cdot || b_S ||_1 - 2 \lambda \cdot || b_S - \beta ||_1
+  + 2 \lambda \cdot || b_{S^c} ||_1 \\
+&\leq \lambda || b - \beta ||_1 + \lambda \cdot || b_S - \beta_S ||_1 + \lambda \cdot || b_{S^c} ||_1
+\end{align*}
+\pause Which cancels out as:
+\begin{align*}
+2 || X (b - \beta) ||_2^2 + \lambda || b_{S^c} ||_1 \leq 3 \cdot \lambda \cdot || b_S - \beta_S ||_1
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+This result now actually gives two sub-results, as all three terms are positive and
+therefore each component of the left hand side is individually bounded by the right
+hand side.
+
+\pause Namely we have:
+\begin{align*}
+|| b_{S^c} ||_1 \leq 3 \cdot || b_S - \beta_S ||_1
+\end{align*}
+Which implies that the amount of error in $b$ can not be too highly concentrated
+on $S^c$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+The other sub-result gives:
+\begin{align*}
+2 || X (b - \beta) ||_2^2 \leq 3 \lambda \cdot || b_S - \beta_S ||_1
+\end{align*}
+\pause If $\sigma_{min}$ is the minimum singular value of $X$, then the
+left hand side can be bounded below by:
+\begin{align*}
+2 \sigma^2_{min} || b - \beta ||_2^2 \leq 3 \lambda \cdot || b_S - \beta_S ||_1\\
+\end{align*}
+\pause Using the Cauchy-Schwarz inequality, this becomes:
+\begin{align*}
+2 \sigma^2_min || b - \beta ||_2^2 \leq 3 \lambda \cdot \sqrt{s} || b_S - \beta_S ||_2\\
+|| b - \beta ||_2 \leq \frac{3 \lambda \sqrt{s}}{2\sigma^2_{min}} \\
+\end{align*}
+Which gives a bound on the error of estimating $\beta$, which is exactly what we wanted
+to establish.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Why is this not sufficient for us? Well, in the high dimensional case $p > n$, we will
+always have $\sigma_{min}$ equal to $0$.
+
+\pause We can get around this problem by defining a modified version of the minimum
+eigenvector (or squared singular value) by only considering $b - \beta$ such that:
+\begin{align*}
+|| b_{S^c} ||_1 \leq 3 \cdot || b_S - \beta_S ||_1
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+The (minimum) restricted eigenvalue $\phi_S$ on the set $S$ is defined as:
+\begin{align*}
+\phi_S &= \argmin_{v in \mathcal{V}_S} \frac{|| X b ||_2}{|| b ||_2}
+\end{align*}
+Where:
+\begin{align*}
+\mathcal{V}_S &= \{ v \in \mathbb{R}^p \, \text{s.t.} \, || v_{S^c} ||_1 \leq 3 \cdot || v_S ||_1  \}
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Because we do not know $S$, it is impossible to calculate $\phi_S$ in practice.
+In theoretical work, often one considers \textbf{the} restricted eigenvalue
+$\phi$ defined as the smallest $\phi_S$ for all sets $S$ with size bounded by
+some predefined $s_0$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Now, we can bound the following using our prior result:
+\begin{align*}
+2 || X ( b - \beta) ||_2^2 + \lambda \cdot || b - \beta ||_1
+  &= 2 || X ( b - \beta) ||_2^2 + \lambda \cdot || b_S - \beta_S ||_1 + \lambda \cdot || b_{S^c} ||_1 \\
+  &= 4 \lambda \cdot || b_S - \beta_S ||_1 \\
+\end{align*}
+\pause Using Cauchy-Schartz again, we can change the $\ell_1$-norm to an $\ell_2$-norm at
+the cost of a factor of $\sqrt{s}$:
+\begin{align*}
+2 || X ( b - \beta) ||_2^2 + \lambda \cdot || b - \beta ||_1
+  &\leq 4 \lambda \cdot \sqrt{s} \cdot || b_S - \beta_S ||_2 \\
+\end{align*}
+\pause Finally, we now use the restricted eigenvalue $\phi$ to convert from $\beta$ space
+to $X \beta$ space:
+\begin{align*}
+2 || X ( b - \beta) ||_2^2 + \lambda \cdot || b - \beta ||_1
+  &\leq 4 \lambda \cdot \sqrt{s} \cdot || X( b_S - \beta_S) ||_2 / \phi \\
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+I am now going to use an inequality trick that is often pulled out in
+theoretical statistics proofs. For any $u$ and $v$, notice that
+$4uv \leq u^2 + 4 v^2$.
+
+For a proof, notice that it is trivially true at zero and negative values
+of $u$ and $v$. Then look at the derivatives and notice that the right hand
+side grows faster than the left hand side in the directions of both $u$ and
+$v$.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Setting $u = || X( b_S - \beta_S) ||_2$, we then have:
+\begin{align*}
+2 || X ( b - \beta) ||_2^2 + \lambda \cdot || b - \beta ||_1
+  &\leq || X( b_S - \beta_S) ||_2 + 4 \lambda^2 \cdot s \cdot / \phi^2 \\
+  &\leq || X( b - \beta) ||_2 + 4 \lambda^2 \cdot s \cdot / \phi^2
+\end{align*}
+And when canceling one factor of $|| X( b - \beta) ||_2$:
+\begin{align*}
+|| X ( b - \beta) ||_2^2 + \lambda \cdot || b - \beta ||_1
+  &\leq 4 \lambda^2 \cdot s \cdot / \phi^2
+\end{align*}
+Which holds on the entire set $\mathcal{A}$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+This establishes two simultaneous bounds:
+\begin{align*}
+|| X ( b - \beta) ||_2^2 &\leq 4 \lambda^2 \cdot s \cdot / \phi^2 \\
+|| b - \beta ||_1 &\leq 4 \lambda \cdot s \cdot / \phi^2
+\end{align*}
+Though the first is slightly less satisfying than our result
+in last class as it relies on $\phi^2$, though it no longer requires
+the norm of $\beta$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Asymptotic analysis}
+\end{flushright}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+As before, we can convert a more natural re-scaled problem by dividing all of the
+$\lambda$ parameters by $\sqrt{n}$
+
+Also, remember that for some $A > 1$, we have $\mathbb{P} \mathcal{A} \geq 1 - A^{-1}$
+for all $\lambda > A \cdot \sqrt{8 n^{-1} \log(2p) \sigma^2}$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Therefore, we have:
+\begin{align*}
+|| b - \beta ||_1 &\leq 4 \lambda \cdot s \cdot / \phi^2
+&\leq 4 A 2 \sqrt{2} \sigma^2 / \phi^2 \cdot \frac{s_n^2 \log(2p_n)}{n}
+\end{align*}
+So to establish consistency of the estimator under constant noise and
+restricted eigenvalues $\phi^2$, we need the following limit to
+go to zero:
+\begin{align*}
+\lim_{n \rightarrow \infty} \frac{s_n^2 \log(2p_n)}{n} = 0
+\end{align*}
+Which can happen with a number of different scalings, such as a constant
+number of non-zero terms but an exponential number of non-zero terms. Or,
+$s_n$ growing like $n^{1/3}$ and $p_n$ growing linearly with $s_n$.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Some (personal) closing thoughts on the application of the lasso theory
+to data analysis:
+\begin{enumerate}
+\item The theory is useful for establishing a rough rule of thumb
+for how large $p_n$ and $s_n$ can be to have a reasonable chance
+of reconstructing $\beta$ or $X\beta$ \pause
+\item The theory also helps guide where to start looking for the
+optimal $\lambda$ \pause
+\item We still generally need some form of cross validation however,
+as the theoretical values tend to greatly overestimate $\lambda$ in
+practice; we also do not know $\sigma^2$ and in theory need to use
+an over-estimate for the convergence results to hold \pause
+\item Bounds on $|| X (\beta - \widehat{\beta}) ||_2^2$ are fairly
+tight, however the theoretical for bounds on $|| \beta - \widehat{\beta} ||_2^2$
+are difficult to use in practice due to the near-impossible to calculate
+restricted eigenvalue assumption \pause
+\item I have always been skeptical of the asymptotic results for the same
+reason; $\phi$ likely depends on $n$, $p_n$ and $s_n$ in complex ways that
+are not accounted for
+\end{enumerate}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+For our next (and last) week we will:
+\begin{enumerate}
+\item use the lasso to encode more complex forms of linear sparsity (e.g., outlier
+detection and the fused lasso)
+\item give an alternative approach to solving for the lasso solution at
+a particular value of $\lambda$
+\end{enumerate}
+
+\end{frame}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
