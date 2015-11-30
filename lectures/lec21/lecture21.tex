@@ -97,6 +97,12 @@ Today we will motivate a stronger assumption on the model
 and use these two results to establish bounds on the prediction of
 $\beta$.
 
+Also, it will be helpful to write the set $\mathcal{A}$ as being parameterized
+by the value of $\lambda_0$:
+\begin{align*}
+\mathcal{A}(\lambda_0) &= \left\{ 2 || \epsilon^t X ||_\infty \leq \lambda_0 \right\}
+\end{align*}
+
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -138,7 +144,7 @@ $v$ which has components not in $S$ set to zero.
 
 Notice that:
 \begin{align*}
-|| b ||_1 &= || b_S ||_1 + || b_{S^c} ||_1
+|| b ||_1 &= || b_S ||_1 + || b_{S^c} ||_1 \\
 &\geq || b_S ||_1 - || b_S - \beta ||_1 + || b_{S^c} ||_1
 \end{align*}
 Using the (reverse) triangle inequality and the fact that $\beta_{S^c}$ is zero
@@ -181,7 +187,7 @@ This result now actually gives two sub-results, as all three terms are positive 
 therefore each component of the left hand side is individually bounded by the right
 hand side.
 
-\pause Namely we have:
+\pause In particular, we have:
 \begin{align*}
 || b_{S^c} ||_1 \leq 3 \cdot || b_S - \beta_S ||_1
 \end{align*}
@@ -200,12 +206,12 @@ The other sub-result gives:
 \pause If $\sigma_{min}$ is the minimum singular value of $X$, then the
 left hand side can be bounded below by:
 \begin{align*}
-2 \sigma^2_{min} || b - \beta ||_2^2 \leq 3 \lambda \cdot || b_S - \beta_S ||_1\\
+2 \sigma^2_{min} || b - \beta ||_2^2 \leq 3 \lambda \cdot || b_S - \beta_S ||_1
 \end{align*}
 \pause Using the Cauchy-Schwarz inequality, this becomes:
 \begin{align*}
 2 \sigma^2_min || b - \beta ||_2^2 \leq 3 \lambda \cdot \sqrt{s} || b_S - \beta_S ||_2\\
-|| b - \beta ||_2 \leq \frac{3 \lambda \sqrt{s}}{2\sigma^2_{min}} \\
+|| b - \beta ||_2 \leq \frac{3 \lambda \sqrt{s}}{2\sigma^2_{min}}
 \end{align*}
 Which gives a bound on the error of estimating $\beta$, which is exactly what we wanted
 to establish.
@@ -231,7 +237,7 @@ eigenvector (or squared singular value) by only considering $b - \beta$ such tha
 
 The (minimum) restricted eigenvalue $\phi_S$ on the set $S$ is defined as:
 \begin{align*}
-\phi_S &= \argmin_{v in \mathcal{V}_S} \frac{|| X b ||_2}{|| b ||_2}
+\phi_S &= \argmin_{v \, \in \, \mathcal{V}_S} \frac{|| X b ||_2}{|| b ||_2}
 \end{align*}
 Where:
 \begin{align*}
@@ -255,15 +261,15 @@ some predefined $s_0$.
 
 Now, we can bound the following using our prior result:
 \begin{align*}
-2 || X ( b - \beta) ||_2^2 + \lambda \cdot || b - \beta ||_1
+2 || X ( b - \beta) ||_2^2 &+ \lambda \cdot || b - \beta ||_1 \\
   &= 2 || X ( b - \beta) ||_2^2 + \lambda \cdot || b_S - \beta_S ||_1 + \lambda \cdot || b_{S^c} ||_1 \\
-  &= 4 \lambda \cdot || b_S - \beta_S ||_1 \\
+  &= 4 \lambda \cdot || b_S - \beta_S ||_1
 \end{align*}
 \pause Using Cauchy-Schartz again, we can change the $\ell_1$-norm to an $\ell_2$-norm at
 the cost of a factor of $\sqrt{s}$:
 \begin{align*}
 2 || X ( b - \beta) ||_2^2 + \lambda \cdot || b - \beta ||_1
-  &\leq 4 \lambda \cdot \sqrt{s} \cdot || b_S - \beta_S ||_2 \\
+  &\leq 4 \lambda \cdot \sqrt{s} \cdot || b_S - \beta_S ||_2
 \end{align*}
 \pause Finally, we now use the restricted eigenvalue $\phi$ to convert from $\beta$ space
 to $X \beta$ space:
@@ -277,8 +283,8 @@ to $X \beta$ space:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-I am now going to use an inequality trick that is often pulled out in
-theoretical statistics proofs. For any $u$ and $v$, notice that
+I am now going to use an inequality trick that is often useful in
+theoretical statistics derivations. For any $u$ and $v$, notice that
 $4uv \leq u^2 + 4 v^2$.
 
 For a proof, notice that it is trivially true at zero and negative values
@@ -296,14 +302,14 @@ Setting $u = || X( b_S - \beta_S) ||_2$, we then have:
 \begin{align*}
 2 || X ( b - \beta) ||_2^2 + \lambda \cdot || b - \beta ||_1
   &\leq || X( b_S - \beta_S) ||_2 + 4 \lambda^2 \cdot s \cdot / \phi^2 \\
-  &\leq || X( b - \beta) ||_2 + 4 \lambda^2 \cdot s \cdot / \phi^2
+  &\leq || X( b - \beta) ||_2^2 + 4 \lambda^2 \cdot s \cdot / \phi^2
 \end{align*}
-And when canceling one factor of $|| X( b - \beta) ||_2$:
+\pause And when canceling one factor of $|| X( b - \beta) ||_2$:
 \begin{align*}
 || X ( b - \beta) ||_2^2 + \lambda \cdot || b - \beta ||_1
   &\leq 4 \lambda^2 \cdot s \cdot / \phi^2
 \end{align*}
-Which holds on the entire set $\mathcal{A}$.
+Which holds on the entire set $\mathcal{A}(\lambda_0)$.
 
 \end{frame}
 
@@ -336,8 +342,8 @@ the norm of $\beta$.
 As before, we can convert a more natural re-scaled problem by dividing all of the
 $\lambda$ parameters by $\sqrt{n}$
 
-Also, remember that for some $A > 1$, we have $\mathbb{P} \mathcal{A} \geq 1 - A^{-1}$
-for all $\lambda > A \cdot \sqrt{8 n^{-1} \log(2p) \sigma^2}$.
+Also, remember that for some $A > 1$, we have $\mathbb{P} \mathcal{A}(\lambda_0) \geq 1 - A^{-1}$
+for all $\lambda > A \cdot \sqrt{16 n^{-1} \log(2p) \sigma^2}$.
 
 \end{frame}
 
@@ -346,10 +352,17 @@ for all $\lambda > A \cdot \sqrt{8 n^{-1} \log(2p) \sigma^2}$.
 
 Therefore, we have:
 \begin{align*}
-|| b - \beta ||_1 &\leq 4 \lambda \cdot s \cdot / \phi^2
-&\leq 4 A 2 \sqrt{2} \sigma^2 / \phi^2 \cdot \frac{s_n^2 \log(2p_n)}{n}
+|| b - \beta ||_1 &\leq 4 \lambda \cdot s \cdot / \phi^2 \\
+&\leq 8 \cdot A \sigma^2 / \phi^2 \cdot \frac{s_n^2 \log(2p_n)}{n}
 \end{align*}
-So to establish consistency of the estimator under constant noise and
+Which is the same result as from the Bickel, Ritov, Tsybakov paper.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+To establish consistency of the estimator under constant noise and
 restricted eigenvalues $\phi^2$, we need the following limit to
 go to zero:
 \begin{align*}
@@ -374,11 +387,11 @@ of reconstructing $\beta$ or $X\beta$ \pause
 \item The theory also helps guide where to start looking for the
 optimal $\lambda$ \pause
 \item We still generally need some form of cross validation however,
-as the theoretical values tend to greatly overestimate $\lambda$ in
+as the theoretical values tend to overestimate $\lambda$ in
 practice; we also do not know $\sigma^2$ and in theory need to use
 an over-estimate for the convergence results to hold \pause
-\item Bounds on $|| X (\beta - \widehat{\beta}) ||_2^2$ are fairly
-tight, however the theoretical for bounds on $|| \beta - \widehat{\beta} ||_2^2$
+\item Bounds on $|| X (\beta - \widehat{\beta}) ||_2^2$ are nice to have,
+however the theoretical bounds on $|| \beta - \widehat{\beta} ||_2^2$
 are difficult to use in practice due to the near-impossible to calculate
 restricted eigenvalue assumption \pause
 \item I have always been skeptical of the asymptotic results for the same

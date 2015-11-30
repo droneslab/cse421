@@ -76,7 +76,7 @@ with in lasso regression. \pause The prediction loss:
 \end{align*}
 \pause And model selection:
 \begin{align*}
-\text{supp} (\beta) &= \text{supp} (\widehat{\beta})
+\mathbb{P} \left\{ \text{supp} (\beta) = \text{supp} (\widehat{\beta}) \right\}
 \end{align*}
 
 \end{frame}
@@ -167,7 +167,7 @@ on $\mathcal{A}$:
 \begin{align*}
 2 \cdot|x_j^t y| &= 2 \cdot|x_j^t (X \beta + \epsilon) | \\
 &= 2 \cdot |\beta_j + x_j^t \epsilon | \\
-&\geq 2 \cdot | \beta_j | - 2 \cdot |x_j^t \epsilon) | \\
+&\geq 2 \cdot | \beta_j | - 2 \cdot |x_j^t \epsilon | \\
 &\geq 2 \cdot | \beta_j | - \lambda
 \end{align*}
 \pause We then have that as long as the following holds:
@@ -182,18 +182,23 @@ $\widehat{\beta}_j$ will be non-zero.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
-To establish a bound on the estimation error, we need a bit
-more notation. Let $S = \{j \, : \, \beta_j \neq 0\}$, $s$
-be the size of the set $S$. Also, let $v_{S}$ be the vector
-$v$ which has components not in $S$ set to zero.
+Therefore, on $\mathcal{A}$ the estimator $\widehat{\beta}_\lambda$
+finds the correct support of $\beta$ if:
+\begin{align*}
+2 || X \epsilon ||_2^2 \leq \lambda \leq \min_{j, \beta_j \neq 0} | \beta_j|
+\end{align*}
+As one would expect, this forces there to be no particularly small
+elements $\beta_j$, as otherwise we could not differentiate between
+that and $0$.
 
 \end{frame}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
 To establish a bound on the estimation error, we need a bit
-more notation. Let $S = \{j \, : \, \beta_j \neq 0\}$, $s$
+more notation. Let $S = \{j \, : \, \beta_j \neq 0\}$ and $s$
 be the size of the set $S$. Also, let $v_{S}$ be the vector
 $v$ which has components not in $S$ set to zero.
 
@@ -212,15 +217,15 @@ the correct support of $\beta$ is $S$.
 Now, notice that on $\mathcal{A}$, the estimator
 $\widehat{\beta}^\lambda$ will be zero on $S^c$. Therefore:
 \begin{eqnarray*}
-|| \beta - \widehat{\beta} ||_2^2
- &= || \beta_S - \widehat{\beta}_S ||_2^2 \\ \pause
- &= || \beta_S - \widehat{\beta}^{\text{oracle}}  + \widehat{\beta}^{\text{oracle}} - \widehat{\beta}_S ||_2^2 \\ \pause
- &\leq || \beta_S - \widehat{\beta}^{\text{oracle}} ||_2^2  + || \widehat{\beta}^{\text{oracle}} - \widehat{\beta}_S ||_2^2 \\ \pause
- &= || \beta_S - \widehat{\beta}^{\text{oracle}} ||_2^2  + \sum_{j \in S} | x_j^t y - \text{sign} (x_j^t y) \lambda - x_j^t y | \\ \pause
- &= || \beta_S - \widehat{\beta}^{\text{oracle}} ||_2^2  + \sum_{j \in S} |\text{sign} (x_j^t y) \lambda | \\ \pause
- &= || \beta_S - \widehat{\beta}^{\text{oracle}} ||_2^2  + s \lambda \\
+|| \beta - \widehat{\beta} ||_2
+ &=& || \beta_S - \widehat{\beta}_S ||_2 \\ \pause
+ &=& || \beta_S - \widehat{\beta}^{\text{oracle}}  + \widehat{\beta}^{\text{oracle}} - \widehat{\beta}_S ||_2 \\ \pause
+ &\leq& || \beta_S - \widehat{\beta}^{\text{oracle}} ||_2  + || \widehat{\beta}^{\text{oracle}} - \widehat{\beta}_S ||_2 \\ \pause
+ &=& || \beta_S - \widehat{\beta}^{\text{oracle}} ||_2  + \sqrt{\sum_{j \in S} ( x_j^t y - \text{sign} (x_j^t y) \lambda - x_j^t y )^2} \\ \pause
+ &=& || \beta_S - \widehat{\beta}^{\text{oracle}} ||_2  + \sqrt{\sum_{j \in S} (\text{sign} (x_j^t y) \lambda )^2} \\ \pause
+ &=& || \beta_S - \widehat{\beta}^{\text{oracle}} ||_2  + \lambda\sqrt{s}  \\
 \end{eqnarray*}
-\pause So the cost of not knowing $S$ is an extra factor of $s \lambda$ in the prediction error.
+\pause So the cost of not knowing $S$ is an extra factor of $\lambda \sqrt{s}$ in the prediction error.
 
 \end{frame}
 
@@ -243,9 +248,9 @@ set $S$.
 
 Now, how far off will the prediction of $\beta$ be? Notice that:
 \begin{align*}
-|| X (\beta - b) ||_2^2 &= (\beta - b)^t X^t X (\beta - b)\\
-&= (\beta - b)^t (\beta - b)\\
-&= || \beta - b ||_2^2
+|| X (\beta - \widehat{\beta}) ||_2 &= \sqrt{(\beta - \widehat{\beta})^t X^t X (\beta - \widehat{\beta})}\\
+&= \sqrt{(\beta - \widehat{\beta})^t (\beta - \widehat{\beta})}\\
+&= || \beta - \widehat{\beta} ||_2
 \end{align*}
 So we simultaneously established a prediction and estimation bound
 for the simple lasso regression.
@@ -484,8 +489,8 @@ Up until now we have assumed that $X^tX$ has $1$'s on the diagonal. A more natur
 assumption is that it was $n$'s on the diagonal. Let $X' = \sqrt{n} \cdot X$ and
 $\beta' = n^{-1/2} \beta$. Then, the new criterion becomes:
 \begin{align*}
-\cdot || y - X'b' ||_2^2 + \lambda \sqrt{n} \cdot ||b'||_1 \\
-\cdot || y - X'b' ||_2^2 + \lambda' \cdot ||b'||_1
+|| y - X'b' ||_2^2 + \lambda \sqrt{n} \cdot ||b'||_1 \\
+|| y - X'b' ||_2^2 + \lambda' \cdot ||b'||_1
 \end{align*}
 So, therefore we can solve this re-scaled problem by simply dividing all of the
 $\lambda$ parameters by $\sqrt{n}$.
@@ -530,6 +535,17 @@ we have consistency of the lasso estimator as long as $p_n$ is dominated
 by $e^n$.
 
 \end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Simulations}
+\end{flushright}
+
+\end{frame}
+
 
 \end{document}
 
