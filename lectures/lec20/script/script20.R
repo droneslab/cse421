@@ -29,7 +29,7 @@ abline(v=coff,lty="dashed",col='red')
 # Independent design matrix (sparse model)
 set.seed(1)
 d <- 25
-s <- 3
+s <- 5
 n <- 1000
 x <- sort(runif(n))
 X <- poly(x,degree=d)
