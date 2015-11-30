@@ -54,7 +54,7 @@ students. You are welcome to ask Jason on I for help on understanding the
 questions but we will not help with the content of the questions. You are allowed
 to access whatever notes or texts you would like.
 
-{\bf 1. (15 points)} Consider a $3$-by-$4$ matrix $X$ and the
+{\bf 1. (25 points)} Consider a $3$-by-$4$ matrix $X$ and the
 regression vector $\beta$ equal to $(1, 1, 1)^t$. Define $y$ as the following (i.e., no
 error terms of offsets):
 \begin{align*}
@@ -70,14 +70,14 @@ the three error rates (direct solve, QR of $X$, and pseudoinverse of $X$). Hint:
 condition number need to be between \texttt{sqrt(.Machine\$double.eps)} and
 \texttt{.Machine\$double.eps} for the first matrix, and less than both in the second.
 
-{\bf 2. (10 points)} Construct a simulated dataset $X$ and response vector $y$ such
-that the lasso solution path \textit{returns} a vector from the active set back into
-the inactive set. That is, there exists a $j$ such that $\widehat{\beta}_j^{\lambda_1}$ is non-zero
-but $\widehat{\beta}_j^{\lambda_2}$ for some $\lambda_2 < \lambda_1$. Do not give me the
-data, but rather supply R code which generates such a dataset. For full credit, explain
-why you would expect your simulated model to behave like this. Note: Do not just simulate
-a large set of data until this happens! Hint: You will want to use the \textbf{lars} package
-rather than \textbf{glmnet} for this.
+% {\bf 2. (10 points)} Construct a simulated dataset $X$ and response vector $y$ such
+% that the lasso solution path \textit{returns} a vector from the active set back into
+% the inactive set. That is, there exists a $j$ such that $\widehat{\beta}_j^{\lambda_1}$ is non-zero
+% but $\widehat{\beta}_j^{\lambda_2}$ for some $\lambda_2 < \lambda_1$. Do not give me the
+% data, but rather supply R code which generates such a dataset. For full credit, explain
+% why you would expect your simulated model to behave like this. Note: Do not just simulate
+% a large set of data until this happens! Hint: You will want to use the \textbf{lars} package
+% rather than \textbf{glmnet} for this.
 
 {\bf 2. (75 points)} This question concerns a dataset constructed from a corpus of texts.
 I have supplied a term frequency matrix (which gives the words counts for any word contained
@@ -107,7 +107,7 @@ discrete predictions $0$ or $1$, not probabilities. Your goal is to minimize the
 prediction errors.
 
 To answer this question, upload your predictions as a plain text csv file to the classesV2
-site and write a short 1 page response describing how you approached this problem and how
+site and write a short 1-1.5 page response describing how you approached this problem and how
 well you believe your prediction will do on the unknown data. This should contain absolutely
 no code, and be entirely in prose. You may include tables or figures, but the total response
 should be no longer than two standard sized pages long.
