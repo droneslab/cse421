@@ -39,6 +39,79 @@ STAT 312/612
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
 
+{\color{yaleblue}\fontsize{16pt}{20pt}\selectfont Midterm II}
+
+Easy solution to question 1:
+\begin{verbatim}
+> X <- matrix(rnorm(12),nrow=4)
+> s <- svd(X)
+> svals <- c(1,1,1e-10)
+> X <- s$u %*% diag(svals) %*% t(s$v)
+> X
+           [,1]        [,2]      [,3]
+[1,] -0.3425962  0.50634449 0.1048543
+[2,]  0.2080486 -0.53566801 0.3398572
+[3,] -0.3472912  0.07954308 0.8733534
+[4,]  0.2120066 -0.45074100 0.1781087
+\end{verbatim}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Now notice that a direct solve does not work well:
+\begin{verbatim}
+> beta <- c(1,1,1)
+> y <- X %*% beta
+> solve(t(X) %*% X, t(X) %*% y, tol=0)
+            [,1]
+[1,] -0.62017237
+[2,]  0.01868727
+[3,]  0.44511010
+\end{verbatim}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+But the pseudo inverse does:
+\begin{verbatim}
+> pseudo <- s$v %*% diag(1/svals) %*% t(s$u)
+> pseudo %*% y
+         [,1]
+[1,] 1.000001
+[2,] 1.000001
+[3,] 1.000000
+\end{verbatim}
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{center}
+\includegraphics[height=\textheight]{img/predFig.pdf}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont ADMM}
+\end{flushright}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
 Consider the following minimization problem:
 \begin{align*}
 \begin{array}{ll}
@@ -100,7 +173,7 @@ f(x) &= \sum_i f_i (x_i)
 The Lagrangian can the be written as:
 \begin{align*}
 L(x,y) &= \sum_i L_i (x_i, y) \\
-&= \sum_i f_i(x) + y^t A_i x_i
+&= \sum_i f_i(x) + y^t A_i x_i - y^t b
 \end{align*}
 And therefore the $x$-step in dual ascent can be parallelized over each
 $x_i$.
@@ -154,7 +227,7 @@ combines the splitting capability of dual ascent with the robustness
 of the method of multipliers. It solves the optimization problem:
 \begin{align*}
 \begin{array}{ll}
-\text{minimize} & f(x) + g(x) \\
+\text{minimize} & f(x) + g(z) \\
 \text{subject to} & Ax + Bz = c
 \end{array}
 \end{align*}
@@ -199,7 +272,7 @@ u^{k+1} &= u^{k} + (A x^{k+1} + B z^{k+1} - c)
 
 Assume $f$ and $g$ are convex, closed, and proper and $L_0$ has
 a saddle point. Then ADMM converges in both feasibility (does the
-constrain hold) and optimality (is the function to be optimized near
+constraint hold) and optimality (is the function to be optimized near
 its optimal value).
 
 \end{frame}
@@ -229,6 +302,7 @@ $\ell_1$-penalty as a function of $z$.
 \begin{frame}[fragile] \frametitle{}
 
 So the $x$-step in ADMM amounts to finding the minimum over $x$
+of the following quantity:
 \begin{align*}
 f(x) + (\rho / 2) || Ax + Bz - c + u ||_2^2
 &= ||A x - b ||_2^2 + (\rho / 2) || x - z + u ||_2^2 \\
@@ -237,7 +311,7 @@ f(x) + (\rho / 2) || Ax + Bz - c + u ||_2^2
 on $w$, which we have an analytic formula for. Transforming the variables
 we get specifically:
 \begin{align*}
-x^{k+1} &= (A^t A + \rho I)^{-1}  (A^t b + \rho z^k - y^k)
+x^{k+1} &= (A^t A + \rho I)^{-1}  (A^t b + \rho z^k - u^k)
 \end{align*}
 
 \end{frame}
@@ -251,9 +325,9 @@ Now, the $z$-step in ADMM amounts to finding the minimum over $x$
 g(z) + (\rho / 2) || Ax + Bz - c + u ||_2^2
 &= \lambda || z ||_1 + (\rho / 2) || x - z + u ||_2^2 \\
 \end{align*}
-And multiplying by $\rho$ gives:
+And dividing by $\rho$ gives:
 \begin{align*}
-(1 / 2) || (x + u) - z ||_2^2 + \lambda || z ||_1 +  \\
+\argmin_z \left\{ (1 / 2) || (x + u) - z ||_2^2 + \lambda / \rho || z ||_1 \right\} \\
 \end{align*}
 Which is just the lasso without an $X$ matrix and on the response $x + u$.
 
@@ -263,18 +337,18 @@ Which is just the lasso without an $X$ matrix and on the response $x + u$.
 \begin{frame}[fragile] \frametitle{}
 
 From lecture 17, we have an analytic formula for the simple lasso case
-where the variable are uncorrelated. Here we have an even more easy
+where the variables are uncorrelated. Here we have an even more easy
 formula because $X$ is the identity itself.
 
 \pause Specifically, we have the following formula for the lasso regression
 \begin{align*}
-z^{k+1} &= \left\{ \begin{array}{ll}
-x_i + u_i - \lambda / \rho &\, (x_i + u_i) \geq \lambda \\
-x_i + u_i + \lambda / \rho &\, (x_i + u_i) \leq -\lambda \\
+z^{k+1}_i &= \left\{ \begin{array}{ll}
+x_i + u_i - \lambda / \rho &\, (x_i + u_i) \geq \lambda / \rho \\
+x_i + u_i + \lambda / \rho &\, (x_i + u_i) \leq -\lambda / \rho \\
 0 &\, \text{else} \\
 \end{array} \right.
 \end{align*}
-Called soft-thresholding and denoted by:
+Called soft-thresholding and denoted by (for the penalty $\lambda / \rho$):
 \begin{align*}
 z^{k+1} &= S_{\lambda / \rho} (x_i + u_i)
 \end{align*}
@@ -287,8 +361,8 @@ z^{k+1} &= S_{\lambda / \rho} (x_i + u_i)
 So the full ADMM lasso update is given by:
 \begin{align*}
 x^{k+1} &= (A^t A + \rho I)^{-1}  (A^t b + \rho z^k - y^k) \\
-z^{k+1} &= S_{\lambda / \rho} (x_i + u_i) \\
-y^{k+1} &= y^k + \rho (x^{k+1} - z^{k+1})
+z^{k+1}_i &= S_{\lambda / \rho} (x_i + u_i) \\
+u^{k+1} &= u^k + \rho (x^{k+1} - z^{k+1})
 \end{align*}
 Or, in other words, we iteratively do ridge regression followed by
 soft-thresholding.
@@ -337,7 +411,6 @@ for massive parallelization gains.
 \end{center}
 
 \end{frame}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] \frametitle{}
