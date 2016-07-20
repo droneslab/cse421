@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Course website for STAT 312/612: Linear Models">
+  <meta name="author" content="Taylor B. Arnold">
+  <title>Yale University STAT 312/612: Linear Models</title>
+
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+  <!-- Google fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Lato:300italic,700italic,300,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+
+</head>
+
+<body>
+
+<a href="https://github.com/statsmaths/stat612">
+  <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+
+<div id="header">
+  <h1>STAT 312/612: Linear Models</h1>
+  <div style="clear:both;"></div>
+</div>
+
+<div class="sechighlight">
+<div class="container sec">
+  <h2>Course Notes and Assignments</h2>
+
+  <i>Fall 2015<br> Monday, Wednesdays 11:35 - 12:50 <br> 60 Sachem Street (Watson Center), Rm A60<br><br></i>
+
+<b>Instructor</b>: Taylor Arnold<br>
+<b>E-mail</b>: taylor.arnold@yale.edu<br>
+<b>Office Hours</b>: Wednesdays 13:30-15:00, Hillhouse 24, Rm 206 <br>
+<b>Teaching Assistant</b>: Jason Klusowski <br>
+<b>TA Session</b>: Tuesdays, 19:00-20:30, 24 Hillhouse, Main Classroom <br>
+
+</div>
+</div>
+
+<div class="container sec">
+<table class="table">
+  <tr class="active">
+    <th>Date</th><th>Description</th><th>Resources</th><th>References</th>
+  </tr>
+  <tr>
+    <td>2015-09-02</td>
+    <td>Course Introduction</td>
+    <td>
+      <b>[<a href="syllabus/LinearModelsSyllabus.pdf">Syllabus</a>]</b><br>
+      <b>[<a href="lectures/lec01/lecture01.pdf">Lecture 01</a>]</b>
+    </td>
+    <td>
+      <ul>
+        <li>Linear Transformations. [<a href="https://www.youtube.com/watch?v=HIcqQhn3vSM">video</a>]</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>2015-09-04</td>
+    <td>Simple linear models: MLEs and Gauss-Markov</td>
+    <td>
+      <b>[<a href="lectures/lec02/lecture02.pdf">Lecture 02</a>]</b><br>
+      <b>[<a href="lectures/lec02/script/script02.R">script02.R</a>]</b><br>
+      [<a href="lectures/lec02/data/galton_peas.csv">Galton Pea Data]
+     </td>
+    <td>
+      <ul>
+        <li>RT 2.1-2.6</li>
+        <li>Jeffrey M. Stanton. "Galton, Pearson, and the Peas: A Brief History of Linear Regression for Statistics Instructors". [<a href="http://www.amstat.org/publications/jse/v9n3/stanton.html">article</a>]</li>
+        <li>Intro to Simple Linear Models. [<a href="https://www.youtube.com/watch?v=ZkjP5RJLQF4">video</a>]</li>
+        <li>Linear Transformations. [<a href="https://www.youtube.com/watch?v=HIcqQhn3vSM">video</a>]</li>
+        <li>Francis Galton (1889). <i>Natural Inheritance</i>. [<a href="http://www.mugu.com/galton/books/natural-inheritance/pdf/galton-nat-inh-1up-clean.pdf">paper</a>]</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>2015-09-09</td>
+    <td>Simple linear models: hypothesis tests </td>
+    <td>
+      <b>[<a href="lectures/lec03/lecture03.pdf">Lecture 03</a>]</b><br>
+      <b>[<a href="lectures/lec03/script/script03.R">script03.R</a>]</b><br>
+      [<a href="lectures/lec03/data/galton_heights.csv">Galton Heights Data</a>]<br>
+    </td>
+    <td>
+      <ul>
+        <li>RT 2.8,2.10</li>
+        <li>Francis Galton (1888). "Co-relations and their measurement, chiefly from anthropometric data". [<a href="http://galton.org/essays/1880-1889/galton-1886-jaigi-regression-stature.pdf">paper</a>]</li>
+        <li>William Sealy Gosset (1908). "The probable error of a mean". [<a href="http://www.york.ac.uk/depts/maths/histstat/student.pdf">paper</a>]</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>2015-09-14</td>
+    <td>Multivariate linear models: Normal Equations </td>
+    <td>
+      <b>[<a href="lectures/lec04/lecture04.pdf">Lecture 04</a>]</b><br>
+      <b>[<a href="lectures/lec04/script/script04.R">script04.R</a>]</b><br>
+    </td>
+    <td>
+      <ul>
+        <li>FH 1.1,1.2</li>
+        <li>David Bindel. "Least squares: the big idea". [<a href="http://www.cs.cornell.edu/~bindel/class/cs3220-s12/notes/lec10.pdf">pdf slides</a>]</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>2015-09-16</td>
+    <td>Geometric Properties of OLS </td>
+    <td>
+      <b>[<a href="lectures/lec05/lecture05.pdf">Lecture 05</a>]</b><br>
+    </td>
+    <td>
+      <ul>
+        <li>RT 3.3. FH 1.3</li>
+        <li>Geometry of least squares. [<a href="https://www.youtube.com/watch?v=444ZkgiHI3Q">video</a>]</li>
+        <li>Walter Sosa-Escudero. "OLS Geometry". [<a href="http://www.econ.uiuc.edu/~wsosa/econ507/OLSGeometry.pdf">pdf slides</a>]</li>
+      </ul>
+    </td>
+  </tr>
+  <tr class="success">
+    <td>2015-09-16</td>
+    <td>Problem Set #1 Due</td>
+    <td>
+      <b>[<a href="psets/pset01/pset01.pdf">Problem Set #1</a>]</b><br>
+      <b>[<a href="psets/pset01/solutions/solutions01.pdf">Solution to problem #3</a>]</b><br>
+      [<a href="psets/pset01/data/indicators.csv">indicators.csv</a>]<br>
+      [<a href="psets/pset01/data/glakes.csv">glakes.csv</a>]<br>
+      [<a href="psets/pset01/data/playbill.csv">playbill.csv</a>]
+    </td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>2015-09-21</td>
+    <td>Finite-Sample Properties of OLS</td>
+    <td>
+      <b>[<a href="lectures/lec06/lecture06.pdf">Lecture 06</a>]</b><br>
+    </td>
+    <td>
+      <ul>
+        <li>FH 1.3</li>
+        <li> Hiroki Tsurumi, "Gauss-Markov Theorem". [<a href="http://econweb.rutgers.edu/tsurumi/blue1.pdf">pdf notes</a>]</li>
+        <li>Kao-Peng Chou and Jia-Chin Lin. "A Study of Cramér-Rao-Like Bounds". [<a href="http://cdn.intechopen.com/pdfs-wm/18311.pdf">pdf article</a>]</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>2015-09-23</td>
+    <td>Hypothesis Testing under Normality</td>
+    <td>
+      <b>[<a href="lectures/lec07/lecture07.pdf">Lecture 07</a>]</b><br>
+      <b>[<a href="lectures/lec07/script/script07.R">script07.R</a>]</b><br>
+    </td>
+    <td>
+      <ul>
+        <li>FH 1.4, 1.5</li>
+        <li>Arne Hallam. "Some Theorems on Quadratic Forms and Normal Variables". [<a href="http://www.eco.uc3m.es/~ricmora/miccua/materials/DavidsonMacKinnon_2004_Ch4.pdf">pdf notes</a>]</li>
+        <li>Ricardo Mora. "Hypothesis Testing in Linear Regression Models". [<a href="http://www2.econ.iastate.edu/classes/econ671/hallam/documents/QUAD_NORM.pdf">pdf chapter</a>]</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>2015-09-28</td>
+    <td>Measuring Airline On-time Performance</td>
+    <td>
+      <b>[<a href="lectures/lec08/lecture08.pdf">Lecture 08</a>]</b><br>
+      [<a href="http://stat-computing.org/dataexpo/2009/2007.csv.bz2">2007.csv.bz2</a>]<br>
+      [<a href="../class_data/airline2007_clean.Rds">airline2007_clean.Rds</a>]<br>
+      [<a href="../class_data/airports.csv">airports.csv</a>]<br>
+      [<a href="../class_data/carriers/csv">carriers.csv</a>]<br>
+      [<a href="../class_data/plane-data.csv">plane-data.csv</a>]<br>
+      [<a href="lectures/lec08/script/clean_asa_data.R">clean_asa_data.R</a>]<br>
+      [<a href="lectures/lec08/script/script08a.R">script08a.R</a>]<br>
+      [<a href="lectures/lec08/script/script08b.R">script08b.R</a>]<br>
+    </td>
+    <td>
+      <ul>
+        <li>ASA 2012 Flight Data [<a href="http://stat-computing.org/dataexpo/2009/">website</a>]</li>
+        <li>David Smith. "Analysis of airline performance". [<a href="http://blog.revolutionanalytics.com/2009/09/analysis-of-airline-performance.html">blog post</a>]</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>2015-09-30</td>
+    <td>Prediction and Leverage with ASA Flight Data</td>
+    <td>
+      <b>[<a href="lectures/lec09/lecture09.pdf">Lecture 09</a>]</b><br>
+      [<a href="lectures/lec09/script/script09.R">script09.R</a>]<br>
+    </td>
+    <td>
+      <ul>
+        <li>FH 1.3, RT 7.3</li>
+        <li>Thomas Leininger. "Confidence and Prediction Intervals for Simple Linear Models".[<a href="https://stat.duke.edu/~tjl13/s101/slides/unit6lec3H.pdf">pdf slides</a>]</li>
+      </ul>
+    </td>
+  </tr>
+  <tr class="success">
+    <td>2015-09-30</td>
+    <td>Problem Set #2 Due</td>
+    <td>
+      <b>[<a href="psets/pset02/pset02.pdf">Problem Set #2</a>]</b><br>
+      <b>[<a href="psets/pset02/solutions/solutions02.pdf">Selected solutions</a>]</b><br>
+      [<a href="psets/pset02/data/Latour.txt">Latour.txt</a>]<br>
+    </td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>2015-10-05</td>
+    <td>Factor Contrasts and Hierarchical Linear Models</td>
+    <td>
+      <b>[<a href="lectures/lec10/lecture10.pdf">Lecture 10</a>]</b><br>
+      <b>[<a href="lectures/lec10/script/script10.R">script10.R</a>]</b><br>
+    </td>
+    <td>
+      <ul>
+        <li>UCLA Institute for Digital Research and Education. "R Library: Contrast Coding Systems for categorical variables". [<a href="http://www.ats.ucla.edu/stat/r/library/contrast_coding.htm">html notes</a>]</li>
+        <li>Heather Woltman, Andrea Feldstain, J. Christine MacKay, Meredith Rocchi. "An introduction to hierarchical linear modeling ". [<a href="http://www.tqmp.org/RegularArticles/vol08-1/p052/p052.pdf">pdf article</a>]</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>2015-10-07</td>
+    <td>Weighted Least Squares and Review </td>
+    <td>
+      <b>[<a href="lectures/lec11/lecture11.pdf">Lecture 11</a>]</b><br>
+      <b>[<a href="lectures/lec11/script/script11.R">script11.R</a>]</b><br>
+    </td>
+    <td>
+      <ul>
+        <li>FH 1.6</li>
+      </ul>
+    </td>
+  </tr>
+<!--   <tr>
+    <td>2015-10-07</td>
+    <td>Functional Data Analysis </td>
+    <td>
+      <b>Lecture 11</b><br>
+    </td>
+    <td>
+      <ul>
+        <li>J. O. Ramsay, Hadley Wickham, Spencer Graves, Giles Hooker, "fda: Functional Data Analysis". [<a href="https://cran.r-project.org/web/packages/fda/index.html">html notes</a>]</li>
+        <li>Giles Hooker. "Functional Data Analysis". [<a href="http://faculty.bscb.cornell.edu/~hooker/ShortCourseHandout.pdf">lecture notes</a>]</li>
+      </ul>
+    </td>
+  </tr> -->
+  <tr class="success">
+    <td>2015-10-07</td>
+    <td>Problem Set #3 Due</td>
+    <td>
+      <b>[<a href="psets/pset03/pset03.pdf">Problem Set #3</a>]</b><br>
+      <b>[<a href="psets/pset03/pset03_solutions.R">R Solution Code</a>]<br></b>
+      [<a href="../class_data/airline2007_pset03.Rds">airline2007_pset03.Rds</a>]<br>
+      [<a href="psets/pset03/script/clean_script.R">clean_script.R</a>]<br>
+    </td>
+    <td></td>
+  </tr>
+  <tr class="danger">
+    <td>2015-10-12</td>
+    <td>Midterm #1</td>
+    <td>
+      <b>[<a href="midterms/mt01/mt01.pdf">Midterm Questions</a>]</b><br>
+      <b>[<a href="midterms/mt01/mt01_solutions.pdf">Answers and Grading</a>]</b><br>
+    </td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>2015-10-14</td>
+    <td>Logistic Regression</td>
+    <td>
+      <b>[<a href="lectures/lec12/lecture12.pdf">Lecture 12</a>]</b><br>
+      <b>[<a href="lectures/lec12/script/script12.R">script12.R</a>]</b><br>
+    </td>
+    <td>
+      <ul>
+        <li>Germán Rodríguez. "Logit Models for Binary Data". [<a href="http://data.princeton.edu/wws509/notes/c3.pdf">pdf notes</a>]</li>
+        <li>UCLA Institute for Digital Research and Education. "R Data Analysis Examples: Logit Regression". [<a href="http://www.ats.ucla.edu/stat/r/dae/logit.htm">html page</a>]</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>2015-10-26</td>
+    <td>Guest Lecture: Jay Emerson</td>
+    <td>
+    </td>
+    <td>
+      <ul>
+        <li>John Emerson and Silas Meredith. "Nationalistic Judging Bias in the 2000 Olympic Diving Competition". [<a href="http://www.stat.yale.edu/~jay/EmersonMaterials/MathHorizons.pdf">pdf paper</a>]</li>
+        <li>Emerson, John W. and Taylor Arnold. "Statistical Sleuthing by Leveraging Human Nature: A Study of Olympic Figure Skating". [<a href="http://www.tandfonline.com/doi/abs/10.1198/tast.2011.10165#.Vh3CpGRhlE4">pdf article</a>]</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>2015-10-28</td>
+    <td>Solving Least Squares</td>
+    <td>
+      <b>[<a href="lectures/lec13/lecture13.pdf">Lecture 13</a>]</b><br>
+      <b>[<a href="lectures/lec13/script/script13.R">script13.R</a>]</b><br>
+    </td>
+    <td>
+      <ul>
+        <li>GVL, Ch 5</li>
+        <li>Do Q. Lee. "Numerically Efficent Methods for Solving Least Squares Problems". <a href="http://math.uchicago.edu/~may/REU2012/REUPapers/Lee.pdf">pdf notes</a></li>
+      </ul>
+    </td>
+  </tr>
+  <tr class="success">
+    <td>2015-10-28</td>
+    <td>Problem Set #4 Due</td>
+    <td>
+      <b>[<a href="psets/pset04/pset04.pdf">Problem Set #4</a>]</b><br>
+      <b>[<a href="psets/pset04/pset04_solutions.R">R Solution Code</a>]</b><br>
+      [<a href="../class_data/airline2007_pset04.Rds">airline2007_pset04.Rds</a>]<br>
+    </td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>2015-11-02</td>
+    <td>Singular Value Decomposition</td>
+    <td>
+      <b>[<a href="lectures/lec14/lecture14.pdf">Lecture 14</a>]</b><br>
+      <b>[<a href="lectures/lec14/script/script14.R">script14.R</a>]</b><br>
+    </td>
+    <td>
+      <ul>
+        <li>GVL, 2.7</li>
+        <li>Ben Harris. "Computing the Singular Value Decomposition". [<a href="https://www.youtube.com/watch?v=cOUTpqlX-Xs">video</a>]</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>2015-11-04</td>
+    <td>Ridge Regression and PCR</td>
+    <td>
+      <b>[<a href="lectures/lec15/lecture15.pdf">Lecture 15</a>]</b><br>
+      <b>[<a href="lectures/lec15/script/script15.R">script15.R</a>]</b><br>
+    </td>
+    <td>
+      <ul>
+        <li>RT, 3.14</li>
+        <li>Tian-Tsong Ng, Shih-Fu Chang, Jessie Hsu, Martin Pepeljugoski. "Columbia Photographic Images and Photorealistic Computer Graphics Dataset." <a href="http://www.ee.columbia.edu/dvmm/publications/05/ng_cgdataset_05.pdf">pdf paper</a></li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>2015-11-09</td>
+    <td>Solving GLMs via IRWLS</td>
+    <td>
+      <b>[<a href="lectures/lec16/lecture16.pdf">Lecture 16</a>]</b><br>
+      <b>[<a href="lectures/lec16/script/script16.R">script16.R</a>]</b><br>
+    </td>
+    <td>
+      <ul>
+        <li>RT 10.4.1</li>
+        <li>Cosma Shalizi. "Generalized Linear Models and Generalized Additive Models". <a href="http://www.stat.cmu.edu/~cshalizi/uADA/12/lectures/ch13.pdf">pdf chapter</a></li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>2015-11-11</td>
+    <td>Intro to Lasso Regression</td>
+    <td>
+      <b>[<a href="lectures/lec17/lecture17.pdf">Lecture 17</a>]</b><br>
+      <b>[<a href="lectures/lec17/script/script17.R">script17.R</a>]</b><br>
+    </td>
+    <td>
+      <ul>
+        <li>BvdG, 2.1-2.4</li>
+        <li>Robert Tibshirani. "Regression Shrinkage and Selection via the Lasso". <a href="http://www.jstor.org/stable/2346178?seq=1#page_scan_tab_contents">pdf paper</a></li>
+        <li>Efron, Hastie, Johnstone, Tibshirani. "Least Angle Regression. <a href="http://statweb.stanford.edu/~imj/WEBLIST/2004/LarsAnnStat04.pdf">pdf paper</a></li>
+      </ul>
+    </td>
+  </tr>
+  <tr class="success">
+    <td>2015-11-11</td>
+    <td>Problem Set #5 Due</td>
+    <td>
+      <b>[<a href="psets/pset05/pset05.pdf">Problem Set #5</a>]</b><br>
+      <b>[<a href="psets/pset05/pset05_solutions.R">R Solution Code</a>]</b><br>
+      [<a href="../class_data/columbiaImages.zip">columbiaImages.zip</a>]<br>
+      [<a href="../class_data/photoMetaData.csv">photoMetaData.csv</a>]<br>
+    </td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>2015-11-16</td>
+    <td>Applications to Image Classification</td>
+    <td>
+      <b>[<a href="lectures/lec18/lecture18.pdf">Lecture 18</a>]</b><br>
+      <b>[<a href="lectures/lec18/script/script18.R">script18.R</a>]</b><br>
+    </td>
+    <td>
+      <ul>
+        <li>BvdG, 2.1-2.4</li>
+        <li>Tian-Tsong Ng, Shih-Fu Chang, Jessie Hsu, Martin Pepeljugoski. "Columbia Photographic Images and Photorealistic Computer Graphics Dataset." <a href="http://www.ee.columbia.edu/dvmm/publications/05/ng_cgdataset_05.pdf">pdf paper</a></li>
+        <li>Taylor Arnold, Lauren Tilton. "Humanities Data in R". <a href="http://www.springer.com/us/book/9783319207018/">book; free pdf version from Yale</a></li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>2015-11-18</td>
+    <td>Tuning Ridge and Lasso Regression</td>
+    <td>
+      <b>[<a href="lectures/lec19/lecture19.pdf">Lecture 19</a>]</b><br>
+      <b>[<a href="lectures/lec19/script/script19.R">script19.R</a>]</b><br>
+    </td>
+    <td>
+      <ul>
+        <li>BvdG, 2.5</li>
+        <li>Ryan Tibshirani. "Model selection and validation 1: Cross-validation" <a href="http://www.stat.cmu.edu/~ryantibs/datamining/lectures/18-val1-marked.pdf">pdf notes</a></li>
+        <li>Ryan Tibshirani. "Model selection and validation 2: Model assessment" <a href="http://www.stat.cmu.edu/~ryantibs/datamining/lectures/19-val2-marked.pdf">pdf notes</a></li>
+      </ul>
+    </td>
+  </tr>
+  <tr class="success">
+    <td>2015-11-18</td>
+    <td>Problem Set #6 Due</td>
+    <td>
+      <b>[<a href="psets/pset06/pset06.pdf">Problem Set #6</a>]</b><br>
+      <b>[<a href="psets/pset06/pset06_dp.pdf">questions</a>]</b><br>
+    </td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>2015-11-30</td>
+    <td>Theory of the Lasso I</td>
+    <td>
+      <b>[<a href="lectures/lec20/lecture20.pdf">Lecture 20</a>]</b><br>
+      <b>[<a href="lectures/lec20/script/script20.R">script20.R</a>]</b><br>
+    </td>
+    <td>
+      <ul>
+        <li>BvdG, 6.0-6.3</li>
+        <li>Meinshausen, Nicolai, and Bin Yu. "Lasso-type recovery of sparse representations for high-dimensional data." The Annals of Statistics (2009): 246-270.</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>2015-12-02</td>
+    <td>Theory of the Lasso II</td>
+    <td>
+      <b>[<a href="lectures/lec21/lecture21.pdf">Lecture 21</a>]</b><br>
+      <b>[<a href="lectures/lec21/script/script21.R">script21.R</a>]</b><br>
+    </td>
+    <td>
+      <ul>
+        <li>BvdG, 6.3</li>
+        <li>Bickel, Peter J., Ya'acov Ritov, and Alexandre B. Tsybakov. "Simultaneous analysis of Lasso and Dantzig selector." The Annals of Statistics (2009): 1705-1732.</li>
+        <li>Zhao, Peng, and Bin Yu. "On model selection consistency of Lasso." The Journal of Machine Learning Research 7 (2006): 2541-2563.</li>
+      </ul>
+    </td>
+  </tr>
+  <tr class="danger">
+    <td>2015-12-07</td>
+    <td>Midterm #2</td>
+    <td>
+      <b>[<a href="midterms/mt02/mt02.pdf">Midterm Questions</a>]</b><br>
+      [<a href="../class_data/lset.Rds">lset.Rds</a>] Set of lemmas<br>
+      [<a href="../class_data/metaData.Rds">metaData.Rds</a>] Metadata: responses and training flag<br>
+      [<a href="../class_data/mmLemma.Rds">mmLemma.Rds</a>] Data Matrix<br>
+      [<a href="../class_data/metaDataAll.Rds">metaDataAll.Rds</a>] Metadata, with solutions to test set<br>
+      [<a href="midterms/mt02/lemma_gender.mp4">lemma_gender.mp4</a>] visualization of the lasso solution<br>
+      [<a href="midterms/mt02/lemma_age.mp4">lemma_age.mp4</a>] visualization of the lasso solution<br>
+    </td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>2015-12-07</td>
+    <td>The Generalized Lasso</td>
+    <td>
+      <b>[<a href="lectures/lec22/lecture22.pdf">Lecture 22</a>]</b><br>
+      [<a href="lectures/lec22/img/trendfilter_linear.mp4">trendfilter_linear.mp4</a>]<br>
+      [<a href="lectures/lec22/img/trendfilter_quadratic.mp4">trendfilter_quadratic.mp4</a>]<br>
+    </td>
+    <td>
+      <ul>
+        <li>Taylor Arnold and Ryan Tibshirani. "genlasso: Path algorithm for generalized lasso problems" <a href="https://cran.r-project.org/web/packages/genlasso/index.html">R package and vignette</a></li>
+        <li>Taylor Arnold and Ryan Tibshirani. "Efficient Implementations of the Generalized Lasso Dual Path Algorithm", Journal of Computational and Graphical Statistics. <a href="http://www.tandfonline.com/doi/abs/10.1080/10618600.2015.1008638#.VmWqn2RhlE4">pdf article</a></li>
+        <li>Ryan Tibshirani and Johnathan Taylor. "The solution path of the generalized lasso", Annals of Statistics 39 (3) 1335-1371.</li>
+      </ul>
+    </td>
+  </tr>
+<tr>
+    <td>2015-12-09</td>
+    <td>ADMM and Course Review</td>
+    <td>
+      <b>[<a href="lectures/lec23/lecture23.pdf">Lecture 23</a>]</b><br>
+    </td>
+    <td>
+      <ul>
+        <li> S. Boyd et al.,
+  <i>Distributed optimization and statistical learning via the alternating
+  direction method of multipliers</i>. Foundations and Trends in Machine Learning,
+  3(1):1–122, 2011. <a href="https://web.stanford.edu/~boyd/papers/pdf/admm_distr_stats.pdf">pdf article</a></li>
+      </ul>
+    </td>
+  </tr>
+  <tr class="success">
+    <td>2015-12-16</td>
+    <td>Problem Set #7 Due</td>
+    <td>
+      <b>[<a href="psets/pset07/pset07.pdf">Problem Set #7</a>]</b><br>
+      [<a href="psets/pset07/data/pset07_X.Rds">pset07_X.Rds</a>]<br>
+      [<a href="psets/pset07/data/pset07_y.Rds">pset07_y.Rds</a>]<br>
+    </td>
+    <td></td>
+  </tr>
+</table>
+</div>
+
+<!-- jQuery and Boostrap -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,515 @@
+\input{../header-ho.tex}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\vfill
+
+{\fontsize{0.7cm}{0cm}\selectfont Lecture 07 \\\vspace{0.2cm}
+Hypothesis Testing with Multivariate Regression}\\\vspace{0.5cm}
+23 September 2015
+
+\vspace{2cm}
+
+\begin{minipage}{0.6\textwidth}
+Taylor B. Arnold \\
+Yale Statistics \\
+STAT 312/612
+\end{minipage}
+\hfill
+\begin{minipage}{0.3\textwidth}\raggedleft
+\includegraphics[scale=0.3]{../yale-logo.png}
+\end{minipage}%
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\color{yaleblue}\fontsize{16pt}{20pt}\selectfont Goals for today}
+
+\begin{enumerate}
+\item Review of assumptions and properties of linear model
+\item The multivariate T-test
+\item Hypothesis test simulations
+\item The multivariate F-test
+\end{enumerate}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Review from Last Time}
+\end{flushright}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{center}
+{\Large Classical linear model assumptions}
+\end{center}
+
+{\bf I. Linearity} $\quad Y = X\beta + \epsilon$
+
+{\bf II. Strict exogeneity} $\quad \mathbb{E} \left( \epsilon | X \right) = 0$
+
+{\bf III. No multicollinearity} $\quad \mathbb{P} \left[ \text{rank} (X) = p \right] = 1$
+
+{\bf IV. Spherical errors} $\quad \mathbb{V} \left( \epsilon | X \right) = \sigma^2 \mathbb{I}_n$
+
+{\bf V. Normality} $\quad \epsilon | X \sim \mathcal{N} (0, \sigma^2 \mathbb{I}_n)$
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf Finite sample properties}
+
+Under assumptions I-III:
+
+\hspace{1cm} (A) $\mathbb{E} (\widehat{\beta} | X) = \beta$
+
+Under assumptions I-IV:
+
+\hspace{1cm}  (B)  $\mathbb{V} (\widehat{\beta} | X) = \sigma^2 (X^t X)^{-1}$
+
+\hspace{1cm}  (C) $\widehat{\beta}$ is the best linear unbiased estimator (Gauss-Markov)
+
+\hspace{1cm}  (D) $Cov( \widehat{\beta}, r | X) = 0$
+
+\hspace{1cm}  (E) $\mathbb{E} (s^2 | X) = \sigma^2$
+
+Under assumptions I-V:
+
+\hspace{1cm}  (F) $\widehat{\beta}$ achieves the Cramér–Rao lower bound
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont The T-test}
+\end{flushright}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf Hypothesis tests}
+
+Consider testing the hypothesis $H_0: \beta_j = b_j$.
+
+\pause Under assumptions I-V we have the following:
+\begin{align*}
+\left. \widehat{\beta}_j - b_j \right| X, H_0 \sim \mathcal{N} ( 0, \sigma^2 \left( (X^t X)^{-1}_{jj} \right))
+\end{align*}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf Z-test}
+
+This suggests the following test statistic:
+\begin{align*}
+z &= \frac{\widehat{\beta}_j - b_j}{\sqrt{\sigma^2  \left( (X^t X)^{-1}_{jj} \right)}}
+\end{align*}
+With,
+\begin{align*}
+\left. z \right| X, H_0 \sim \mathcal{N} (0, 1)
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf T-test}
+
+As in the simple linear linear regression case, we generally
+need to estimate $\sigma^2$ with $s^2$.
+
+\pause This yields the following test statistic:
+\begin{align*}
+t &= \frac{\widehat{\beta}_j - b_j}{\sqrt{s^2  \left( (X^t X)^{-1}_{jj} \right)}} \\
+&= \frac{\widehat{\beta}_j - b_j}{\text{S.E.}(\widehat{\beta}_j)}
+\end{align*}
+
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf T-test}
+
+The test statistic has a $T$-distribution with $(n-p)$ degrees
+of freedom under the null hypothesis:
+\begin{align*}
+\left. t \right| X, H_0 \sim t_{n-p}
+\end{align*}
+\pause This time around, we'll actually prove this.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+To start, we re-write the test statistic as:
+\begin{eqnarray*}
+t &=& \frac{\widehat{\beta} - b}{\sqrt{{\color{solarized@blue}\sigma^2}  \left( (X^t X)^{-1}_{jj} \right)}} \cdot
+\sqrt{\frac{{\color{solarized@blue}\sigma^2}}{s^2}} \\ \pause
+&=& \frac{z}{\sqrt{s^2 / \sigma^2}} \\ \pause
+&=& \frac{z}{\sqrt{{\color{solarized@magenta}q} / (n-p)}}
+\end{eqnarray*}
+\pause Where ${\color{solarized@magenta}q} = r^t r / \sigma^2$.
+
+\pause We need to show that (1) ${\color{solarized@magenta}q} | X \sim \chi^2_{n-p}$ and
+(2) $z \independent {\color{solarized@magenta}q} | X$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf Lemma} If $B$ is a symmetric idempotent matrix and
+$u \sim \mathcal{N} (0, \mathbb{I}_n)$, then
+$u^t B u \sim \chi^2_{\text{tr(B)}}$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\it Proof:} The symmetric matrix $B$ can be written as
+by its eigen-decompostion; for some orthonormal $Q$ matrix
+and diagonal matrix $\Lambda$:
+\begin{align*}
+B &= Q^t \Lambda Q
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Notice that as $B$ is idempotent:
+\begin{eqnarray*}
+(Q^t \Lambda Q) &=& (Q^t \Lambda Q) (Q^t \Lambda Q) \\ \pause
+&=& Q^t \Lambda Q Q^t \Lambda Q \\ \pause
+&=& Q^t \Lambda^2 Q \\
+\end{eqnarray*}
+\pause Since $Q^t = Q^{-1}$:
+\begin{align*}
+\Lambda &= \Lambda^2 \\
+\end{align*}
+\pause Therefore all the elements of $\Lambda$ are $0$ or $1$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+By rotating the columns of $Q$, we can actually write:
+\begin{align*}
+\Lambda &= \left( \begin{array}{cc} \mathbb{I}_{\text{rank}(B)} & 0 \\ 0 & 0 \end{array} \right)
+\end{align*}
+\pause Notice that this also shows that:
+\begin{align*}
+\text{tr}(B) &= \text{tr}(Q^t \Lambda Q) \\
+&= \text{tr}(\Lambda Q Q^t ) \\
+&= \text{tr}(\Lambda) \\
+&= \text{rank}(B)
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Now let $v = Q u$. We can see that the mean of $v$ is zero:
+\begin{align*}
+\mathbb{E} v &= \mathbb{E} Q u \\
+&= Q \mathbb{E} u \\
+&= 0
+\end{align*}
+\pause And the variance of $v$ is:
+\begin{align*}
+\mathbb{E} v v^t &= Q \mathbb{E} (u u^t) Q \\
+&= Q \mathbb{I}_n Q^t \\
+&= \mathbb{I}_n
+\end{align*}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Now we calculate the quadtratic form $u^t B u$ by the
+transform of $v$. Substitute that $u = (Q)^{-1}v = Q^tv$:
+\begin{eqnarray*}
+u^t B u &=& v^t Q B Q^t v \\ \pause
+&=& v^t Q {\color{solarized@blue} (Q^t \Lambda Q)} Q^t v \\ \pause
+&=& v^t {\color{solarized@magenta} Q Q^t} \Lambda {\color{solarized@magenta} Q Q^t} v \\ \pause
+&=& v^t \Lambda v \\ \pause
+&=& v^t \left( \begin{array}{cc} \mathbb{I}_{\text{tr}(B)} & 0 \\ 0 & 0 \end{array} \right) v \\ \pause
+&=& \sum_{i=1}^{\text{tr}(B)} v_i^2 \pause \\
+&\sim& \chi^2_{\text{tr}(B)}
+\end{eqnarray*}
+Which completes the lemma.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+(1) We know that $r^t r = \epsilon^t M \epsilon$, so:
+\begin{eqnarray*}
+q &=& \frac{r^t r}{\sigma^2} \\ \pause
+&=& \frac{\epsilon^t}{\sigma} \cdot M \cdot \frac{\epsilon}{\sigma}
+\end{eqnarray*}
+\pause Under Assumption V,
+$\frac{\epsilon}{\sigma} \sim \mathcal{N} (0, \mathbb{I}_n)$.
+Therefore from the lemma, then $q \sim \chi^2_{\text{tr(M)}}$; last
+time we showed the $\text{tr(M)} = n - p$, which
+finishes the first part of the proof.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+(2) The random variables $\widehat{\beta}$ and $r$ are both
+linear combinations of $\epsilon$, and are therefore jointly
+normally distributed. As they are uncorrelated (problem set 2),
+this implies that they are independent. Finally, this implies that
+$z = f(\widehat{\beta})$ and $q = g(r)$ and themselves independent.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+So, therefore, we have:
+\begin{align*}
+t &= \frac{\widehat{\beta} - b}{\sqrt{{\color{solarized@blue}\sigma^2}  \left( (X^t X)^{-1}_{jj} \right)}} \cdot
+      \sqrt{\frac{{\color{solarized@blue}\sigma^2}}{s^2}} \\
+&= \frac{z}{{\color{solarized@magenta}q} / (n-p)} \\
+&\sim t_{n-p}
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Simulation}
+\end{flushright}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont F-Test}
+\end{flushright}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf F-test}
+
+Now consider the hypothesis test $H_0: D\beta = d$ for a
+matrix $D$ with $k$ rows and rank $k$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+We'll form the following test statistic:
+\begin{align*}
+F &= \frac{(D\widehat{\beta} - d)^t [D (X^t X)^{-1} D^t ]^{-1} (D\widehat{\beta} - d) / k}{s^2}
+\end{align*}
+And prove that is has an F-distribution with $k$ and $n-p$ degrees of
+freedom.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+We can re-write the test statistics as:
+\begin{align*}
+F &= \frac{{\color{solarized@cyan} w} / k}{{\color{solarized@magenta} q} / (n - p)}
+\end{align*}
+Where:
+\begin{align*}
+{\color{solarized@cyan} w} &= (D\widehat{\beta} - d)^t [\sigma^2 D (X^t X)^{-1} D^t ]^{-1} (D\widehat{\beta} - d) \\
+{\color{solarized@magenta} q} &= r^t r / \sigma^2
+\end{align*}
+
+\pause
+We've already shown that ${\color{solarized@magenta} q} | X \sim \chi^2_{n-p}$, and can see
+that ${\color{solarized@magenta} q} \independent {\color{solarized@cyan} w}$ by the same argument as before. All that
+is left is to show that ${\color{solarized@cyan} w} \sim \chi^2_{k}$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Let $v = D\widehat{\beta} - d$. Under the null hypothesis $v = D (\widehat{\beta} - \beta)$.
+\pause Therefore:
+\begin{eqnarray*}
+\mathbb{V} (v | X) &=& \mathbb{V} (D (\widehat{\beta} - \beta) | X) \\ \pause
+&=& D \mathbb{V} (\widehat{\beta} - \beta | X) D^t \\ \pause
+&=& \sigma^2 D (X^t X)^{-1} D^t
+\end{eqnarray*}
+
+\pause
+Now, for the multivariate normally distributed $v$ with zero mean,
+we have:
+\begin{align*}
+w &= v^t \mathbb{V} (v | X)^{-1} v
+\end{align*}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Now, decompose $ \mathbb{V} (v | X)^{-1} = \Sigma^{-1}$
+as $Q^t \Lambda Q$. Notice that this implies:
+\begin{eqnarray*}
+\Sigma^{-1} &=& Q^t \Lambda^{1/2} \Lambda^{1/2} Q \\ \pause
+Q \Sigma^{-1} &=& \Lambda^{1/2} \Lambda^{1/2} Q  \\ \pause
+\Lambda^{-1/2} Q \Sigma^{-1} &=& \Lambda^{1/2} Q
+\end{eqnarray*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+From here, we can write $w$ as the inner product of
+a suitably defined vector $u$:
+\begin{eqnarray*}
+w &=& v^t \Sigma^{-1} v \\ \pause
+&=& v^t Q^t \Lambda^{1/2} \Lambda^{1/2} Q v \\ \pause
+&=& u^t u
+\end{eqnarray*}
+\pause With a mean of zero:
+\begin{align*}
+\mathbb{E} (u | X) &= \mathbb{E} (\Lambda^{1/2} Q v | X) \\
+&= \Lambda^{1/2} Q \mathbb{E} (v | X) \\
+&= 0
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+And variance of
+\begin{eqnarray*}
+\mathbb{E} (u u^t | X) &=& \mathbb{E} (\Lambda^{1/2} Q v v^t Q^t \Lambda^{1/2} | X) \\ \pause
+&=& \Lambda^{1/2} Q \mathbb{E} (v v^t | X) Q^t \Lambda^{1/2} \\ \pause
+&=& {\color{solarized@magenta} \Lambda^{1/2} Q} \Sigma Q^t \Lambda^{1/2} \\ \pause
+&=& \Lambda^{-1/2} Q \Sigma^{-1}\Sigma Q^t \Lambda^{1/2} \\ \pause
+&=& \Lambda^{-1/2} \Lambda^{1/2} \\ \pause
+&=& \mathbb{I}_k
+\end{eqnarray*}
+And, finally:
+\begin{align*}
+w &= u u^t \sim \chi^2_{k}
+\end{align*}
+Which finishes the proof.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf An alternative F-test}
+
+Now, consider the following estimator:
+\begin{align*}
+\widetilde{\beta} &= \argmin_b || y - Xb ||_2^2 , \quad \text{s.t.} \quad Db = d
+\end{align*}
+\pause We then define the restricted residuals
+$\widetilde{r} = y - X\tilde{\beta}$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf An alternative F-test}
+
+An alternative expression for the $F$-test statistic is:
+\begin{align*}
+F &= \frac{(\tilde{r}^t \tilde{r} -  r^t r) / k }{r^t r / (n - p)}
+\end{align*}
+Conceptually, it should make sense that this is large whenever
+the null hypothesis is false.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\bf An alternative F-test}
+
+If we let $\text{SSR}_U$ be the sum of squared residuals of the unrestricted
+model ($r^t r$) and $\text{SSR}_R$ be the sum of squared residuals of the
+restricted model, then this can be re-written as:
+\begin{align*}
+F &= \frac{(\text{SSR}_R -  \text{SSR}_U) / k }{\text{SSR}_U / (n - p)}
+\end{align*}
+This is the way it is written in the homework and in the Fumio Hayashi
+text. It is left for you to prove that this is equivalent to the
+other F test.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Application}
+\end{flushright}
+
+\end{frame}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+

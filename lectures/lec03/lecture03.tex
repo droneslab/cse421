@@ -1,0 +1,331 @@
+\input{../header-ho.tex}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\vfill
+
+{\fontsize{0.7cm}{0cm}\selectfont Lecture 03 \\\vspace{0.2cm} Simple Linear Models:\\
+Leverage, Hypothesis Tests, Goodness of Fit}\\\vspace{0.5cm}
+09 September 2015
+
+\vspace{2cm}
+
+\begin{minipage}{0.6\textwidth}
+Taylor B. Arnold \\
+Yale Statistics \\
+STAT 312/612
+\end{minipage}
+\hfill
+\begin{minipage}{0.3\textwidth}\raggedleft
+\includegraphics[scale=0.3]{../yale-logo.png}
+\end{minipage}%
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\color{yaleblue}\fontsize{16pt}{20pt}\selectfont Notes}
+
+\begin{itemize}
+\item Problem Set \#1 Online: Due Next Wednesday, 2015-09-16
+\item R code; online
+\item Course Pace
+\item Classroom
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\color{yaleblue}\fontsize{16pt}{20pt}\selectfont Goals for today}
+
+\begin{enumerate}
+\item simulation of leverage
+\item hypothesis tests for simple linear regression
+\item goodness of fit, $R^2$
+\item Galton's heights data
+\end{enumerate}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Leverage Simulation}
+\end{flushright}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Hypothesis Tests}
+\end{flushright}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\color{yaleblue}\fontsize{16pt}{20pt}\selectfont Z-Test}
+
+Take the simple linear regression model:
+\begin{align*}
+y_i &=  x_i\beta  + \epsilon_i, \quad i = 1, \ldots n.
+\end{align*}
+With independent, identically distributed normal error terms:
+\begin{align*}
+\epsilon_i \sim \mathcal{N}(0, \sigma^2)
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Last time we calculated the MLE estimator,
+\begin{align*}
+\widehat{\beta}_{MLE} &= \frac{\sum_i y_i x_i}{\sum_i x_i^2}
+\end{align*}
+\pause And showed that it has a normal distribution with the following
+mean and variance:
+\begin{align*}
+\widehat{\beta} \sim \mathcal{N} (\beta, \frac{\sigma^2}{\sum_i x_i^2})
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+If we want to test the hypothesis $H_0: \beta = b$, we
+could construct a test statistic as follows: \pause
+\begin{align*}
+z &= \frac{\widehat{\beta} - b}{\sqrt{\frac{\sigma^2}{\sum_i x_i^2}}}
+\end{align*}
+\pause Under the null hypothesis, we have
+\begin{align*}
+z | H_0  \sim \mathcal{N} (0, 1)
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+When we know $\sigma^2$ that is all we need to do, however
+outside of simulations we (very) rarely known the true variance
+of the noise. Otherwise, we first need to estimate it.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\color{yaleblue}\fontsize{16pt}{20pt}\selectfont T-Test}
+
+The residuals from a given prediction of $\beta$ are given by:
+\begin{align*}
+r_i &= y_i - \widehat{y}_i \\
+&= y_i - x_i \widehat{\beta}
+\end{align*}
+These represent an estimate of the error terms $\epsilon_i$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+If $r_i$ is the sampled and estimated version of $\epsilon_i$,
+it would seem reasonable to have:
+\begin{align*}
+\frac{1}{n} \sum_{i=1}^n r_i^2 &\approx \mathbb{E} \epsilon^2 \\
+&= \sigma^2
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Much like when estimating the mean of a randomly sampled normal
+distribution, this is approximately correct though the exact
+formula requires a small correction since\pause
+\begin{align*}
+\mathbb{E} \left( \sum_i r_i^2 \right) &= (n-1) \cdot \sigma^2
+\end{align*}
+\pause I will delay a formal derivation of this until the multivariate
+case; conceptually seems reasonable that the estimate will be slightly
+smaller due to the estimation of $r_i$ by the same data.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+So, we instead use a corrected form to estimate the error
+variance, an estimator that we will call $s^2$:
+\begin{align*}
+s^2 &= \frac{1}{n-1} \cdot \sum_i r_i^2 \\
+&= \frac{1}{n-1} \cdot \sum_i (y_i - \widehat{y}_i)^2 \\
+&= \frac{1}{n-1} \cdot \sum_i (y_i - x_i \beta)^2
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+The ratio of our estimator to the true variance has
+a $\chi^2$ distribution with $n-1$ degrees of freedom.
+\begin{align*}
+(n-1) \cdot \frac{s^2}{\sigma^2} \sim \chi^2_{n - 1}
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+The standard error is then given by:
+\begin{eqnarray*}
+\text{S.E.}(\widehat{\beta}) &=& \sqrt{\frac{s^2}{\sum_i x_i^2}} \\ \pause
+&=& \sqrt{\frac{(y - x_i \widehat{\beta})^2}{(n-1) \cdot \sum_i x_i^2}}
+\end{eqnarray*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+Finally, we can construct a test statistic:
+\begin{align*}
+t &= \frac{\widehat{\beta} - b}{\text{S.E.}(\widehat{\beta})}
+\end{align*}
+\pause And under the null hypothesis, we have
+\begin{align*}
+t | H_0  \sim t_{n-1}
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+On a related note, we can similarly calculate a confidence
+interval for $\beta$ using the standard error. A $100(1-\alpha)\%$.
+confidence interval is given by:
+\begin{align*}
+\widehat{\beta} \pm t_{n-1, 1 - \alpha/2} \cdot \text{S.E.}(\widehat{\beta})
+\end{align*}
+\pause For a reasonably large sample size $n$, we can approximate
+this by a normal distribution:
+\begin{align*}
+\widehat{\beta} \pm z_{1 - \alpha/2} \cdot \text{S.E.}(\widehat{\beta})
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\color{yaleblue}\fontsize{16pt}{20pt}\selectfont F-Test}
+
+As an alternative to the T-test, consider squaring the
+test statistic
+\begin{eqnarray*}
+T^2 &=& \left( \frac{\widehat{\beta} - b}{\text{S.E.}(\widehat{\beta})} \right)^2 \\ \pause
+&=& \frac{{\color{solarized@red}\left(\frac{\widehat{\beta} - b}{\sqrt{\sigma^2 / \sum_i x_i^2}}\right)^2}}{{\color{solarized@violet}s^2 / \sigma^2}} \\ \pause
+&=& \frac{{\color{solarized@red}U}}{{\color{solarized@violet}V}}
+\end{eqnarray*}
+\pause Where ${\color{solarized@red}U} \sim \chi^2_{1}$ and ${\color{solarized@violet}(n-1) \cdot V} \sim \chi^2_{n-1}$.
+
+\pause And therefore $T^2 \sim F_{1, n-1}$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\color{yaleblue}\fontsize{16pt}{20pt}\selectfont Intercept Model}
+
+When we have the model $y = \alpha + x \beta + \epsilon$, the form of $s^2$
+changes slightly:
+\begin{align*}
+s^2 &= \frac{1}{n-2} \cdot \sum_i (y_i - \widehat{y}_i)^2
+\end{align*}
+\pause as well as the standard errors:
+\begin{align*}
+\text{S.E.}(\alpha) &= \sqrt{s^2 \cdot \left(\frac{1}{n} + \frac{\bar{x}^2}{\sum_i (x_i-\bar{x})^2} \right)} \\
+\text{S.E.}(\beta) &= \sqrt{\frac{s^2}{\sum_i (x_i-\bar{x})^2}}
+\end{align*}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+\begin{flushright}
+{\color{yaleblue}\sc\fontsize{1cm}{0cm}\selectfont Goodness of Fit}
+\end{flushright}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+{\color{yaleblue}\fontsize{16pt}{20pt}\selectfont $R^2$}
+
+A common measurement of how well a linear model explains
+the data is the $R^2$. For the non-intercept version, it
+can be written as:
+\begin{align*}
+R^2 &= 1 - \frac{\sum_i (y_i - \widehat{y}_i)^2}{\sum_i (y_i)^2}
+\end{align*}
+\pause We can re-write this as:
+\begin{align*}
+R^2 &= \left( \frac{\sum_i x_i y_i}{\sqrt{\sum_i x_i^2 \cdot \sum_i y_i^2}} \right)^2
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] \frametitle{}
+
+The more typically seen version compares the estimated
+residuals with the centered values of $y$.
+\begin{align*}
+R^2 &= 1 - \frac{\sum_i (y_i - \widehat{y}_i)^2}{\sum_i (y_i - \bar{y})^2}
+\end{align*}
+\pause With a bit of algebraic manipulation, we see that this is
+equal to the squared sample correlation of $x$ and $y$:
+\begin{align*}
+R^2 &= \left( \frac{\sum_i (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_i (x_i - \bar{x})^2 \cdot \sum_i (y_i - \bar{y})^2}} \right)^2 \\
+&= cor(x,y)^2
+\end{align*}
+
+\end{frame}
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+

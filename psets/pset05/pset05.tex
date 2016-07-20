@@ -1,0 +1,154 @@
+\documentclass[12pt]{article}
+
+\usepackage{fontspec}
+\usepackage{geometry}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+
+\makeatletter
+\newcommand{\distas}[1]{\mathbin{\overset{#1}{\kern\z@\sim}}}%
+
+\geometry{top=1in, bottom=1in, left=1in, right=1in, marginparsep=4pt, marginparwidth=1in}
+
+\renewcommand{\headrulewidth}{0pt}
+\pagestyle{fancyplain}
+\fancyhf{}
+\cfoot{\thepage\ of \pageref{LastPage}}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{12pt}
+
+\usepackage{marginnote} % For margin years
+\newcommand{\years}[1]{\marginnote{\scriptsize #1}} % New command for including margin years
+\renewcommand*{\raggedleftmarginnote}{}
+\setlength{\marginparsep}{-16pt} % Slightly increase the distance of the margin years from the content
+\reversemarginpar
+
+\setromanfont [Ligatures={Common}, Numbers={OldStyle}, Variant=01,
+ BoldFont={LinLibertine_RB.otf},
+ ItalicFont={LinLibertine_RI.otf},
+ BoldItalicFont={LinLibertine_RBI.otf}
+ ]{LinLibertine_R.otf}
+%\setromanfont [Ligatures={Common}, Numbers={OldStyle}]{Hoefler Text}
+
+%\usepackage[xetex, bookmarks, pdftitle={Taylor Arnold CV},pdfauthor={Taylor Arnold}]{hyperref}
+%\hypersetup{linkcolor=blue,citecolor=blue,filecolor=black,urlcolor=MidnightBlue}
+
+\usepackage{xunicode} % Allows generation of unicode characters from accented glyphs
+\defaultfontfeatures{Mapping=tex-text}
+
+\begin{document}
+
+\begin{center}
+{\bf Problem Set 05} \\
+Linear Models -- Fall 2015 \\
+Due date: 2015-11-11
+\end{center}
+
+\medskip
+
+Problems sets are due at the start of class on the due date. Please hand write
+or type up and print the solutions; we will not accept e-mail solution sets except
+in exceptional circumstances. You may discuss problem sets with others, but must
+write up your own solutions. This means that you should have no need to look at other's
+final written solutions. Many of these problems come from a variety of textbooks,
+which are referenced in the problems. These are for citation purposes and not because
+you will need to consult the text itself (though you may feel free to do so).
+
+\medskip
+
+{\bf I.} Singular Value Decomposition
+
+{\bf 1.} The pseudoinverse of a matrix $A$, denoted $A^{+}$, is a generalization of
+a matrix inverse, is defined for any matrix $A$. It has the following four properties:
+\begin{enumerate}
+\item $A A^{+} A = A$
+\item $A^{+} A A^{+} = A^{+}$
+\item $(A A^{+})^{t} = A A^{+}$
+\item $(A^{+} A)^{t} = A^{+} A$
+\end{enumerate}
+For the singular value decomposition $U \Sigma V^t$ of $A$, show that $V \Sigma^{+} U^t$
+satisfies all the properties of pseudoinverse, where $\Sigma^{+}$ is the transpose of the
+rectangular diagonal matrix $\Sigma$ with all of the non-zero terms replaced with their
+inverse.
+
+{\bf 2.} An additional way to solve the ordinary least squares problem is to take the
+pseudoinverse of the design matrix $X$, and let $\widehat{\beta}$ be equal to $X^{+} y$.
+(a) Explain why this seems reasonable.  (b) Show, directly, that
+the predicted values $X\widehat{\beta}$ will be equal to $U_pU_p^t y$ (where $U_p$ is
+the first $p$ columns of $U$, also known as the \textit{thin SVD}).
+(c) Apply this technique to solve the ill-conditioned system we observed in class:
+\begin{verbatim}
+> X  <- matrix(c(10^9, -1, -1, 10^(-5)), 2, 2)
+> beta <- c(1,1)
+> y <- X %*% beta
+\end{verbatim}
+(d) Comment on how well this works and why it works well/poorly.
+
+{\bf 3.} The condition number of a matrix can, alternatively, be defined as
+$|| A ||_2 || A^{+} ||_2$.\footnote{The matrix norm $||A||_2$ is the induced
+norm defined as the supremum  of $||Ax||_2 / ||x||_2$ over all non-zero $x$.}
+Verify that this matches the definition given in class as the
+ratio of the extremal singular values.
+
+{\bf II.} Shrinkage Estimators
+
+{\bf 1.} Calculate the (a) bias, (b) variance, and (c) mean squared error for the ridge
+regression vector in terms of $X$, $\sigma^2$, and $\lambda$. Make sure to justify all
+of the steps in your derivation.
+
+{\bf 2.} Show that there exists a $\lambda_0$ such that the mean squared error of the
+ridge regression vector $\widehat{\beta}_\lambda$ is lower than that of the ordinary least squares
+regression vector $\widehat{\beta}$ for all $0 < \lambda < \lambda_0$.
+
+{\bf 3.} Consider again the estimator $\widehat{\beta}_\alpha$ equal to $\alpha \cdot \widehat{\beta}$.
+Calculate its (a) bias, (b) variance, and (c) mean squared error. Write these in terms of the
+singular value decomposition of $X$. How do they compare to the results in question 1?
+
+{\bf III.} Applications to Image Data
+
+{\bf 1.} Download the Columbia images dataset:
+\begin{quote}
+\url{http://euler.stat.yale.edu/~tba3/class_data/columbiaImages.zip}
+\end{quote}
+and metadata
+\begin{quote}
+\url{http://euler.stat.yale.edu/~tba3/class_data/photoMetaData.csv}
+\end{quote}
+Read the image \texttt{DSC\_1739.jpg} into R using
+the \textbf{jpeg} package. Construct a greyscale matrix by averaging the three color
+channels together and take the singular value decomposition of the matrix. For example,
+the following code will construct and save a black and white version of the
+image \texttt{DSC\_1785.jpg}:
+\begin{verbatim}
+> img <- jpeg::readJPEG("columbiaImages/DSC_1785.jpg")
+> matBW <- (img[,,1] + img[,,2] + img[,,3]) / 3
+> jpeg::writeJPEG(matBW, "DS_1785_BW.jpg")
+\end{verbatim}
+(a) Plot a histogram of the log of the
+singular values. (b) Now create a new matrix $\Sigma$ where all but the largest $60$ singular values
+have been set to $0$ and reconstruct the matrix with the new $\Sigma$. Save the image and open it
+as a jpeg. (c) How well has it been reconstructed?
+
+{\bf 2.} (a) Now create images with only the top $50$, $40$, $30$, $20$, and $10$ singular values.
+(b) How well do these capture the image? (c) What are the last components to
+disappear? (d) What's the smallest number of singular values that you recommend for producing
+a thumbnail of the image?
+
+{\bf 3.} Using the image \texttt{DSC\_1734.jpg}, (a) produce a pixel-by-pixel scatter
+plot of the red and green channels, and the green and blue channels.
+Now compute the principal components of this dataset and save three (black and white)
+images with these components (hint: you will need to scale the values so they fall
+between $0$ and $1$). (c) Comment on what is captured in each component.
+
+
+\end{document}
+
+
+
+
+

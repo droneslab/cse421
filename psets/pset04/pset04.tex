@@ -1,0 +1,151 @@
+\documentclass[12pt]{article}
+
+\usepackage{fontspec}
+\usepackage{geometry}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+
+\makeatletter
+\newcommand{\distas}[1]{\mathbin{\overset{#1}{\kern\z@\sim}}}%
+
+\geometry{top=1in, bottom=1in, left=1in, right=1in, marginparsep=4pt, marginparwidth=1in}
+
+\renewcommand{\headrulewidth}{0pt}
+\pagestyle{fancyplain}
+\fancyhf{}
+\cfoot{\thepage\ of \pageref{LastPage}}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{12pt}
+
+\usepackage{marginnote} % For margin years
+\newcommand{\years}[1]{\marginnote{\scriptsize #1}} % New command for including margin years
+\renewcommand*{\raggedleftmarginnote}{}
+\setlength{\marginparsep}{-16pt} % Slightly increase the distance of the margin years from the content
+\reversemarginpar
+
+\setromanfont [Ligatures={Common}, Numbers={OldStyle}, Variant=01,
+ BoldFont={LinLibertine_RB.otf},
+ ItalicFont={LinLibertine_RI.otf},
+ BoldItalicFont={LinLibertine_RBI.otf}
+ ]{LinLibertine_R.otf}
+%\setromanfont [Ligatures={Common}, Numbers={OldStyle}]{Hoefler Text}
+
+%\usepackage[xetex, bookmarks, pdftitle={Taylor Arnold CV},pdfauthor={Taylor Arnold}]{hyperref}
+%\hypersetup{linkcolor=blue,citecolor=blue,filecolor=black,urlcolor=MidnightBlue}
+
+\usepackage{xunicode} % Allows generation of unicode characters from accented glyphs
+\defaultfontfeatures{Mapping=tex-text}
+
+\begin{document}
+
+\begin{center}
+{\bf Problem Set 04} \\
+Linear Models -- Fall 2015 \\
+Due date: 2015-10-28
+\end{center}
+
+\medskip
+
+Problems sets are due at the start of class on the due date. Please hand write
+or type up and print the solutions; we will not accept e-mail solution sets except
+in exceptional circumstances. You may discuss problem sets with others, but must
+write up your own solutions. This means that you should have no need to look at other's
+final written solutions. Many of these problems come from a variety of textbooks,
+which are referenced in the problems. These are for citation purposes and not because
+you will need to consult the text itself (though you may feel free to do so).
+
+\medskip
+
+{\bf I.} Binomial regression
+
+This question explores and additional dimension of the airline dataset using binomial
+regression. I have produced a further downsampled version of the data, available at
+(\url{euler.stat.yale.edu/~tba3/stat612/class_data/airline2007_pset04.Rds}).
+
+{\bf 1.} Construct a binary variable \texttt{late} that indicated whether a flight arrives
+over one hour late. Over the entire data dataset, fit the following model using both
+ordinary least squares and generalized least squares with a logistic link function:
+\begin{align}
+late \sim dest.
+\end{align}
+Calculate the predicted values from both of these models, and find the maximum absolute
+difference between the two sets of predictions. What is going on here? Why?
+
+{\bf 2.} Now, using the same data calculate the local scheduled departure hour (Hint:
+the data gives the actual departure time; you need to adjust this with the departure
+delay). Fit the following model on the entire dataset using both
+ordinary least squares and generalized least squares with a logistic link function:
+\begin{align}
+late \sim hour. \label{hourReg}
+\end{align}
+Again, calculate the predictions from both models and determine the maximum absolute
+difference between the two sets of predictions. How (and why) does this differ from
+the answer in question 1?
+
+Plot the predicted probabilities from both models as a function of hour; describe
+what is going on here and the difference between the two models.
+
+{\bf 3.} Now calculate the model given in Equation~\ref{hourReg} for all five
+binomial link functions available within R: ``logit'', ``probit'', ``cloglog'',
+``cauchit'', ``log''. Produce the same plot as before. Is there a natural ordering
+to these links?
+
+{\bf 4.} Finally, fit the following model using only data in Group I for
+both ordinary least squares and generalized least squares with a logistic
+regression (logit link):
+\begin{align}
+late \sim hour + dest + schedTotTime.
+\end{align}
+Now, predict values for each of these on Group II. Calculate the mean squared
+errors for each and comment on how close or far away from one another they
+are.
+
+Calculate the centiles for the predictions of both models and plot them against
+one another. Add vertical and horizontal lines at $0$ and a line with a slope of
+$1$ and intercept of $0$. Describe the difference between the predicitons of both
+models.
+
+{\bf 5.} Using the two sets of predictions on Group II from Question 4, calculate
+the ROC curve for both. Do you notice any substantial differences? Report the estimated
+AUC, area under the curve, for both models.
+
+{\bf II.} Simulations
+
+{\bf 1.} Construct a random matrix $X$ with $100$ columns and $1000$ rows filled
+with independent random uniform variables. Generate a random $\beta$ vector of length
+$100$ by generating independent trials from a standard random normal distribution.
+
+Simulate the following model for $2000$ trials with a fixed $X$ and $\beta$:
+\begin{align}
+y = X \beta + \epsilon, \quad \epsilon_i \sim_{i.i.d.} \mathcal{N}(0, 5^2)
+\end{align}
+Compute both the ordinary least squares $\widehat{\beta}_{ols}$ and the following
+modified estimator for $\alpha$ in $0.9$, $0.8$, $0.5$, $0.2$, and $0.1$:
+\begin{align}
+\widetilde{\beta}_\alpha &= \alpha \cdot \widehat{\beta}_{ols}
+\end{align}
+saving the squared parameter error ($|| \beta - \widehat{\beta} ||_2^2$) for all
+$6$ models. Which has the best average error rate? Try to explain what is going on
+(hint: you may want to save other results from each simulation to try
+to answer this).
+
+{\bf 2.} Redo the previous question with each of the following tweaks (that is,
+do them one by one) and comment on if, how, and why the results change:
+\begin{enumerate} \renewcommand{\theenumi}{\Alph{enumi}}
+\item use Cauchy errors (i.e., $\epsilon_i$)
+\item set $p$ equal to $10$
+\item set $n$ equal to $10000$
+\end{enumerate}
+
+
+\end{document}
+
+
+
+
+
