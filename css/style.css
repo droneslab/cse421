@@ -14,8 +14,9 @@ body {
 
 h1 {
   font-size: 40px;
-  font-weight: 300;
+  font-weight: bold;
   text-align: center;
+  color: #000000;
 }
 h2 {
   font-size: 25px;
@@ -30,8 +31,8 @@ h2 {
 }
 
 .sechighlight {
-  background-color: #fdf6e3;
-  color: #586e75;
+  background-color: #e1e1e1;
+  color: #2aa198;
 }
 
 td { min-width: 200px; }
