@@ -1,5 +1,5 @@
 body {
-  font: 16px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font: 16px/1.5 Lato, "Sofia Pro", More Pro, Arial, sans-serif;
   padding: 0;
   margin: 0;
   font-size: 16px;
@@ -26,7 +26,7 @@ h2 {
   margin-bottom: 10px;
   padding-top: 10px;
   padding-bottom: 20px;
-  color: #073642;
+  color: #005bbb;
 }
 
 .sechighlight {
