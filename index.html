@@ -1,99 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
+  <title>CSE 421/521 Course Homepage</title>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Course website for CSE 421/521: Operating Systems">
-  <meta name="author" content="Karthik Dantu">
-  <title>University at Buffalo CSE 421/521: Operating Systems</title>
-
-  <!-- bootstrap -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-
-  <!-- Google fonts -->
-  <link href='https://fonts.googleapis.com/css?family=Lato:300italic,700italic,300,700' rel='stylesheet' type='text/css'>
-
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!--
+  <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */ 
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+    
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 450px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      padding-top: 20px;
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+    
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+      padding: 15px;
+    }
+    
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height:auto;} 
+    }
+-->
   <link rel="stylesheet" type="text/css" href="css/style.css" />
-
+  </style>
 </head>
-
 <body>
 
-<a href="https://github.com/droneslab/cse421">
-  <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
-
-<div id="header">
-  <h1 align=center>CSE 421/521: Operating Systems</h1>
-</div>
-<div style="clear:both;"></div>
-</div>
-
-<div class="sechighlight">
-<div class="container sec">
-  <h2>Course Notes and Assignments</h2>
-
-  <i>Fall 2017<br> Tuesday, Thursday 11:00 - 12:20 <br> Norton 112<br><br></i>
-
-<b>Instructor</b>: Karthik Dantu<br>
-<b>E-mail</b>: kdantu@buffalo.edu<br>
-<b>Office Hours</b>: Wednesdays 3:00-5:00, Davis 331 <br>
-<b>Teaching Assistants</b>: TBD <br>
-<b>TA Session</b>: TBD <br>
-
-</div>
-<div class="container sec">
-<b> Textbook</b>: None. Please follow class slides as well as recommended reading. <br>
-<b> Recommended books</b>: <a href="http://ospp.cs.washington.edu/"> Operating Systems: Principles and Practice </a>, Thomas Anderson and Michael Dahlin, Recursive Books. <br>
-<b> Syllabus</b>: <a href="syllabus.pdf"> CSE 421/521 Syllabus </a><br> 
-<b> Discussion board</b>: <a href="https://piazza.com/buffalo/fall2017/cse421521/home"> Piazza link for the course</a> <br>
-</div>
-</div>
-
-<div class="container sec">
-<table class="table">
-  <tr class="active">
-    <th>Date</th><th>Description</th><th>Resources</th><th>References</th>
-  </tr>
-  <tr>
-    <td>2017-08-28</td>
-    <td>Course Introduction</td>
-    <td>
-      <b>[<a href="lectures/intro.pdf">slides</a>]</b><br>
-      <b>[<a href="assignments/pa0.pdf">Programming Assignment#0</a>]</b>
-    </td>
-    <td>
-      <!--
-      <ul>
-        <li>Introduction to CSE 421/521. </li>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#"> CSE 421/521</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="info.html">Course Info</a></li>
+        <li><a href="#">Staff</a></li>
+        <li><a href="#">Projects</a></li>
+        <li><a href="https://piazza.com/buffalo/fall2017/cse421521/home" target="_blank">Piazza</a></li>
       </ul>
-    -->
-    </td>
-  </tr
-  <tr>
-    <td>2017-08-28</td>
-    <td>OS History and OS Structures</td>
-    <td>
-      <b>[<a href="lectures/history.pdf">slides</a>]</b><br>
-    </td>
-    <td>
-      <!--
-      <ul>
-        <li>Introduction to CSE 421/521. </li>
-      </ul>
-    -->
-    </td>
-  </tr>
-</table>
+    </div>
+  </div>
+</nav>
+  
+<div class="container-fluid text-center">    
+  <div class="row content">
+    <div class="col-sm-2 sidenav">
+      <p><a href="#">Link</a></p>
+      <p><a href="#">Link</a></p>
+      <p><a href="#">Link</a></p>
+    </div>
+<!--
+    <div class="col-sm-2 sidenav">
+      <div class="well">
+      </div>
+      <div class="well">
+      </div>
+    </div>
+-->
+  </div>
 </div>
-
-<!-- jQuery and Boostrap -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<hr>
+<footer class="container-fluid text-center">
+  <p>Footer Text</p>
+</footer>
 
 </body>
-
 </html>
